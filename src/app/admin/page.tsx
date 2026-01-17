@@ -14,6 +14,10 @@ import {
   Trash2,
   PenSquare,
   ArrowLeft,
+  FolderOpen,
+  Plus,
+  Check,
+  X,
 } from 'lucide-react';
 
 interface Post {
@@ -30,12 +34,25 @@ interface Draft {
   updatedAt: string;
 }
 
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
+
 export default function AdminPage() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [drafts, setDrafts] = useState<Draft[]>([]);
-  const [activeTab, setActiveTab] = useState<'posts' | 'drafts'>('posts');
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [activeTab, setActiveTab] = useState<'posts' | 'drafts' | 'categories'>('posts');
+
+  // Category editing state
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  const [editingCategoryName, setEditingCategoryName] = useState('');
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [isAddingCategory, setIsAddingCategory] = useState(false);
 
   useEffect(() => {
     fetch('/api/auth/check')
@@ -65,6 +82,12 @@ export default function AdminPage() {
         .then((res) => res.json())
         .then((data) => setDrafts(data.drafts || []))
         .catch(() => setDrafts([]));
+
+      // Fetch categories
+      fetch('/api/categories')
+        .then((res) => res.json())
+        .then((data) => setCategories(data.categories || []))
+        .catch(() => setCategories([]));
     }
   }, [isAuthenticated]);
 
@@ -112,6 +135,94 @@ export default function AdminPage() {
     } catch {
       alert('삭제에 실패했습니다.');
     }
+  };
+
+  // Category functions
+  const generateSlug = (name: string) => {
+    return name
+      .toLowerCase()
+      .replace(/[^a-z0-9가-힣]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+  };
+
+  const handleAddCategory = async () => {
+    if (!newCategoryName.trim()) return;
+
+    try {
+      const res = await fetch('/api/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newCategoryName.trim(),
+          slug: generateSlug(newCategoryName.trim()),
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setCategories((prev) => [...prev, data.category]);
+        setNewCategoryName('');
+        setIsAddingCategory(false);
+      } else {
+        alert('카테고리 추가에 실패했습니다.');
+      }
+    } catch {
+      alert('카테고리 추가 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleUpdateCategory = async (id: string) => {
+    if (!editingCategoryName.trim()) return;
+
+    try {
+      const res = await fetch(`/api/categories/id/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: editingCategoryName.trim(),
+          slug: generateSlug(editingCategoryName.trim()),
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setCategories((prev) =>
+          prev.map((c) => (c.id === id ? data.category : c))
+        );
+        setEditingCategoryId(null);
+        setEditingCategoryName('');
+      } else {
+        alert('카테고리 수정에 실패했습니다.');
+      }
+    } catch {
+      alert('카테고리 수정 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleDeleteCategory = async (id: string) => {
+    if (!confirm('이 카테고리를 삭제하시겠습니까? 해당 카테고리의 글들은 카테고리 없음 상태가 됩니다.')) return;
+
+    try {
+      const res = await fetch(`/api/categories/id/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setCategories((prev) => prev.filter((c) => c.id !== id));
+      } else {
+        alert('카테고리 삭제에 실패했습니다.');
+      }
+    } catch {
+      alert('카테고리 삭제 중 오류가 발생했습니다.');
+    }
+  };
+
+  const startEditCategory = (category: Category) => {
+    setEditingCategoryId(category.id);
+    setEditingCategoryName(category.name);
+  };
+
+  const cancelEditCategory = () => {
+    setEditingCategoryId(null);
+    setEditingCategoryName('');
   };
 
   if (isAuthenticated === null) {
@@ -177,11 +288,145 @@ export default function AdminPage() {
             <Clock size={18} />
             임시저장 ({drafts.length})
           </button>
+          <button
+            onClick={() => setActiveTab('categories')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+              activeTab === 'categories'
+                ? 'bg-[var(--kuromi-purple)] text-white'
+                : 'bg-[var(--kuromi-white)] text-[var(--kuromi-black)] border-2 border-[var(--kuromi-lavender)]'
+            }`}
+          >
+            <FolderOpen size={18} />
+            카테고리 ({categories.length})
+          </button>
         </div>
 
         {/* Content */}
         <div className="card-kuromi overflow-hidden">
-          {activeTab === 'posts' ? (
+          {activeTab === 'categories' ? (
+            <div className="p-4">
+              {/* Add new category */}
+              <div className="mb-4">
+                {isAddingCategory ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={newCategoryName}
+                      onChange={(e) => setNewCategoryName(e.target.value)}
+                      placeholder="새 카테고리 이름"
+                      className="input-kuromi flex-1"
+                      autoFocus
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleAddCategory();
+                        if (e.key === 'Escape') {
+                          setIsAddingCategory(false);
+                          setNewCategoryName('');
+                        }
+                      }}
+                    />
+                    <button
+                      onClick={handleAddCategory}
+                      className="p-2 text-green-500 hover:bg-green-100 rounded transition-colors"
+                      title="저장"
+                    >
+                      <Check size={18} />
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsAddingCategory(false);
+                        setNewCategoryName('');
+                      }}
+                      className="p-2 text-[var(--text-muted)] hover:bg-[var(--kuromi-light-lavender)] rounded transition-colors"
+                      title="취소"
+                    >
+                      <X size={18} />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setIsAddingCategory(true)}
+                    className="flex items-center gap-2 px-4 py-2 text-[var(--kuromi-purple)] hover:bg-[var(--kuromi-light-lavender)] rounded-lg transition-colors"
+                  >
+                    <Plus size={18} />
+                    카테고리 추가
+                  </button>
+                )}
+              </div>
+
+              {/* Category list */}
+              <div className="divide-y-2 divide-[var(--kuromi-lavender)]">
+                {categories.length === 0 ? (
+                  <div className="py-8 text-center text-[var(--text-muted)]">
+                    카테고리가 없습니다.
+                  </div>
+                ) : (
+                  categories.map((category) => (
+                    <div
+                      key={category.id}
+                      className="py-3 flex items-center justify-between hover:bg-[var(--kuromi-cream)] transition-colors px-2 -mx-2 rounded"
+                    >
+                      {editingCategoryId === category.id ? (
+                        <div className="flex items-center gap-2 flex-1">
+                          <input
+                            type="text"
+                            value={editingCategoryName}
+                            onChange={(e) => setEditingCategoryName(e.target.value)}
+                            className="input-kuromi flex-1"
+                            autoFocus
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleUpdateCategory(category.id);
+                              if (e.key === 'Escape') cancelEditCategory();
+                            }}
+                          />
+                          <button
+                            onClick={() => handleUpdateCategory(category.id)}
+                            className="p-2 text-green-500 hover:bg-green-100 rounded transition-colors"
+                            title="저장"
+                          >
+                            <Check size={18} />
+                          </button>
+                          <button
+                            onClick={cancelEditCategory}
+                            className="p-2 text-[var(--text-muted)] hover:bg-[var(--kuromi-light-lavender)] rounded transition-colors"
+                            title="취소"
+                          >
+                            <X size={18} />
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex-1">
+                            <span className="font-medium text-[var(--kuromi-dark-purple)]">
+                              {category.name}
+                            </span>
+                            <span className="ml-2 text-xs text-[var(--text-muted)]">
+                              /{category.slug}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => startEditCategory(category)}
+                              className="p-2 text-[var(--kuromi-purple)] hover:bg-[var(--kuromi-light-lavender)] rounded transition-colors"
+                              title="수정"
+                            >
+                              <Edit size={18} />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteCategory(category.id)}
+                              className="p-2 text-red-500 hover:bg-red-100 rounded transition-colors"
+                              title="삭제"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          ) : activeTab === 'posts' ? (
             <div className="divide-y-2 divide-[var(--kuromi-lavender)]">
               {posts.length === 0 ? (
                 <div className="p-8 text-center text-[var(--text-muted)]">

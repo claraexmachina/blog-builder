@@ -83,6 +83,30 @@ export async function createCategory(name: string, slug: string): Promise<Catego
   return category;
 }
 
+export async function updateCategory(id: string, name: string, slug: string): Promise<Category | null> {
+  const db = await readDb();
+  const index = db.categories.findIndex((c) => c.id === id);
+  if (index === -1) return null;
+
+  db.categories[index] = { ...db.categories[index], name, slug };
+  await writeDb(db);
+  return db.categories[index];
+}
+
+export async function deleteCategory(id: string): Promise<boolean> {
+  const db = await readDb();
+  const index = db.categories.findIndex((c) => c.id === id);
+  if (index === -1) return false;
+
+  db.categories.splice(index, 1);
+  // Also remove categoryId from posts that had this category
+  db.posts = db.posts.map((p) =>
+    p.categoryId === id ? { ...p, categoryId: null } : p
+  );
+  await writeDb(db);
+  return true;
+}
+
 // Post functions
 export async function getAllPosts(publishedOnly = true): Promise<Post[]> {
   const db = await readDb();
