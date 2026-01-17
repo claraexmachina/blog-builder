@@ -102,6 +102,23 @@ export default async function HomePage() {
 
           {/* Main Content Area */}
           <div className="space-y-4">
+            {/* Pixel Room Image */}
+            <div className="widget-box">
+              <div className="widget-title">MY ROOM</div>
+              <div className="widget-content p-0 overflow-hidden">
+                <div className="relative w-full">
+                  <Image
+                    src="/images/pixel-room.png"
+                    alt="My Pixel Room"
+                    width={1280}
+                    height={853}
+                    className="w-full h-auto"
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Recent Posts Widget */}
             <div className="widget-box">
               <div className="widget-title">{siteConfig.widgetTitles.recentPosts}</div>
