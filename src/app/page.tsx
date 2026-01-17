@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { getAllPosts, getAllCategories } from '@/lib/db';
-import { Heart, Star, MessageCircle, Folder, Clock } from 'lucide-react';
+import { Heart, Folder, Clock } from 'lucide-react';
 import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { siteConfig } from '@/config/site';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,7 +18,7 @@ export default async function HomePage() {
         {/* Mini Homepage Title */}
         <div className="text-center mb-6">
           <h1 className="text-lg text-[var(--kuromi-dark-purple)] mb-1">
-            <span className="pixel-star">★</span> my mini room <span className="pixel-star">★</span>
+            <span className="pixel-star">★</span> {siteConfig.title} <span className="pixel-star">★</span>
           </h1>
           <div className="today-box mx-auto">
             TODAY <span>{Math.floor(Math.random() * 50) + 10}</span> | TOTAL <span>{Math.floor(Math.random() * 5000) + 1000}</span>
@@ -32,28 +32,28 @@ export default async function HomePage() {
           <div className="space-y-4">
             {/* Profile Widget */}
             <div className="widget-box">
-              <div className="widget-title">PROFILE</div>
+              <div className="widget-title">{siteConfig.widgetTitles.profile}</div>
               <div className="widget-content text-center">
                 <div className="profile-frame w-20 h-20 mx-auto mb-3">
                   <div className="profile-inner w-full h-full flex items-center justify-center text-3xl">
-                    🐱
+                    {siteConfig.profile.emoji}
                   </div>
                 </div>
                 <p className="text-sm text-[var(--kuromi-dark-purple)] font-bold mb-1">
-                  ISTP의 아지트
+                  {siteConfig.profile.name}
                 </p>
                 <p className="text-xs text-[var(--text-muted)] mb-3">
-                  cyberpunk girl vibes ⚡
+                  {siteConfig.profile.bio}
                 </p>
                 <div className="pixel-divider"></div>
                 <div className="flex justify-center gap-4 text-xs">
                   <div className="text-center">
                     <div className="text-[var(--kuromi-pink)] font-bold">{posts.length}</div>
-                    <div className="text-[var(--text-muted)]">글</div>
+                    <div className="text-[var(--text-muted)]">{siteConfig.profile.statsLabels.posts}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-[var(--kuromi-pink)] font-bold">{totalLikes}</div>
-                    <div className="text-[var(--text-muted)]">♥</div>
+                    <div className="text-[var(--text-muted)]">{siteConfig.profile.statsLabels.likes}</div>
                   </div>
                 </div>
               </div>
@@ -61,7 +61,7 @@ export default async function HomePage() {
 
             {/* Categories Widget */}
             <div className="widget-box">
-              <div className="widget-title">CATEGORY</div>
+              <div className="widget-title">{siteConfig.widgetTitles.category}</div>
               <div className="widget-content">
                 <ul className="space-y-2">
                   {categories.map((category) => (
@@ -81,7 +81,7 @@ export default async function HomePage() {
 
             {/* Music/Mood Widget */}
             <div className="widget-box">
-              <div className="widget-title">NOW PLAYING</div>
+              <div className="widget-title">{siteConfig.widgetTitles.nowPlaying}</div>
               <div className="widget-content">
                 <div className="mini-widget">
                   <div className="flex items-center gap-2">
@@ -89,8 +89,8 @@ export default async function HomePage() {
                       ♪
                     </div>
                     <div className="text-xs">
-                      <p className="text-[var(--kuromi-dark-purple)] font-bold">Lo-fi Beats</p>
-                      <p className="text-[var(--text-muted)]">coding session</p>
+                      <p className="text-[var(--kuromi-dark-purple)] font-bold">{siteConfig.nowPlaying.title}</p>
+                      <p className="text-[var(--text-muted)]">{siteConfig.nowPlaying.subtitle}</p>
                     </div>
                   </div>
                 </div>
@@ -104,27 +104,26 @@ export default async function HomePage() {
             <div className="room-container h-64 md:h-80 flex items-center justify-center">
               <div className="text-center z-10 relative">
                 <p className="text-[var(--kuromi-light-lavender)] text-sm mb-2">
-                  ✧ MY PIXEL ROOM ✧
+                  {siteConfig.room.title}
                 </p>
                 <p className="text-[var(--kuromi-lavender)] text-xs mb-4 opacity-70">
-                  cyberpunk cozy space
+                  {siteConfig.room.subtitle}
                 </p>
                 {/* Decorative elements */}
                 <div className="flex justify-center gap-6 text-2xl opacity-70">
-                  <span>🖥️</span>
-                  <span>🐱</span>
-                  <span>🪴</span>
-                  <span>💜</span>
+                  {siteConfig.room.decorations.map((emoji, i) => (
+                    <span key={i}>{emoji}</span>
+                  ))}
                 </div>
                 <p className="text-[var(--text-muted)] text-xs mt-4">
-                  픽셀 룸 이미지를 여기에 추가하세요
+                  {siteConfig.room.placeholder}
                 </p>
               </div>
             </div>
 
             {/* Recent Posts Widget */}
             <div className="widget-box">
-              <div className="widget-title">RECENT POSTS</div>
+              <div className="widget-title">{siteConfig.widgetTitles.recentPosts}</div>
               <div className="widget-content">
                 {posts.length > 0 ? (
                   <div className="space-y-3">
@@ -182,10 +181,10 @@ export default async function HomePage() {
                 ) : (
                   <div className="text-center py-8">
                     <p className="text-sm text-[var(--text-muted)] mb-4">
-                      아직 작성된 글이 없어요 <span className="pixel-heart">♡</span>
+                      {siteConfig.emptyState.message} <span className="pixel-heart">♡</span>
                     </p>
                     <Link href="/write" className="pixel-btn inline-block">
-                      첫 글 쓰러 가기
+                      {siteConfig.emptyState.buttonText}
                     </Link>
                   </div>
                 )}
@@ -193,7 +192,7 @@ export default async function HomePage() {
                 {posts.length > 0 && (
                   <div className="mt-4 text-center">
                     <Link href="/posts" className="pixel-btn-secondary pixel-btn inline-block">
-                      전체 글 보기 →
+                      {siteConfig.buttons.viewAllPosts}
                     </Link>
                   </div>
                 )}
@@ -203,7 +202,7 @@ export default async function HomePage() {
             {/* Guestbook Style Footer */}
             <div className="mini-widget text-center">
               <p className="text-xs text-[var(--text-muted)]">
-                <span className="pixel-star">✧</span> 방문해주셔서 감사합니다 <span className="pixel-star">✧</span>
+                <span className="pixel-star">✧</span> {siteConfig.footer.message} <span className="pixel-star">✧</span>
               </p>
             </div>
           </div>
