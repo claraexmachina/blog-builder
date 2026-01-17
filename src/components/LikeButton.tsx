@@ -31,7 +31,7 @@ export default function LikeButton({ postId, initialLikes = 0 }: LikeButtonProps
     if (loading) return;
 
     setAnimating(true);
-    setTimeout(() => setAnimating(false), 600);
+    setTimeout(() => setAnimating(false), 300);
 
     try {
       const res = await fetch(`/api/likes/${postId}`, {
@@ -49,18 +49,18 @@ export default function LikeButton({ postId, initialLikes = 0 }: LikeButtonProps
     <button
       onClick={handleLike}
       disabled={loading}
-      className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+      className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-medium ${
         liked
-          ? 'bg-[var(--kuromi-pink)] text-white'
-          : 'bg-[var(--kuromi-white)] border-2 border-[var(--kuromi-pink)] text-[var(--kuromi-pink)]'
-      } ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'}`}
+          ? 'bg-[var(--kuromi-pink-accent)] text-white'
+          : 'bg-[var(--kuromi-cream)] text-[var(--kuromi-pink-accent)] hover:bg-[var(--kuromi-light-lavender)]'
+      } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       <Heart
-        size={20}
-        className={`${animating ? 'heart-beat' : ''}`}
+        size={16}
+        className={animating ? 'heart-beat' : ''}
         fill={liked ? 'currentColor' : 'none'}
       />
-      <span className="font-bold">{likes}</span>
+      <span>{likes}</span>
     </button>
   );
 }

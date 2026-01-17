@@ -11,7 +11,7 @@ import { getPostById, getAllCategories } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import LikeButton from '@/components/LikeButton';
 import DeleteButton from './DeleteButton';
-import { Calendar, Folder, ArrowLeft, Edit } from 'lucide-react';
+import { ArrowLeft, Edit } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,7 +28,6 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
-  // Non-authenticated users can only see published posts
   if (!post.published && !session) {
     notFound();
   }
@@ -37,22 +36,19 @@ export default async function PostPage({ params }: PostPageProps) {
   const category = categories.find((c) => c.id === post.categoryId);
 
   return (
-    <div className="min-h-screen bg-[var(--kuromi-cream)] py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Back button */}
+    <div className="min-h-screen py-12 px-4">
+      <div className="max-w-3xl mx-auto">
         <Link
           href="/posts"
-          className="inline-flex items-center gap-2 text-[var(--kuromi-purple)] hover:text-[var(--kuromi-pink)] mb-6 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--kuromi-purple)] mb-8 transition-colors"
         >
-          <ArrowLeft size={20} />
-          목록으로 돌아가기
+          <ArrowLeft size={16} />
+          목록으로
         </Link>
 
-        {/* Post Card */}
-        <article className="card-kuromi overflow-hidden">
-          {/* Thumbnail */}
+        <article>
           {post.thumbnail && (
-            <div className="relative w-full h-64 md:h-96">
+            <div className="relative w-full h-64 md:h-80 rounded-xl overflow-hidden mb-8">
               <Image
                 src={post.thumbnail}
                 alt={post.title}
@@ -62,77 +58,62 @@ export default async function PostPage({ params }: PostPageProps) {
             </div>
           )}
 
-          {/* Content */}
-          <div className="p-6 md:p-8">
-            {/* Not published badge */}
+          <div className="mb-8">
             {!post.published && (
-              <div className="mb-4">
-                <span className="bg-[var(--kuromi-pink)] text-white text-sm px-3 py-1 rounded-full">
-                  비공개
-                </span>
-              </div>
+              <span className="badge badge-accent text-xs mb-4 inline-block">
+                비공개
+              </span>
             )}
 
-            {/* Title */}
-            <h1 className="text-3xl md:text-4xl font-bold text-[var(--kuromi-dark-purple)] mb-4">
+            <h1 className="text-2xl md:text-3xl font-bold text-[var(--kuromi-dark-purple)] mb-4 leading-tight">
               {post.title}
             </h1>
 
-            {/* Meta */}
-            <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--text-muted)] mb-6 pb-6 border-b-2 border-[var(--kuromi-lavender)]">
-              <span className="flex items-center gap-1">
-                <Calendar size={16} />
+            <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--text-muted)]">
+              <span>
                 {format(new Date(post.createdAt), 'yyyy년 MM월 dd일', { locale: ko })}
               </span>
 
               {category && (
-                <Link
-                  href={`/category/${category.slug}`}
-                  className="flex items-center gap-1 hover:text-[var(--kuromi-purple)] transition-colors"
-                >
-                  <Folder size={16} />
-                  {category.name}
-                </Link>
-              )}
-            </div>
-
-            {/* Content */}
-            <div className="markdown-content">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeRaw, rehypeSanitize]}
-              >
-                {post.content}
-              </ReactMarkdown>
-            </div>
-
-            {/* Actions */}
-            <div className="flex items-center justify-between mt-8 pt-6 border-t-2 border-[var(--kuromi-lavender)]">
-              <LikeButton postId={post.id} initialLikes={post.likes} />
-
-              {session && (
-                <div className="flex items-center gap-2">
+                <>
+                  <span className="w-1 h-1 rounded-full bg-[var(--text-muted)]" />
                   <Link
-                    href={`/write?edit=${post.id}`}
-                    className="btn-retro-secondary flex items-center gap-2"
+                    href={`/category/${category.slug}`}
+                    className="hover:text-[var(--kuromi-purple)] transition-colors"
                   >
-                    <Edit size={18} />
-                    수정
+                    {category.name}
                   </Link>
-                  <DeleteButton postId={post.id} />
-                </div>
+                </>
               )}
             </div>
           </div>
-        </article>
 
-        {/* Navigation */}
-        <div className="mt-8 text-center">
-          <Link href="/posts" className="btn-retro inline-flex items-center gap-2">
-            <ArrowLeft size={18} />
-            다른 글 보기
-          </Link>
-        </div>
+          <div className="markdown-content pb-8 border-b border-[var(--card-border)]">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw, rehypeSanitize]}
+            >
+              {post.content}
+            </ReactMarkdown>
+          </div>
+
+          <div className="flex items-center justify-between py-6">
+            <LikeButton postId={post.id} initialLikes={post.likes} />
+
+            {session && (
+              <div className="flex items-center gap-2">
+                <Link
+                  href={`/write?edit=${post.id}`}
+                  className="btn-secondary inline-flex items-center gap-2 text-sm"
+                >
+                  <Edit size={16} />
+                  수정
+                </Link>
+                <DeleteButton postId={post.id} />
+              </div>
+            )}
+          </div>
+        </article>
       </div>
     </div>
   );

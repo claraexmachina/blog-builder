@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { LogIn, ArrowLeft, User, Lock } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,7 +14,6 @@ export default function LoginPage() {
   const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
-    // Check if already authenticated
     fetch('/api/auth/check')
       .then((res) => res.json())
       .then((data) => {
@@ -57,33 +56,26 @@ export default function LoginPage() {
 
   if (checkingAuth) {
     return (
-      <div className="min-h-screen bg-[var(--kuromi-cream)] flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-4xl mb-4 loading-kuromi">★</div>
-          <p className="text-[var(--kuromi-dark-purple)]">로딩 중...</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-6 h-6 rounded-full bg-[var(--kuromi-lavender)] loading" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--kuromi-light-lavender)] via-[var(--kuromi-cream)] to-[var(--kuromi-lavender)] flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Back link */}
+    <div className="min-h-screen flex items-center justify-center p-4 bg-[var(--kuromi-cream)]">
+      <div className="w-full max-w-sm">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-[var(--kuromi-purple)] hover:text-[var(--kuromi-pink)] mb-6 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--kuromi-purple)] mb-8 transition-colors"
         >
-          <ArrowLeft size={20} />
-          홈으로 돌아가기
+          <ArrowLeft size={16} />
+          홈으로
         </Link>
 
-        {/* Login Card */}
-        <div className="pixel-border bg-[var(--kuromi-white)] p-8 rounded-lg">
-          {/* Header */}
+        <div className="card p-8">
           <div className="text-center mb-8">
-            <div className="text-4xl mb-2">★</div>
-            <h1 className="text-2xl font-bold text-[var(--kuromi-dark-purple)]">
+            <h1 className="text-xl font-semibold text-[var(--kuromi-dark-purple)]">
               로그인
             </h1>
             <p className="text-sm text-[var(--text-muted)] mt-2">
@@ -91,40 +83,37 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="p-3 bg-red-100 border-2 border-red-300 rounded-lg text-red-600 text-sm">
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
                 {error}
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-bold text-[var(--kuromi-dark-purple)] mb-2">
-                <User size={16} className="inline mr-2" />
+              <label className="block text-sm font-medium text-[var(--kuromi-black)] mb-2">
                 사용자 이름
               </label>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="사용자 이름을 입력하세요"
-                className="input-kuromi w-full"
+                placeholder="사용자 이름"
+                className="input-modern"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-[var(--kuromi-dark-purple)] mb-2">
-                <Lock size={16} className="inline mr-2" />
+              <label className="block text-sm font-medium text-[var(--kuromi-black)] mb-2">
                 비밀번호
               </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="비밀번호를 입력하세요"
-                className="input-kuromi w-full"
+                placeholder="비밀번호"
+                className="input-modern"
                 required
               />
             </div>
@@ -132,19 +121,11 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="btn-retro w-full flex items-center justify-center gap-2"
+              className="btn-primary w-full"
             >
-              <LogIn size={20} />
               {loading ? '로그인 중...' : '로그인'}
             </button>
           </form>
-
-          {/* Footer decoration */}
-          <div className="flex justify-center gap-2 mt-6">
-            <span className="text-[var(--kuromi-lavender)]">☆</span>
-            <span className="text-[var(--kuromi-pink)]">★</span>
-            <span className="text-[var(--kuromi-lavender)]">☆</span>
-          </div>
         </div>
       </div>
     </div>

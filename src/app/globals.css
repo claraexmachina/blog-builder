@@ -1,28 +1,25 @@
 @import "tailwindcss";
 
-/* Kuromi-inspired Game Boy Theme */
+/* Modern Minimal Kuromi Theme */
 :root {
-  /* Main colors */
+  /* Main colors - softer, more modern palette */
   --kuromi-black: #1a1a2e;
-  --kuromi-dark-purple: #4a1f5c;
-  --kuromi-purple: #7b2cbf;
-  --kuromi-lavender: #c77dff;
-  --kuromi-light-lavender: #e0aaff;
-  --kuromi-pink-accent: #ff69b4;
-  --kuromi-white: #faf0ff;
-  --kuromi-cream: #f8f0fc;
+  --kuromi-dark-purple: #3d2066;
+  --kuromi-purple: #6b4aa0;
+  --kuromi-lavender: #9d7cd8;
+  --kuromi-light-lavender: #d4c4f5;
+  --kuromi-pink-accent: #e879b9;
+  --kuromi-white: #fefefe;
+  --kuromi-cream: #faf8fc;
+  --kuromi-gray: #f3f1f7;
 
-  /* Game Boy inspired */
-  --gameboy-screen: #9bbc0f;
-  --gameboy-dark: #0f380f;
-
-  --background: var(--kuromi-cream);
+  --background: #ffffff;
   --foreground: var(--kuromi-black);
   --card-bg: var(--kuromi-white);
-  --card-border: var(--kuromi-lavender);
+  --card-border: #e8e4f0;
   --accent: var(--kuromi-purple);
   --accent-light: var(--kuromi-light-lavender);
-  --text-muted: #6b5b7a;
+  --text-muted: #7c7589;
 }
 
 @theme inline {
@@ -34,7 +31,6 @@
   --color-accent-light: var(--accent-light);
   --color-muted: var(--text-muted);
 
-  /* Kuromi palette */
   --color-kuromi-black: var(--kuromi-black);
   --color-kuromi-dark: var(--kuromi-dark-purple);
   --color-kuromi-purple: var(--kuromi-purple);
@@ -43,159 +39,154 @@
   --color-kuromi-pink: var(--kuromi-pink-accent);
   --color-kuromi-white: var(--kuromi-white);
   --color-kuromi-cream: var(--kuromi-cream);
-
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-kuromi-gray: var(--kuromi-gray);
 }
 
-/* Custom scrollbar */
+/* Clean scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--kuromi-cream);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--kuromi-lavender);
-  border-radius: 5px;
+  background: var(--kuromi-light-lavender);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--kuromi-purple);
+  background: var(--kuromi-lavender);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   min-height: 100vh;
+  line-height: 1.6;
 }
 
-/* Game Boy styled pixel borders */
-.pixel-border {
-  border: 3px solid var(--kuromi-black);
-  box-shadow:
-    4px 4px 0 var(--kuromi-purple),
-    -1px -1px 0 var(--kuromi-lavender) inset;
-}
-
-.pixel-border-sm {
-  border: 2px solid var(--kuromi-black);
-  box-shadow: 2px 2px 0 var(--kuromi-purple);
-}
-
-/* Retro button style */
-.btn-retro {
-  background: linear-gradient(135deg, var(--kuromi-lavender) 0%, var(--kuromi-purple) 100%);
-  border: 2px solid var(--kuromi-black);
-  box-shadow: 3px 3px 0 var(--kuromi-black);
+/* Modern button styles */
+.btn-primary {
+  background: var(--kuromi-purple);
   color: white;
-  font-weight: bold;
-  padding: 0.5rem 1rem;
-  transition: all 0.1s ease;
-  cursor: pointer;
-}
-
-.btn-retro:hover {
-  transform: translate(1px, 1px);
-  box-shadow: 2px 2px 0 var(--kuromi-black);
-}
-
-.btn-retro:active {
-  transform: translate(3px, 3px);
-  box-shadow: none;
-}
-
-.btn-retro-secondary {
-  background: var(--kuromi-white);
-  border: 2px solid var(--kuromi-purple);
-  box-shadow: 3px 3px 0 var(--kuromi-lavender);
-  color: var(--kuromi-purple);
-  font-weight: bold;
-  padding: 0.5rem 1rem;
-  transition: all 0.1s ease;
-  cursor: pointer;
-}
-
-.btn-retro-secondary:hover {
-  background: var(--kuromi-light-lavender);
-  transform: translate(1px, 1px);
-  box-shadow: 2px 2px 0 var(--kuromi-lavender);
-}
-
-/* Card styles */
-.card-kuromi {
-  background: var(--kuromi-white);
-  border: 3px solid var(--kuromi-black);
-  box-shadow: 5px 5px 0 var(--kuromi-purple);
+  font-weight: 500;
+  padding: 0.625rem 1.25rem;
   border-radius: 8px;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--kuromi-dark-purple);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 74, 160, 0.3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--kuromi-purple);
+  font-weight: 500;
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--kuromi-lavender);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: var(--kuromi-cream);
+  border-color: var(--kuromi-purple);
+}
+
+/* Modern card styles */
+.card {
+  background: white;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
   transition: all 0.2s ease;
 }
 
-.card-kuromi:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 7px 7px 0 var(--kuromi-purple);
+.card:hover {
+  box-shadow: 0 8px 30px rgba(107, 74, 160, 0.12);
+  border-color: var(--kuromi-lavender);
+}
+
+.card-interactive {
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  transform: translateY(-2px);
 }
 
 /* Input styles */
-.input-kuromi {
-  background: var(--kuromi-white);
-  border: 2px solid var(--kuromi-lavender);
-  border-radius: 4px;
+.input-modern {
+  background: white;
+  border: 1.5px solid var(--card-border);
+  border-radius: 8px;
   padding: 0.75rem 1rem;
   transition: all 0.2s ease;
+  width: 100%;
 }
 
-.input-kuromi:focus {
+.input-modern:focus {
   outline: none;
   border-color: var(--kuromi-purple);
-  box-shadow: 0 0 0 3px rgba(123, 44, 191, 0.2);
+  box-shadow: 0 0 0 3px rgba(107, 74, 160, 0.1);
 }
 
 /* Badge styles */
-.badge-kuromi {
-  background: linear-gradient(135deg, var(--kuromi-light-lavender) 0%, var(--kuromi-lavender) 100%);
-  color: var(--kuromi-black);
+.badge {
+  background: var(--kuromi-cream);
+  color: var(--kuromi-purple);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  border: 1px solid var(--kuromi-purple);
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-accent {
+  background: var(--kuromi-light-lavender);
+  color: var(--kuromi-dark-purple);
 }
 
 /* Heart animation for likes */
-@keyframes heartBeat {
+@keyframes heartPop {
   0% { transform: scale(1); }
-  25% { transform: scale(1.2); }
-  50% { transform: scale(1); }
-  75% { transform: scale(1.2); }
+  50% { transform: scale(1.15); }
   100% { transform: scale(1); }
 }
 
 .heart-beat {
-  animation: heartBeat 0.6s ease;
+  animation: heartPop 0.3s ease;
 }
 
 /* Markdown content styles */
 .markdown-content {
   line-height: 1.8;
+  color: var(--kuromi-black);
 }
 
 .markdown-content h1,
 .markdown-content h2,
 .markdown-content h3 {
   color: var(--kuromi-dark-purple);
-  font-weight: bold;
-  margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
 }
 
 .markdown-content h1 {
-  font-size: 2rem;
-  border-bottom: 3px solid var(--kuromi-lavender);
-  padding-bottom: 0.5rem;
+  font-size: 1.875rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--card-border);
 }
 
 .markdown-content h2 {
@@ -207,93 +198,99 @@ body {
 }
 
 .markdown-content p {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .markdown-content blockquote {
-  border-left: 4px solid var(--kuromi-purple);
-  background: var(--kuromi-light-lavender);
-  padding: 1rem;
-  margin: 1rem 0;
+  border-left: 3px solid var(--kuromi-lavender);
+  background: var(--kuromi-cream);
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
   border-radius: 0 8px 8px 0;
-  font-style: italic;
+  color: var(--kuromi-dark-purple);
 }
 
 .markdown-content ul,
 .markdown-content ol {
   margin-left: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .markdown-content li {
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .markdown-content code {
-  background: var(--kuromi-light-lavender);
-  padding: 0.125rem 0.375rem;
+  background: var(--kuromi-cream);
+  padding: 0.125rem 0.5rem;
   border-radius: 4px;
-  font-family: monospace;
-  font-size: 0.9em;
+  font-family: 'SF Mono', Consolas, monospace;
+  font-size: 0.875em;
+  color: var(--kuromi-purple);
 }
 
 .markdown-content pre {
   background: var(--kuromi-black);
-  color: var(--kuromi-light-lavender);
-  padding: 1rem;
-  border-radius: 8px;
+  color: #e4e4e7;
+  padding: 1.25rem;
+  border-radius: 12px;
   overflow-x: auto;
-  margin: 1rem 0;
+  margin: 1.5rem 0;
 }
 
 .markdown-content pre code {
   background: transparent;
   padding: 0;
+  color: inherit;
 }
 
 .markdown-content hr {
   border: none;
-  height: 3px;
-  background: linear-gradient(90deg, var(--kuromi-lavender), var(--kuromi-purple), var(--kuromi-lavender));
-  margin: 2rem 0;
-  border-radius: 2px;
+  height: 1px;
+  background: var(--card-border);
+  margin: 2.5rem 0;
 }
 
 .markdown-content a {
   color: var(--kuromi-purple);
-  text-decoration: underline;
+  text-decoration: none;
+  border-bottom: 1px solid var(--kuromi-lavender);
+  transition: border-color 0.2s;
 }
 
 .markdown-content a:hover {
-  color: var(--kuromi-pink-accent);
+  border-color: var(--kuromi-purple);
 }
 
 .markdown-content img {
   max-width: 100%;
-  border-radius: 8px;
-  border: 2px solid var(--kuromi-lavender);
-  margin: 1rem 0;
+  border-radius: 12px;
+  margin: 1.5rem 0;
 }
 
 /* Loading animation */
-@keyframes pulse-kuromi {
+@keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
 
-.loading-kuromi {
-  animation: pulse-kuromi 1.5s ease-in-out infinite;
+.loading {
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
-/* Star decoration */
-.star-decoration::before {
-  content: "★";
-  color: var(--kuromi-pink-accent);
-  margin-right: 0.5rem;
+/* Text utilities */
+.text-gradient {
+  background: linear-gradient(135deg, var(--kuromi-purple) 0%, var(--kuromi-pink-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.star-decoration::after {
-  content: "★";
-  color: var(--kuromi-pink-accent);
-  margin-left: 0.5rem;
+/* Soft shadow utilities */
+.shadow-soft {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 4px 24px rgba(107, 74, 160, 0.08);
+}
+
+.shadow-soft-lg {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 8px 32px rgba(107, 74, 160, 0.12);
 }

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getAllPosts, getAllCategories } from '@/lib/db';
 import PostCard from '@/components/PostCard';
-import { BookOpen, PenSquare, Sparkles, Star, Heart } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,42 +12,18 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative py-20 px-4 bg-gradient-to-br from-[var(--kuromi-light-lavender)] via-[var(--kuromi-cream)] to-[var(--kuromi-lavender)] overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-10 left-10 text-6xl opacity-20 animate-pulse">★</div>
-        <div className="absolute top-20 right-20 text-4xl opacity-30 animate-pulse delay-100">☆</div>
-        <div className="absolute bottom-10 left-1/4 text-5xl opacity-20 animate-pulse delay-200">♡</div>
-        <div className="absolute bottom-20 right-1/3 text-3xl opacity-25 animate-pulse delay-300">★</div>
-
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          {/* Pixel art-style frame */}
-          <div className="inline-block mb-8">
-            <div className="pixel-border bg-[var(--kuromi-white)] p-8 rounded-lg">
-              <h1 className="text-4xl md:text-6xl font-bold text-[var(--kuromi-dark-purple)] mb-4">
-                <span className="star-decoration">My Blog</span>
-              </h1>
-              <p className="text-lg md:text-xl text-[var(--kuromi-black)] opacity-80">
-                일상과 생각을 기록하는 나만의 공간
-              </p>
-            </div>
-          </div>
-
-          {/* Game Boy style message box */}
-          <div className="pixel-border-sm bg-[var(--kuromi-white)] p-4 rounded max-w-md mx-auto mb-8">
-            <p className="font-mono text-sm text-[var(--kuromi-dark-purple)]">
-              ▶ Press START to explore...
-            </p>
-          </div>
-
-          {/* CTA Buttons */}
+      <section className="py-24 px-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-[var(--kuromi-dark-purple)] mb-6 tracking-tight">
+            안녕하세요
+          </h1>
+          <p className="text-lg md:text-xl text-[var(--text-muted)] mb-10 leading-relaxed">
+            일상과 생각을 기록하는 나만의 공간입니다
+          </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/posts" className="btn-retro flex items-center gap-2">
-              <BookOpen size={20} />
+            <Link href="/posts" className="btn-primary inline-flex items-center gap-2">
               글 보러가기
-            </Link>
-            <Link href="/write" className="btn-retro-secondary flex items-center gap-2">
-              <PenSquare size={20} />
-              글 작성하기
+              <ArrowRight size={18} />
             </Link>
           </div>
         </div>
@@ -55,26 +31,24 @@ export default async function HomePage() {
 
       {/* Categories Section */}
       <section className="py-16 px-4 bg-[var(--kuromi-cream)]">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-[var(--kuromi-dark-purple)] mb-8 flex items-center gap-2">
-            <Sparkles className="text-[var(--kuromi-pink)]" />
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">
             카테고리
           </h2>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {categories.map((category) => (
               <Link
                 key={category.id}
                 href={`/category/${category.slug}`}
-                className="card-kuromi p-6 text-center group"
+                className="card card-interactive p-5 text-center"
               >
-                <div className="text-3xl mb-2 group-hover:scale-110 transition-transform">
+                <div className="text-2xl mb-2">
                   {category.slug === 'daily' && '📅'}
                   {category.slug === 'thoughts' && '💭'}
                   {category.slug === 'journal' && '📔'}
                   {category.slug === 'tech' && '💻'}
                 </div>
-                <h3 className="font-bold text-[var(--kuromi-dark-purple)]">
+                <h3 className="font-medium text-[var(--kuromi-black)]">
                   {category.name}
                 </h3>
               </Link>
@@ -84,18 +58,18 @@ export default async function HomePage() {
       </section>
 
       {/* Recent Posts Section */}
-      <section className="py-16 px-4 bg-[var(--kuromi-white)]">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-16 px-4">
+        <div className="max-w-5xl mx-auto">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold text-[var(--kuromi-dark-purple)] flex items-center gap-2">
-              <Star className="text-[var(--kuromi-pink)]" />
+            <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider">
               최근 글
             </h2>
             <Link
               href="/posts"
-              className="text-[var(--kuromi-purple)] hover:text-[var(--kuromi-pink)] font-medium flex items-center gap-1"
+              className="text-sm text-[var(--kuromi-purple)] hover:text-[var(--kuromi-dark-purple)] font-medium inline-flex items-center gap-1"
             >
-              전체보기 →
+              전체보기
+              <ArrowRight size={14} />
             </Link>
           </div>
 
@@ -119,17 +93,13 @@ export default async function HomePage() {
               })}
             </div>
           ) : (
-            <div className="card-kuromi p-12 text-center">
-              <div className="text-6xl mb-4">★</div>
-              <h3 className="text-xl font-bold text-[var(--kuromi-dark-purple)] mb-2">
-                아직 글이 없어요!
-              </h3>
+            <div className="card p-12 text-center">
               <p className="text-[var(--text-muted)] mb-6">
-                첫 번째 글을 작성해보세요~
+                아직 작성된 글이 없습니다
               </p>
-              <Link href="/write" className="btn-retro inline-flex items-center gap-2">
-                <PenSquare size={18} />
-                글 작성하기
+              <Link href="/write" className="btn-primary inline-flex items-center gap-2">
+                첫 글 작성하기
+                <ArrowRight size={18} />
               </Link>
             </div>
           )}
@@ -137,28 +107,16 @@ export default async function HomePage() {
       </section>
 
       {/* About Section */}
-      <section className="py-16 px-4 bg-gradient-to-br from-[var(--kuromi-lavender)] to-[var(--kuromi-purple)]">
-        <div className="max-w-4xl mx-auto">
-          <div className="pixel-border bg-[var(--kuromi-white)] p-8 rounded-lg text-center">
-            <div className="flex justify-center gap-2 mb-4">
-              <Heart className="text-[var(--kuromi-pink)]" fill="currentColor" />
-              <Heart className="text-[var(--kuromi-pink)]" fill="currentColor" />
-              <Heart className="text-[var(--kuromi-pink)]" fill="currentColor" />
-            </div>
-            <h2 className="text-2xl font-bold text-[var(--kuromi-dark-purple)] mb-4">
-              About This Blog
-            </h2>
-            <p className="text-[var(--kuromi-black)] opacity-80 max-w-2xl mx-auto leading-relaxed">
-              이곳은 일상의 소소한 순간들과 깊은 생각들을 기록하는 나만의 공간입니다.
-              90년대 게임보이의 향수와 귀여운 감성을 담아,
-              하루하루의 이야기를 써내려갑니다.
-            </p>
-            <div className="flex justify-center gap-2 mt-4">
-              <span className="text-2xl">★</span>
-              <span className="text-2xl">☆</span>
-              <span className="text-2xl">★</span>
-            </div>
-          </div>
+      <section className="py-16 px-4 bg-[var(--kuromi-cream)]">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-4">
+            About
+          </h2>
+          <p className="text-[var(--kuromi-black)] leading-relaxed">
+            이곳은 일상의 소소한 순간들과 깊은 생각들을 기록하는 공간입니다.
+            <br className="hidden md:block" />
+            하루하루의 이야기를 편하게 써내려갑니다.
+          </p>
         </div>
       </section>
     </div>

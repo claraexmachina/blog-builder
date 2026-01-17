@@ -49,14 +49,14 @@ export default function DeleteButton({ postId }: DeleteButtonProps) {
         <button
           onClick={handleDelete}
           disabled={deleting}
-          className="px-4 py-2 bg-red-500 text-white rounded font-medium hover:bg-red-600 disabled:opacity-50 transition-colors"
+          className="px-3 py-2 text-sm bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 disabled:opacity-50 transition-colors"
         >
           {deleting ? '삭제 중...' : '확인'}
         </button>
         <button
           onClick={handleCancel}
           disabled={deleting}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded font-medium hover:bg-gray-400 transition-colors"
+          className="px-3 py-2 text-sm bg-gray-100 text-gray-600 rounded-lg font-medium hover:bg-gray-200 transition-colors"
         >
           취소
         </button>
@@ -67,9 +67,9 @@ export default function DeleteButton({ postId }: DeleteButtonProps) {
   return (
     <button
       onClick={handleDelete}
-      className="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-600 rounded font-medium hover:bg-red-200 transition-colors"
+      className="flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors"
     >
-      <Trash2 size={18} />
+      <Trash2 size={16} />
       삭제
     </button>
   );

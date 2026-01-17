@@ -33,13 +33,11 @@ export default function PostList({ initialPosts, categorySlug, showAll = false }
   const [loading, setLoading] = useState(!initialPosts);
 
   useEffect(() => {
-    // Fetch categories
     fetch('/api/categories')
       .then((res) => res.json())
       .then((data) => setCategories(data.categories || []))
       .catch(() => setCategories([]));
 
-    // Fetch posts if not provided
     if (!initialPosts) {
       const url = categorySlug
         ? `/api/categories/${categorySlug}`
@@ -71,7 +69,7 @@ export default function PostList({ initialPosts, categorySlug, showAll = false }
     return (
       <div className="space-y-4">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="card-kuromi h-40 loading-kuromi" />
+          <div key={i} className="card h-36 loading" />
         ))}
       </div>
     );
@@ -79,9 +77,8 @@ export default function PostList({ initialPosts, categorySlug, showAll = false }
 
   if (posts.length === 0) {
     return (
-      <div className="card-kuromi p-8 text-center">
-        <span className="text-4xl block mb-4">★</span>
-        <p className="text-[var(--kuromi-dark-purple)] font-medium">
+      <div className="card p-10 text-center">
+        <p className="text-[var(--text-muted)]">
           아직 작성된 글이 없습니다.
         </p>
       </div>
@@ -110,9 +107,9 @@ export default function PostList({ initialPosts, categorySlug, showAll = false }
       {hasMore && (
         <button
           onClick={() => setDisplayCount((prev) => prev + 5)}
-          className="btn-retro-secondary w-full flex items-center justify-center gap-2"
+          className="btn-secondary w-full flex items-center justify-center gap-2"
         >
-          <ChevronDown size={20} />
+          <ChevronDown size={18} />
           더보기 ({posts.length - displayCount}개 더)
         </button>
       )}
