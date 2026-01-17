@@ -1,21 +1,7 @@
 @import "tailwindcss";
 
-/* Pixel Font - Limgul */
-@font-face {
-  font-family: 'Limgul';
-  src: url('/fonts/Limgul11.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'LimgulMono';
-  src: url('/fonts/LimgulMono11.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
+/* Pixel Font - Galmuri from CDN (no file upload needed!) */
+@import url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/galmuri.css');
 
 /* Kuromi-inspired Cyworld Palette */
 :root {
@@ -63,7 +49,7 @@ body {
     radial-gradient(circle at 20% 50%, rgba(157, 124, 216, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 80% 50%, rgba(232, 121, 185, 0.1) 0%, transparent 50%);
   color: var(--text-primary);
-  font-family: 'Limgul', 'LimgulMono', monospace;
+  font-family: 'Galmuri11', 'Galmuri9', monospace;
   min-height: 100vh;
   font-size: 14px;
   line-height: 1.6;
