@@ -8,11 +8,19 @@ import { siteConfig } from '@/config/site';
 
 export const dynamic = 'force-dynamic';
 
+// KST 기준 현재 날짜 가져오기
+function getKSTDate() {
+  const now = new Date();
+  const kstOffset = 9 * 60; // KST is UTC+9
+  const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+  return new Date(utc + (kstOffset * 60000));
+}
+
 export default async function HomePage() {
   const posts = (await getAllPosts(true)).slice(0, 5);
   const categories = await getAllCategories();
   const totalLikes = posts.reduce((acc, post) => acc + post.likes, 0);
-  const today = new Date();
+  const today = getKSTDate();
 
   return (
     <div className="min-h-screen py-6 px-4">
