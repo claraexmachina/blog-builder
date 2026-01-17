@@ -3,16 +3,16 @@
 /* Pixel Font - Limgul */
 @font-face {
   font-family: 'Limgul';
-  src: url('/fonts/Limgul-Regular.ttf') format('truetype');
-  font-weight: 400;
+  src: url('/fonts/Limgul11.ttf') format('truetype');
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Limgul';
-  src: url('/fonts/Limgul-Bold.ttf') format('truetype');
-  font-weight: 700;
+  font-family: 'LimgulMono';
+  src: url('/fonts/LimgulMono11.ttf') format('truetype');
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
@@ -63,7 +63,7 @@ body {
     radial-gradient(circle at 20% 50%, rgba(157, 124, 216, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 80% 50%, rgba(232, 121, 185, 0.1) 0%, transparent 50%);
   color: var(--text-primary);
-  font-family: 'Limgul', 'DungGeunMo', '둥근모꼴', monospace;
+  font-family: 'Limgul', 'LimgulMono', monospace;
   min-height: 100vh;
   font-size: 14px;
   line-height: 1.6;
