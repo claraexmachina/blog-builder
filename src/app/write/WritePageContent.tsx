@@ -3,17 +3,27 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import MarkdownEditor from '@/components/MarkdownEditor';
 import {
   Save,
   Send,
   ArrowLeft,
-  Image as ImageIcon,
-  X,
   FileText,
   Trash2,
 } from 'lucide-react';
+
+// 본문에서 첫 번째 이미지 URL 추출
+function extractFirstImage(content: string): string | null {
+  // Markdown 이미지: ![alt](url)
+  const mdMatch = content.match(/!\[.*?\]\((.*?)\)/);
+  if (mdMatch) return mdMatch[1];
+
+  // HTML img 태그: <img src="url">
+  const htmlMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
+  if (htmlMatch) return htmlMatch[1];
+
+  return null;
+}
 
 interface Category {
   id: string;
@@ -25,7 +35,6 @@ interface Draft {
   id: string;
   title: string;
   content: string;
-  thumbnail: string | null;
   categoryId: string | null;
   updatedAt: string;
 }
@@ -43,7 +52,6 @@ export default function WritePageContent() {
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [thumbnail, setThumbnail] = useState<string | null>(null);
   const [categoryId, setCategoryId] = useState<string>('');
   const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
 
@@ -95,7 +103,6 @@ export default function WritePageContent() {
           if (data.post) {
             setTitle(data.post.title);
             setContent(data.post.content);
-            setThumbnail(data.post.thumbnail);
             setCategoryId(data.post.categoryId || '');
           }
         })
@@ -112,7 +119,6 @@ export default function WritePageContent() {
           if (data.draft) {
             setTitle(data.draft.title);
             setContent(data.draft.content);
-            setThumbnail(data.draft.thumbnail);
             setCategoryId(data.draft.categoryId || '');
             setCurrentDraftId(draftId);
           }
@@ -138,18 +144,6 @@ export default function WritePageContent() {
     return data.url;
   };
 
-  const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const url = await handleImageUpload(file);
-      setThumbnail(url);
-    } catch {
-      alert('썸네일 업로드에 실패했습니다.');
-    }
-  };
-
   const handleSaveDraft = async () => {
     setSaving(true);
     try {
@@ -162,7 +156,7 @@ export default function WritePageContent() {
         body: JSON.stringify({
           title: title || '제목 없음',
           content,
-          thumbnail,
+          thumbnail: extractFirstImage(content),
           categoryId: categoryId || null,
         }),
       });
@@ -201,6 +195,8 @@ export default function WritePageContent() {
         .replace(/[#*`>\-\[\]()!]/g, '')
         .substring(0, 150)
         .trim();
+
+      const thumbnail = extractFirstImage(content);
 
       if (editId) {
         // Update existing post
@@ -262,7 +258,6 @@ export default function WritePageContent() {
   const handleLoadDraft = (draft: Draft) => {
     setTitle(draft.title);
     setContent(draft.content);
-    setThumbnail(draft.thumbnail);
     setCategoryId(draft.categoryId || '');
     setCurrentDraftId(draft.id);
     setShowDrafts(false);
@@ -362,37 +357,6 @@ export default function WritePageContent() {
 
         {/* Form */}
         <div className="card-kuromi p-6">
-          {/* Thumbnail */}
-          <div className="mb-6">
-            <label className="block text-sm font-bold text-[var(--kuromi-dark-purple)] mb-2">
-              대표 이미지
-            </label>
-            {thumbnail ? (
-              <div className="relative w-full h-48 rounded-lg overflow-hidden group">
-                <Image src={thumbnail} alt="Thumbnail" fill className="object-cover" />
-                <button
-                  onClick={() => setThumbnail(null)}
-                  className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <X size={16} />
-                </button>
-              </div>
-            ) : (
-              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[var(--kuromi-lavender)] rounded-lg cursor-pointer hover:bg-[var(--kuromi-light-lavender)] transition-colors">
-                <ImageIcon size={32} className="text-[var(--kuromi-lavender)] mb-2" />
-                <span className="text-sm text-[var(--text-muted)]">
-                  클릭하여 이미지 업로드
-                </span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleThumbnailUpload}
-                  className="hidden"
-                />
-              </label>
-            )}
-          </div>
-
           {/* Title */}
           <div className="mb-6">
             <label className="block text-sm font-bold text-[var(--kuromi-dark-purple)] mb-2">
