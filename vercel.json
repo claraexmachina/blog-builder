@@ -1,3 +1,6 @@
 {
-  "buildCommand": "curl -L https://github.com/git-lfs/git-lfs/releases/download/v3.4.0/git-lfs-linux-amd64-v3.4.0.tar.gz | tar xz && ./git-lfs-3.4.0/git-lfs install && ./git-lfs-3.4.0/git-lfs pull && npm run build"
+  "framework": "nextjs",
+  "git": {
+    "lfs": true
+  }
 }
