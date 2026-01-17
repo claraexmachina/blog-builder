@@ -4,17 +4,19 @@ export const dynamic = 'force-dynamic';
 
 export default function PostsPage() {
   return (
-    <div className="min-h-screen py-12 px-4">
-      <div className="max-w-5xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-[var(--kuromi-dark-purple)] mb-2">
-            전체 글
-          </h1>
-          <p className="text-sm text-[var(--text-muted)]">
-            모든 글을 최신순으로 확인하세요
-          </p>
+    <div className="min-h-screen py-6 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="widget-box mb-6">
+          <div className="widget-title">ALL POSTS</div>
+          <div className="widget-content">
+            <p className="text-xs text-[var(--text-muted)]">
+              <span className="pixel-star">✦</span> 모든 글을 최신순으로 볼 수 있어요
+            </p>
+          </div>
         </div>
 
+        {/* Post List */}
         <PostList />
       </div>
     </div>

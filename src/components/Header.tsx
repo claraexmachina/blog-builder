@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Home, FileText, PenSquare, LogIn, LogOut, User, Menu, X, ChevronDown } from 'lucide-react';
+import { Home, FileText, PenSquare, LogIn, LogOut, User, Menu, X } from 'lucide-react';
 
 interface Category {
   id: string;
@@ -17,7 +17,6 @@ export default function Header() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
 
   useEffect(() => {
     fetch('/api/auth/check')
@@ -40,106 +39,97 @@ export default function Header() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[var(--card-border)]">
+    <header className="sticky top-0 z-50 bg-[var(--kuromi-cream)] border-b-4 border-[var(--kuromi-purple)]">
       <div className="max-w-5xl mx-auto px-4">
-        <div className="flex items-center justify-between h-14">
+        <div className="flex items-center justify-between h-12">
           {/* Logo */}
           <Link
             href="/"
-            className="text-lg font-semibold text-[var(--kuromi-dark-purple)] hover:text-[var(--kuromi-purple)] transition-colors"
+            className="flex items-center gap-2 text-sm font-bold text-[var(--kuromi-dark-purple)] hover:text-[var(--kuromi-pink)] transition-colors"
           >
-            Blog
+            <span className="pixel-star">★</span>
+            <span>MINI ROOM</span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
             <Link
               href="/"
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3 py-1.5 text-xs font-bold transition-all ${
                 isActive('/')
-                  ? 'text-[var(--kuromi-purple)] bg-[var(--kuromi-cream)]'
-                  : 'text-[var(--text-muted)] hover:text-[var(--kuromi-black)] hover:bg-[var(--kuromi-cream)]'
+                  ? 'bg-[var(--kuromi-purple)] text-white'
+                  : 'text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
               }`}
+              style={{ boxShadow: isActive('/') ? '2px 2px 0 0 var(--kuromi-dark-purple)' : 'none' }}
             >
-              홈
+              HOME
             </Link>
 
             <Link
               href="/posts"
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3 py-1.5 text-xs font-bold transition-all ${
                 isActive('/posts')
-                  ? 'text-[var(--kuromi-purple)] bg-[var(--kuromi-cream)]'
-                  : 'text-[var(--text-muted)] hover:text-[var(--kuromi-black)] hover:bg-[var(--kuromi-cream)]'
+                  ? 'bg-[var(--kuromi-purple)] text-white'
+                  : 'text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
               }`}
+              style={{ boxShadow: isActive('/posts') ? '2px 2px 0 0 var(--kuromi-dark-purple)' : 'none' }}
             >
-              전체 글
+              POSTS
             </Link>
 
-            {/* Categories Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setCategoryMenuOpen(!categoryMenuOpen)}
-                onBlur={() => setTimeout(() => setCategoryMenuOpen(false), 150)}
-                className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  pathname.startsWith('/category')
-                    ? 'text-[var(--kuromi-purple)] bg-[var(--kuromi-cream)]'
-                    : 'text-[var(--text-muted)] hover:text-[var(--kuromi-black)] hover:bg-[var(--kuromi-cream)]'
+            <div className="w-px h-4 bg-[var(--kuromi-lavender)] mx-2" />
+
+            {categories.slice(0, 3).map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/category/${cat.slug}`}
+                className={`px-2 py-1 text-xs transition-all ${
+                  pathname === `/category/${cat.slug}`
+                    ? 'text-[var(--kuromi-pink)] font-bold'
+                    : 'text-[var(--text-muted)] hover:text-[var(--kuromi-purple)]'
                 }`}
               >
-                카테고리
-                <ChevronDown size={14} className={`transition-transform ${categoryMenuOpen ? 'rotate-180' : ''}`} />
-              </button>
-              {categoryMenuOpen && (
-                <div className="absolute top-full left-0 mt-1 bg-white border border-[var(--card-border)] rounded-lg shadow-soft-lg overflow-hidden min-w-[140px]">
-                  {categories.map((cat) => (
-                    <Link
-                      key={cat.id}
-                      href={`/category/${cat.slug}`}
-                      className="block px-4 py-2.5 text-sm text-[var(--kuromi-black)] hover:bg-[var(--kuromi-cream)] transition-colors"
-                    >
-                      {cat.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+                {cat.name}
+              </Link>
+            ))}
+
+            <div className="w-px h-4 bg-[var(--kuromi-lavender)] mx-2" />
 
             {isAuthenticated && (
               <Link
                 href="/write"
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-3 py-1.5 text-xs font-bold transition-all ${
                   isActive('/write')
-                    ? 'text-[var(--kuromi-purple)] bg-[var(--kuromi-cream)]'
-                    : 'text-[var(--text-muted)] hover:text-[var(--kuromi-black)] hover:bg-[var(--kuromi-cream)]'
+                    ? 'bg-[var(--kuromi-pink)] text-white'
+                    : 'text-[var(--kuromi-pink)] hover:bg-[var(--kuromi-soft-pink)]'
                 }`}
+                style={{ boxShadow: isActive('/write') ? '2px 2px 0 0 var(--kuromi-dark-purple)' : 'none' }}
               >
-                글쓰기
+                WRITE
               </Link>
             )}
-
-            <div className="w-px h-5 bg-[var(--card-border)] mx-2" />
 
             {isAuthenticated ? (
               <>
                 <Link
                   href="/admin"
-                  className="p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--kuromi-black)] hover:bg-[var(--kuromi-cream)] transition-colors"
+                  className="p-1.5 text-[var(--kuromi-purple)] hover:text-[var(--kuromi-pink)] transition-colors"
                 >
-                  <User size={18} />
+                  <User size={14} />
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--kuromi-pink-accent)] hover:bg-[var(--kuromi-cream)] transition-colors"
+                  className="p-1.5 text-[var(--text-muted)] hover:text-[var(--kuromi-pink)] transition-colors"
                 >
-                  <LogOut size={18} />
+                  <LogOut size={14} />
                 </button>
               </>
             ) : (
               <Link
                 href="/login"
-                className="px-3 py-2 rounded-lg text-sm font-medium text-[var(--text-muted)] hover:text-[var(--kuromi-black)] hover:bg-[var(--kuromi-cream)] transition-colors"
+                className="px-2 py-1 text-xs text-[var(--text-muted)] hover:text-[var(--kuromi-purple)] transition-colors"
               >
-                로그인
+                LOGIN
               </Link>
             )}
           </nav>
@@ -147,90 +137,87 @@ export default function Header() {
           {/* Mobile menu button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-[var(--kuromi-black)] hover:bg-[var(--kuromi-cream)] rounded-lg"
+            className="md:hidden p-2 text-[var(--kuromi-dark-purple)]"
           >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-[var(--card-border)]">
+          <div className="md:hidden py-3 border-t-2 border-[var(--kuromi-lavender)]">
             <nav className="flex flex-col gap-1">
               <Link
                 href="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`px-4 py-2.5 rounded-lg text-sm font-medium ${
-                  isActive('/') ? 'bg-[var(--kuromi-cream)] text-[var(--kuromi-purple)]' : 'text-[var(--kuromi-black)]'
+                className={`px-3 py-2 text-xs font-bold ${
+                  isActive('/') ? 'bg-[var(--kuromi-purple)] text-white' : 'text-[var(--kuromi-dark-purple)]'
                 }`}
               >
-                홈
+                HOME
               </Link>
 
               <Link
                 href="/posts"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`px-4 py-2.5 rounded-lg text-sm font-medium ${
-                  isActive('/posts') ? 'bg-[var(--kuromi-cream)] text-[var(--kuromi-purple)]' : 'text-[var(--kuromi-black)]'
+                className={`px-3 py-2 text-xs font-bold ${
+                  isActive('/posts') ? 'bg-[var(--kuromi-purple)] text-white' : 'text-[var(--kuromi-dark-purple)]'
                 }`}
               >
-                전체 글
+                POSTS
               </Link>
 
-              <div className="px-4 py-2 text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
-                카테고리
-              </div>
+              <div className="pixel-divider my-1"></div>
+
               {categories.map((cat) => (
                 <Link
                   key={cat.id}
                   href={`/category/${cat.slug}`}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-6 py-2 rounded-lg text-sm text-[var(--kuromi-black)]"
+                  className="px-4 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--kuromi-purple)]"
                 >
-                  {cat.name}
+                  └ {cat.name}
                 </Link>
               ))}
 
               {isAuthenticated && (
                 <>
-                  <div className="h-px bg-[var(--card-border)] my-2" />
+                  <div className="pixel-divider my-1"></div>
                   <Link
                     href="/write"
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`px-4 py-2.5 rounded-lg text-sm font-medium ${
-                      isActive('/write') ? 'bg-[var(--kuromi-cream)] text-[var(--kuromi-purple)]' : 'text-[var(--kuromi-black)]'
-                    }`}
+                    className="px-3 py-2 text-xs font-bold text-[var(--kuromi-pink)]"
                   >
-                    글쓰기
+                    WRITE
                   </Link>
                   <Link
                     href="/admin"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-2.5 rounded-lg text-sm font-medium text-[var(--kuromi-black)]"
+                    className="px-3 py-2 text-xs text-[var(--kuromi-dark-purple)]"
                   >
-                    관리
+                    ADMIN
                   </Link>
                   <button
                     onClick={() => {
                       handleLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="px-4 py-2.5 rounded-lg text-sm font-medium text-left text-[var(--kuromi-pink-accent)]"
+                    className="px-3 py-2 text-xs text-left text-[var(--text-muted)]"
                   >
-                    로그아웃
+                    LOGOUT
                   </button>
                 </>
               )}
 
               {!isAuthenticated && (
                 <>
-                  <div className="h-px bg-[var(--card-border)] my-2" />
+                  <div className="pixel-divider my-1"></div>
                   <Link
                     href="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-2.5 rounded-lg text-sm font-medium text-[var(--kuromi-black)]"
+                    className="px-3 py-2 text-xs text-[var(--text-muted)]"
                   >
-                    로그인
+                    LOGIN
                   </Link>
                 </>
               )}

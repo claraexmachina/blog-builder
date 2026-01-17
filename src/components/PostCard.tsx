@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart } from 'lucide-react';
+import { Heart, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
@@ -26,52 +26,47 @@ export default function PostCard({
   likes,
   categoryName,
 }: PostCardProps) {
-  const truncatedExcerpt = excerpt.length > 150 ? excerpt.substring(0, 150) + '...' : excerpt;
+  const truncatedExcerpt = excerpt.length > 100 ? excerpt.substring(0, 100) + '...' : excerpt;
 
   return (
     <Link href={`/posts/${id}`} className="block group">
-      <article className="card card-interactive overflow-hidden">
-        <div className="flex flex-col sm:flex-row">
+      <article className="pixel-card p-3">
+        <div className="flex gap-3">
           {/* Thumbnail */}
-          <div className="relative w-full sm:w-44 h-36 sm:h-auto sm:min-h-[140px] bg-[var(--kuromi-cream)] flex-shrink-0 overflow-hidden">
+          <div className="w-16 h-16 flex-shrink-0 bg-[var(--kuromi-cream)] border-2 border-[var(--kuromi-lavender)] flex items-center justify-center overflow-hidden">
             {thumbnail ? (
               <Image
                 src={thumbnail}
                 alt={title}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                width={64}
+                height={64}
+                className="object-cover w-full h-full"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <div className="w-12 h-12 rounded-full bg-[var(--kuromi-light-lavender)] opacity-50" />
-              </div>
+              <span className="text-[var(--kuromi-lavender)] text-xl">✦</span>
             )}
           </div>
 
           {/* Content */}
-          <div className="flex-1 p-5">
-            <div className="flex items-center gap-2 mb-2">
-              {categoryName && (
-                <span className="badge text-xs">
-                  {categoryName}
-                </span>
-              )}
-              <span className="text-xs text-[var(--text-muted)]">
-                {format(new Date(createdAt), 'yyyy.MM.dd', { locale: ko })}
-              </span>
-            </div>
-
-            <h3 className="text-base font-semibold text-[var(--kuromi-black)] mb-2 group-hover:text-[var(--kuromi-purple)] transition-colors line-clamp-2">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-bold text-[var(--kuromi-dark-purple)] truncate group-hover:text-[var(--kuromi-pink)] transition-colors">
               {title}
             </h3>
-
-            <p className="text-sm text-[var(--text-muted)] mb-3 line-clamp-2">
+            <p className="text-xs text-[var(--text-muted)] line-clamp-2 mt-1">
               {truncatedExcerpt}
             </p>
-
-            <div className="flex items-center gap-1 text-xs text-[var(--kuromi-pink-accent)]">
-              <Heart size={12} fill="currentColor" />
-              <span>{likes}</span>
+            <div className="flex items-center gap-3 mt-2 text-xs text-[var(--text-muted)]">
+              {categoryName && (
+                <span className="pixel-badge">{categoryName}</span>
+              )}
+              <span className="flex items-center gap-1">
+                <Heart size={10} className="text-[var(--kuromi-pink)]" fill="currentColor" />
+                {likes}
+              </span>
+              <span className="flex items-center gap-1">
+                <Clock size={10} />
+                {format(new Date(createdAt), 'MM.dd')}
+              </span>
             </div>
           </div>
         </div>

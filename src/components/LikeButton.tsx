@@ -49,18 +49,21 @@ export default function LikeButton({ postId, initialLikes = 0 }: LikeButtonProps
     <button
       onClick={handleLike}
       disabled={loading}
-      className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-medium ${
+      className={`inline-flex items-center gap-1 px-3 py-1.5 text-xs font-bold transition-all ${
         liked
-          ? 'bg-[var(--kuromi-pink-accent)] text-white'
-          : 'bg-[var(--kuromi-cream)] text-[var(--kuromi-pink-accent)] hover:bg-[var(--kuromi-light-lavender)]'
-      } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          ? 'bg-[var(--kuromi-pink)] text-white'
+          : 'bg-[var(--kuromi-soft-pink)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-pink)] hover:text-white'
+      } ${loading ? 'opacity-50' : ''}`}
+      style={{
+        boxShadow: '2px 2px 0 0 var(--kuromi-dark-purple)',
+        transform: animating ? 'scale(1.1)' : 'scale(1)'
+      }}
     >
       <Heart
-        size={16}
-        className={animating ? 'heart-beat' : ''}
+        size={12}
         fill={liked ? 'currentColor' : 'none'}
       />
-      <span>{likes}</span>
+      <span>♥ {likes}</span>
     </button>
   );
 }
