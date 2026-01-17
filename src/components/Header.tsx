@@ -3,19 +3,12 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Home, FileText, PenSquare, LogIn, LogOut, User, Menu, X } from 'lucide-react';
-
-interface Category {
-  id: string;
-  name: string;
-  slug: string;
-}
+import { User, LogOut, Menu, X } from 'lucide-react';
 
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -23,11 +16,6 @@ export default function Header() {
       .then((res) => res.json())
       .then((data) => setIsAuthenticated(data.authenticated))
       .catch(() => setIsAuthenticated(false));
-
-    fetch('/api/categories')
-      .then((res) => res.json())
-      .then((data) => setCategories(data.categories || []))
-      .catch(() => setCategories([]));
   }, []);
 
   const handleLogout = async () => {
@@ -76,22 +64,6 @@ export default function Header() {
             >
               POSTS
             </Link>
-
-            <div className="w-px h-4 bg-[var(--kuromi-lavender)] mx-2" />
-
-            {categories.slice(0, 3).map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/category/${cat.slug}`}
-                className={`px-2 py-1 text-xs transition-all ${
-                  pathname === `/category/${cat.slug}`
-                    ? 'text-[var(--kuromi-pink)] font-bold'
-                    : 'text-[var(--text-muted)] hover:text-[var(--kuromi-purple)]'
-                }`}
-              >
-                {cat.name}
-              </Link>
-            ))}
 
             <div className="w-px h-4 bg-[var(--kuromi-lavender)] mx-2" />
 
@@ -166,19 +138,6 @@ export default function Header() {
               >
                 POSTS
               </Link>
-
-              <div className="pixel-divider my-1"></div>
-
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/category/${cat.slug}`}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--kuromi-purple)]"
-                >
-                  └ {cat.name}
-                </Link>
-              ))}
 
               {isAuthenticated && (
                 <>

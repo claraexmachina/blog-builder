@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { getAllPosts, getAllCategories } from '@/lib/db';
-import { Heart, Folder, Clock } from 'lucide-react';
+import { Heart, Clock } from 'lucide-react';
 import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { siteConfig } from '@/config/site';
 
 export const dynamic = 'force-dynamic';
@@ -11,6 +12,7 @@ export default async function HomePage() {
   const posts = (await getAllPosts(true)).slice(0, 5);
   const categories = await getAllCategories();
   const totalLikes = posts.reduce((acc, post) => acc + post.likes, 0);
+  const today = new Date();
 
   return (
     <div className="min-h-screen py-6 px-4">
@@ -21,7 +23,7 @@ export default async function HomePage() {
             <span className="pixel-star">★</span> {siteConfig.title} <span className="pixel-star">★</span>
           </h1>
           <div className="today-box mx-auto">
-            TODAY <span>{Math.floor(Math.random() * 50) + 10}</span> | TOTAL <span>{Math.floor(Math.random() * 5000) + 1000}</span>
+            {format(today, 'yyyy년 M월 d일 EEEE', { locale: ko })}
           </div>
         </div>
 
@@ -59,32 +61,12 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Categories Widget */}
-            <div className="widget-box">
-              <div className="widget-title">{siteConfig.widgetTitles.category}</div>
-              <div className="widget-content">
-                <ul className="space-y-2">
-                  {categories.map((category) => (
-                    <li key={category.id}>
-                      <Link
-                        href={`/category/${category.slug}`}
-                        className="flex items-center gap-2 text-sm hover:text-[var(--kuromi-pink)] transition-colors"
-                      >
-                        <Folder size={12} className="text-[var(--kuromi-lavender)]" />
-                        {category.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Music/Mood Widget */}
+            {/* Music/Mood Widget with YouTube */}
             <div className="widget-box">
               <div className="widget-title">{siteConfig.widgetTitles.nowPlaying}</div>
               <div className="widget-content">
                 <div className="mini-widget">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 mb-3">
                     <div className="w-8 h-8 bg-[var(--kuromi-dark-purple)] flex items-center justify-center text-white text-xs">
                       ♪
                     </div>
@@ -93,6 +75,18 @@ export default async function HomePage() {
                       <p className="text-[var(--text-muted)]">{siteConfig.nowPlaying.artist}</p>
                     </div>
                   </div>
+                  <div className="aspect-video w-full">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      src={`https://www.youtube.com/embed/${siteConfig.nowPlaying.youtubeId}`}
+                      title="Now Playing"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="border-2 border-[var(--kuromi-lavender)]"
+                    ></iframe>
+                  </div>
                 </div>
               </div>
             </div>
@@ -100,27 +94,6 @@ export default async function HomePage() {
 
           {/* Main Content Area */}
           <div className="space-y-4">
-            {/* Room Display */}
-            <div className="room-container h-64 md:h-80 flex items-center justify-center">
-              <div className="text-center z-10 relative">
-                <p className="text-[var(--kuromi-light-lavender)] text-sm mb-2">
-                  {siteConfig.room.title}
-                </p>
-                <p className="text-[var(--kuromi-lavender)] text-xs mb-4 opacity-70">
-                  {siteConfig.room.subtitle}
-                </p>
-                {/* Decorative elements */}
-                <div className="flex justify-center gap-6 text-2xl opacity-70">
-                  {siteConfig.room.decorations.map((emoji, i) => (
-                    <span key={i}>{emoji}</span>
-                  ))}
-                </div>
-                <p className="text-[var(--text-muted)] text-xs mt-4">
-                  {siteConfig.room.placeholder}
-                </p>
-              </div>
-            </div>
-
             {/* Recent Posts Widget */}
             <div className="widget-box">
               <div className="widget-title">{siteConfig.widgetTitles.recentPosts}</div>
@@ -180,12 +153,9 @@ export default async function HomePage() {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <p className="text-sm text-[var(--text-muted)] mb-4">
+                    <p className="text-sm text-[var(--text-muted)]">
                       {siteConfig.emptyState.message} <span className="pixel-heart">♡</span>
                     </p>
-                    <Link href="/write" className="pixel-btn inline-block">
-                      {siteConfig.emptyState.buttonText}
-                    </Link>
                   </div>
                 )}
 

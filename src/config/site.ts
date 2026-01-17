@@ -22,20 +22,12 @@ export const siteConfig = {
   nowPlaying: {
     artist: 'YOASOBI',                     // 아티스트 명
     title: 'たぶん',                        // 곡 제목
-  },
-
-  // 메인 룸 영역
-  room: {
-    title: '✧ MY PIXEL ROOM ✧',           // 룸 타이틀
-    subtitle: 'cyberpunk cozy space',      // 룸 부제목
-    decorations: ['🖥️', '🐱', '🪴', '💜'], // 장식 이모지들
-    placeholder: '픽셀 룸 이미지를 여기에 추가하세요',
+    youtubeId: 'rgNdeflYdYw',              // YouTube 영상 ID
   },
 
   // 위젯 타이틀들
   widgetTitles: {
     profile: 'PROFILE',
-    category: 'CATEGORY',
     nowPlaying: 'NOW PLAYING',
     recentPosts: 'RECENT POSTS',
   },
@@ -43,7 +35,6 @@ export const siteConfig = {
   // 빈 상태 메시지
   emptyState: {
     message: '아직 작성된 글이 없어요',
-    buttonText: '첫 글 쓰러 가기',
   },
 
   // 버튼 텍스트
