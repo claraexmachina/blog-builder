@@ -16,7 +16,7 @@ export default function Header() {
       .then((res) => res.json())
       .then((data) => setIsAuthenticated(data.authenticated))
       .catch(() => setIsAuthenticated(false));
-  }, []);
+  }, [pathname]);
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
@@ -31,13 +31,10 @@ export default function Header() {
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex items-center justify-between h-12">
           {/* Logo */}
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-sm font-bold text-[var(--kuromi-dark-purple)] hover:text-[var(--kuromi-pink)] transition-colors"
-          >
+          <span className="flex items-center gap-2 text-sm font-bold text-[var(--kuromi-dark-purple)]">
             <span className="pixel-star">★</span>
-            <span>MINI ROOM</span>
-          </Link>
+            <span>WELCOME</span>
+          </span>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
