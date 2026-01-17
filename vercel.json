@@ -1,6 +1,5 @@
 {
   "framework": "nextjs",
-  "git": {
-    "lfs": true
-  }
+  "installCommand": "bash scripts/fetch-lfs.sh && npm install",
+  "buildCommand": "npm run build"
 }
