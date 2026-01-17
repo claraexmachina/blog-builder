@@ -90,7 +90,7 @@ export default async function HomePage() {
                     </div>
                     <div className="text-xs">
                       <p className="text-[var(--kuromi-dark-purple)] font-bold">{siteConfig.nowPlaying.title}</p>
-                      <p className="text-[var(--text-muted)]">{siteConfig.nowPlaying.subtitle}</p>
+                      <p className="text-[var(--text-muted)]">{siteConfig.nowPlaying.artist}</p>
                     </div>
                   </div>
                 </div>

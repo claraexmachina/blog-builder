@@ -5,13 +5,13 @@
 
 export const siteConfig = {
   // 사이트 제목
-  title: 'my mini room',
+  title: 'claraexmachina.room',
 
   // 프로필 설정
   profile: {
-    emoji: '🐱',                          // 프로필 이모지
-    name: 'ISTP의 아지트',                 // 닉네임
-    bio: 'cyberpunk girl vibes ⚡',        // 한줄 소개
+    emoji: '🍒',                          // 프로필 이모지
+    name: 'Ab imo pectore',               // 닉네임
+    bio: '햇빛 희, 물모일 주 🌸',          // 한줄 소개
     statsLabels: {
       posts: '글',                         // 글 수 라벨
       likes: '♥',                          // 좋아요 라벨
@@ -20,8 +20,8 @@ export const siteConfig = {
 
   // NOW PLAYING 위젯
   nowPlaying: {
-    title: 'Lo-fi Beats',                  // 곡 제목
-    subtitle: 'coding session',            // 부제목
+    artist: 'YOASOBI',                     // 아티스트 명
+    title: 'たぶん',                        // 곡 제목
   },
 
   // 메인 룸 영역
@@ -53,6 +53,6 @@ export const siteConfig = {
 
   // 푸터 메시지
   footer: {
-    message: '방문해주셔서 감사합니다',
+    message: '평화를 빕니다',
   },
 };
