@@ -9,7 +9,7 @@ export async function GET() {
     return NextResponse.json({ error: '인증이 필요합니다.' }, { status: 401 });
   }
 
-  const drafts = getAllDrafts(session.userId);
+  const drafts = await getAllDrafts(session.userId);
   return NextResponse.json({ drafts });
 }
 
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const data = await request.json();
     const { title, content, thumbnail, categoryId } = data;
 
-    const draft = createDraft({
+    const draft = await createDraft({
       title: title || '제목 없음',
       content: content || '',
       thumbnail,

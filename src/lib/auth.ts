@@ -32,7 +32,7 @@ export async function login(
   username: string,
   password: string
 ): Promise<{ success: boolean; token?: string; error?: string }> {
-  const user = getUserByUsername(username);
+  const user = await getUserByUsername(username);
   if (!user) {
     return { success: false, error: '사용자를 찾을 수 없습니다.' };
   }

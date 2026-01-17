@@ -11,7 +11,7 @@ export async function GET(
   const limit = parseInt(searchParams.get('limit') || '0');
   const offset = parseInt(searchParams.get('offset') || '0');
 
-  const category = getCategoryBySlug(slug);
+  const category = await getCategoryBySlug(slug);
 
   if (!category) {
     return NextResponse.json(
@@ -23,7 +23,7 @@ export async function GET(
   const session = await getSession();
   const publishedOnly = !session;
 
-  let posts = getPostsByCategory(category.id, publishedOnly);
+  let posts = await getPostsByCategory(category.id, publishedOnly);
 
   // Apply pagination
   if (limit > 0) {

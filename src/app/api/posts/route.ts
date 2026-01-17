@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   const session = await getSession();
   const publishedOnly = !session;
 
-  let posts = getAllPosts(publishedOnly);
+  let posts = await getAllPosts(publishedOnly);
 
   // Apply pagination
   if (limit > 0) {
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const post = createPost({
+    const post = await createPost({
       title,
       content,
       excerpt: excerpt || content.substring(0, 150) + '...',

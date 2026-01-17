@@ -1,9 +1,8 @@
-import fs from 'fs';
-import path from 'path';
+import { kv } from '@vercel/kv';
 import { Database, User, Category, Post, Draft, Like } from './types';
 import bcrypt from 'bcryptjs';
 
-const DB_PATH = path.join(process.cwd(), 'data', 'db.json');
+const DB_KEY = 'blog-database';
 
 function generateId(): string {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -32,33 +31,28 @@ function getDefaultDb(): Database {
   };
 }
 
-function readDb(): Database {
+async function readDb(): Promise<Database> {
   try {
-    if (!fs.existsSync(DB_PATH)) {
+    const data = await kv.get<Database>(DB_KEY);
+    if (!data) {
       const defaultDb = getDefaultDb();
-      writeDb(defaultDb);
+      await writeDb(defaultDb);
       return defaultDb;
     }
-    const data = fs.readFileSync(DB_PATH, 'utf-8');
-    return JSON.parse(data);
+    return data;
   } catch {
     const defaultDb = getDefaultDb();
-    writeDb(defaultDb);
     return defaultDb;
   }
 }
 
-function writeDb(data: Database): void {
-  const dir = path.dirname(DB_PATH);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-  fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
+async function writeDb(data: Database): Promise<void> {
+  await kv.set(DB_KEY, data);
 }
 
 // User functions
-export function getUserByUsername(username: string): User | undefined {
-  const db = readDb();
+export async function getUserByUsername(username: string): Promise<User | undefined> {
+  const db = await readDb();
   return db.users.find((u) => u.username === username);
 }
 
@@ -67,31 +61,31 @@ export function validatePassword(user: User, password: string): boolean {
 }
 
 // Category functions
-export function getAllCategories(): Category[] {
-  const db = readDb();
+export async function getAllCategories(): Promise<Category[]> {
+  const db = await readDb();
   return db.categories;
 }
 
-export function getCategoryBySlug(slug: string): Category | undefined {
-  const db = readDb();
+export async function getCategoryBySlug(slug: string): Promise<Category | undefined> {
+  const db = await readDb();
   return db.categories.find((c) => c.slug === slug);
 }
 
-export function createCategory(name: string, slug: string): Category {
-  const db = readDb();
+export async function createCategory(name: string, slug: string): Promise<Category> {
+  const db = await readDb();
   const category: Category = {
     id: generateId(),
     name,
     slug,
   };
   db.categories.push(category);
-  writeDb(db);
+  await writeDb(db);
   return category;
 }
 
 // Post functions
-export function getAllPosts(publishedOnly = true): Post[] {
-  const db = readDb();
+export async function getAllPosts(publishedOnly = true): Promise<Post[]> {
+  const db = await readDb();
   let posts = db.posts;
   if (publishedOnly) {
     posts = posts.filter((p) => p.published);
@@ -99,8 +93,8 @@ export function getAllPosts(publishedOnly = true): Post[] {
   return posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 
-export function getPostsByCategory(categoryId: string, publishedOnly = true): Post[] {
-  const db = readDb();
+export async function getPostsByCategory(categoryId: string, publishedOnly = true): Promise<Post[]> {
+  const db = await readDb();
   let posts = db.posts.filter((p) => p.categoryId === categoryId);
   if (publishedOnly) {
     posts = posts.filter((p) => p.published);
@@ -108,12 +102,12 @@ export function getPostsByCategory(categoryId: string, publishedOnly = true): Po
   return posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 
-export function getPostById(id: string): Post | undefined {
-  const db = readDb();
+export async function getPostById(id: string): Promise<Post | undefined> {
+  const db = await readDb();
   return db.posts.find((p) => p.id === id);
 }
 
-export function createPost(data: {
+export async function createPost(data: {
   title: string;
   content: string;
   excerpt: string;
@@ -121,8 +115,8 @@ export function createPost(data: {
   categoryId?: string | null;
   authorId: string;
   published?: boolean;
-}): Post {
-  const db = readDb();
+}): Promise<Post> {
+  const db = await readDb();
   const now = new Date().toISOString();
   const post: Post = {
     id: generateId(),
@@ -138,15 +132,15 @@ export function createPost(data: {
     updatedAt: now,
   };
   db.posts.push(post);
-  writeDb(db);
+  await writeDb(db);
   return post;
 }
 
-export function updatePost(
+export async function updatePost(
   id: string,
   data: Partial<Omit<Post, 'id' | 'createdAt' | 'authorId'>>
-): Post | undefined {
-  const db = readDb();
+): Promise<Post | undefined> {
+  const db = await readDb();
   const index = db.posts.findIndex((p) => p.id === id);
   if (index === -1) return undefined;
 
@@ -155,43 +149,42 @@ export function updatePost(
     ...data,
     updatedAt: new Date().toISOString(),
   };
-  writeDb(db);
+  await writeDb(db);
   return db.posts[index];
 }
 
-export function deletePost(id: string): boolean {
-  const db = readDb();
+export async function deletePost(id: string): Promise<boolean> {
+  const db = await readDb();
   const index = db.posts.findIndex((p) => p.id === id);
   if (index === -1) return false;
 
   db.posts.splice(index, 1);
-  // Also delete associated likes
   db.likes = db.likes.filter((l) => l.postId !== id);
-  writeDb(db);
+  await writeDb(db);
   return true;
 }
 
 // Draft functions
-export function getAllDrafts(authorId: string): Draft[] {
-  const db = readDb();
+export async function getAllDrafts(authorId: string): Promise<Draft[]> {
+  const db = await readDb();
   return db.drafts
     .filter((d) => d.authorId === authorId)
     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 }
 
-export function getDraftById(id: string): Draft | undefined {
-  const db = readDb();
+export async function getDraftById(id: string): Promise<Draft | undefined> {
+  const db = await readDb();
   return db.drafts.find((d) => d.id === id);
 }
 
-export function createDraft(data: {
+export async function createDraft(data: {
   title: string;
   content: string;
   thumbnail?: string | null;
   categoryId?: string | null;
   authorId: string;
-}): Draft {
-  const db = readDb();
+}): Promise<Draft> {
+  const db = await readDb();
   const now = new Date().toISOString();
   const draft: Draft = {
     id: generateId(),
@@ -204,15 +197,15 @@ export function createDraft(data: {
     updatedAt: now,
   };
   db.drafts.push(draft);
-  writeDb(db);
+  await writeDb(db);
   return draft;
 }
 
-export function updateDraft(
+export async function updateDraft(
   id: string,
   data: Partial<Omit<Draft, 'id' | 'createdAt' | 'authorId'>>
-): Draft | undefined {
-  const db = readDb();
+): Promise<Draft | undefined> {
+  const db = await readDb();
   const index = db.drafts.findIndex((d) => d.id === id);
   if (index === -1) return undefined;
 
@@ -221,34 +214,35 @@ export function updateDraft(
     ...data,
     updatedAt: new Date().toISOString(),
   };
-  writeDb(db);
+  await writeDb(db);
   return db.drafts[index];
 }
 
-export function deleteDraft(id: string): boolean {
-  const db = readDb();
+export async function deleteDraft(id: string): Promise<boolean> {
+  const db = await readDb();
   const index = db.drafts.findIndex((d) => d.id === id);
   if (index === -1) return false;
 
   db.drafts.splice(index, 1);
-  writeDb(db);
+  await writeDb(db);
   return true;
 }
 
 // Like functions
-export function getLikeCount(postId: string): number {
-  const db = readDb();
+export async function getLikeCount(postId: string): Promise<number> {
+  const db = await readDb();
   return db.likes.filter((l) => l.postId === postId).length;
 }
 
-export function hasLiked(postId: string, visitorId: string): boolean {
-  const db = readDb();
+export async function hasLiked(postId: string, visitorId: string): Promise<boolean> {
+  const db = await readDb();
   return db.likes.some((l) => l.postId === postId && l.visitorId === visitorId);
 }
 
-export function addLike(postId: string, visitorId: string): boolean {
-  const db = readDb();
-  if (hasLiked(postId, visitorId)) return false;
+export async function addLike(postId: string, visitorId: string): Promise<boolean> {
+  const db = await readDb();
+  const alreadyLiked = db.likes.some((l) => l.postId === postId && l.visitorId === visitorId);
+  if (alreadyLiked) return false;
 
   const like: Like = {
     id: generateId(),
@@ -258,34 +252,31 @@ export function addLike(postId: string, visitorId: string): boolean {
   };
   db.likes.push(like);
 
-  // Update post likes count
   const postIndex = db.posts.findIndex((p) => p.id === postId);
   if (postIndex !== -1) {
     db.posts[postIndex].likes = db.likes.filter((l) => l.postId === postId).length;
   }
 
-  writeDb(db);
+  await writeDb(db);
   return true;
 }
 
-export function removeLike(postId: string, visitorId: string): boolean {
-  const db = readDb();
+export async function removeLike(postId: string, visitorId: string): Promise<boolean> {
+  const db = await readDb();
   const index = db.likes.findIndex((l) => l.postId === postId && l.visitorId === visitorId);
   if (index === -1) return false;
 
   db.likes.splice(index, 1);
 
-  // Update post likes count
   const postIndex = db.posts.findIndex((p) => p.id === postId);
   if (postIndex !== -1) {
     db.posts[postIndex].likes = db.likes.filter((l) => l.postId === postId).length;
   }
 
-  writeDb(db);
+  await writeDb(db);
   return true;
 }
 
-// Initialize database
-export function initDb(): void {
-  readDb();
+export async function initDb(): Promise<void> {
+  await readDb();
 }

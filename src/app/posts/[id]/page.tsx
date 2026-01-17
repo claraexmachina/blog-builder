@@ -21,7 +21,7 @@ interface PostPageProps {
 
 export default async function PostPage({ params }: PostPageProps) {
   const { id } = await params;
-  const post = getPostById(id);
+  const post = await getPostById(id);
   const session = await getSession();
 
   if (!post) {
@@ -33,7 +33,7 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
-  const categories = getAllCategories();
+  const categories = await getAllCategories();
   const category = categories.find((c) => c.id === post.categoryId);
 
   return (

@@ -12,13 +12,13 @@ interface CategoryPageProps {
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
-  const category = getCategoryBySlug(slug);
+  const category = await getCategoryBySlug(slug);
 
   if (!category) {
     notFound();
   }
 
-  const categories = getAllCategories();
+  const categories = await getAllCategories();
 
   return (
     <div className="min-h-screen bg-[var(--kuromi-cream)] py-8 px-4">

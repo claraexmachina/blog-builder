@@ -5,9 +5,9 @@ import { BookOpen, PenSquare, Sparkles, Star, Heart } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
-export default function HomePage() {
-  const posts = getAllPosts(true).slice(0, 3);
-  const categories = getAllCategories();
+export default async function HomePage() {
+  const posts = (await getAllPosts(true)).slice(0, 3);
+  const categories = await getAllCategories();
 
   return (
     <div className="min-h-screen">

@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const post = getPostById(id);
+  const post = await getPostById(id);
 
   if (!post) {
     return NextResponse.json({ error: '글을 찾을 수 없습니다.' }, { status: 404 });
@@ -39,7 +39,7 @@ export async function PUT(
     const data = await request.json();
     const { title, content, excerpt, thumbnail, categoryId, published } = data;
 
-    const updatedPost = updatePost(id, {
+    const updatedPost = await updatePost(id, {
       title,
       content,
       excerpt,
@@ -72,7 +72,7 @@ export async function DELETE(
   }
 
   const { id } = await params;
-  const success = deletePost(id);
+  const success = await deletePost(id);
 
   if (!success) {
     return NextResponse.json({ error: '글을 찾을 수 없습니다.' }, { status: 404 });

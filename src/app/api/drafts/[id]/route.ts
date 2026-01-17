@@ -13,7 +13,7 @@ export async function GET(
   }
 
   const { id } = await params;
-  const draft = getDraftById(id);
+  const draft = await getDraftById(id);
 
   if (!draft) {
     return NextResponse.json({ error: '임시저장을 찾을 수 없습니다.' }, { status: 404 });
@@ -37,7 +37,7 @@ export async function PUT(
   }
 
   const { id } = await params;
-  const draft = getDraftById(id);
+  const draft = await getDraftById(id);
 
   if (!draft) {
     return NextResponse.json({ error: '임시저장을 찾을 수 없습니다.' }, { status: 404 });
@@ -51,7 +51,7 @@ export async function PUT(
     const data = await request.json();
     const { title, content, thumbnail, categoryId } = data;
 
-    const updatedDraft = updateDraft(id, {
+    const updatedDraft = await updateDraft(id, {
       title,
       content,
       thumbnail,
@@ -78,7 +78,7 @@ export async function DELETE(
   }
 
   const { id } = await params;
-  const draft = getDraftById(id);
+  const draft = await getDraftById(id);
 
   if (!draft) {
     return NextResponse.json({ error: '임시저장을 찾을 수 없습니다.' }, { status: 404 });
@@ -88,6 +88,6 @@ export async function DELETE(
     return NextResponse.json({ error: '권한이 없습니다.' }, { status: 403 });
   }
 
-  deleteDraft(id);
+  await deleteDraft(id);
   return NextResponse.json({ success: true });
 }

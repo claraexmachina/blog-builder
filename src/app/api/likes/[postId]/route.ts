@@ -18,15 +18,15 @@ export async function GET(
   { params }: { params: Promise<{ postId: string }> }
 ) {
   const { postId } = await params;
-  const post = getPostById(postId);
+  const post = await getPostById(postId);
 
   if (!post) {
     return NextResponse.json({ error: '글을 찾을 수 없습니다.' }, { status: 404 });
   }
 
   const visitorId = getVisitorId(request);
-  const count = getLikeCount(postId);
-  const liked = hasLiked(postId, visitorId);
+  const count = await getLikeCount(postId);
+  const liked = await hasLiked(postId, visitorId);
 
   const response = NextResponse.json({ count, liked });
 
@@ -47,23 +47,23 @@ export async function POST(
   { params }: { params: Promise<{ postId: string }> }
 ) {
   const { postId } = await params;
-  const post = getPostById(postId);
+  const post = await getPostById(postId);
 
   if (!post) {
     return NextResponse.json({ error: '글을 찾을 수 없습니다.' }, { status: 404 });
   }
 
   const visitorId = getVisitorId(request);
-  const alreadyLiked = hasLiked(postId, visitorId);
+  const alreadyLiked = await hasLiked(postId, visitorId);
 
   let success: boolean;
   if (alreadyLiked) {
-    success = removeLike(postId, visitorId);
+    success = await removeLike(postId, visitorId);
   } else {
-    success = addLike(postId, visitorId);
+    success = await addLike(postId, visitorId);
   }
 
-  const count = getLikeCount(postId);
+  const count = await getLikeCount(postId);
   const liked = !alreadyLiked;
 
   const response = NextResponse.json({ count, liked, success });
