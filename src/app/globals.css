@@ -73,40 +73,45 @@ body {
     radial-gradient(circle at 20% 50%, rgba(157, 124, 216, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 80% 50%, rgba(232, 121, 185, 0.1) 0%, transparent 50%);
   color: var(--text-primary);
-  font-family: 'Limgul14', 'Pretendard', monospace;
+  font-family: 'Limgul14', 'Pretendard', sans-serif !important;
   min-height: 100vh;
   font-size: 14px;
   line-height: 1.6;
 }
 
+/* Force Pretendard for all Korean text */
+html, body, * {
+  font-family: 'Limgul14', 'Pretendard', sans-serif;
+}
+
 /* Font Size Utility Classes */
 .font-pixel-xs {
-  font-family: 'Limgul13', 'Pretendard', monospace;
+  font-family: 'Limgul13', 'Pretendard', sans-serif;
   font-size: 13px;
 }
 
 .font-pixel-sm {
-  font-family: 'Limgul14', 'Pretendard', monospace;
+  font-family: 'Limgul14', 'Pretendard', sans-serif;
   font-size: 14px;
 }
 
 .font-pixel-base {
-  font-family: 'Limgul14', 'Pretendard', monospace;
+  font-family: 'Limgul14', 'Pretendard', sans-serif;
   font-size: 14px;
 }
 
 .font-pixel-md {
-  font-family: 'Limgul16', 'Pretendard', monospace;
+  font-family: 'Limgul16', 'Pretendard', sans-serif;
   font-size: 16px;
 }
 
 .font-pixel-lg {
-  font-family: 'Limgul16', 'Pretendard', monospace;
+  font-family: 'Limgul16', 'Pretendard', sans-serif;
   font-size: 16px;
 }
 
 .font-pixel-xl {
-  font-family: 'Limgul20', 'Pretendard', monospace;
+  font-family: 'Limgul20', 'Pretendard', sans-serif;
   font-size: 20px;
 }
 
@@ -151,7 +156,7 @@ body {
   position: relative;
   z-index: 1;
   color: white;
-  font-family: 'Limgul13', 'Pretendard', monospace;
+  font-family: 'Limgul13', 'Pretendard', sans-serif;
   font-size: 13px;
   font-weight: bold;
   padding: 4px 8px;
@@ -179,7 +184,7 @@ body {
     inset 1px 1px 0 0 rgba(255,255,255,0.3);
   color: white;
   padding: 6px 16px;
-  font-family: 'Limgul14', 'Pretendard', monospace;
+  font-family: 'Limgul14', 'Pretendard', sans-serif;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.1s;
@@ -227,7 +232,7 @@ body {
   border: 2px solid var(--kuromi-lavender);
   box-shadow: inset 2px 2px 0 0 rgba(0,0,0,0.1);
   padding: 8px 12px;
-  font-family: 'Limgul14', 'Pretendard', monospace;
+  font-family: 'Limgul14', 'Pretendard', sans-serif;
   font-size: 14px;
   outline: none;
   width: 100%;
@@ -246,7 +251,7 @@ body {
   background: var(--kuromi-light-lavender);
   border: 1px solid var(--kuromi-purple);
   color: var(--kuromi-dark-purple);
-  font-family: 'Limgul13', 'Pretendard', monospace;
+  font-family: 'Limgul13', 'Pretendard', sans-serif;
   font-size: 13px;
   padding: 2px 8px;
   box-shadow: 1px 1px 0 0 var(--kuromi-purple);
@@ -344,7 +349,7 @@ body {
   background: var(--kuromi-cream);
   border: 2px solid var(--kuromi-lavender);
   padding: 4px 8px;
-  font-family: 'Limgul13', 'Pretendard', monospace;
+  font-family: 'Limgul13', 'Pretendard', sans-serif;
   font-size: 13px;
   display: inline-flex;
   align-items: center;
@@ -360,7 +365,7 @@ body {
 .markdown-content {
   line-height: 1.8;
   color: var(--text-primary);
-  font-family: 'Limgul14', 'Pretendard', monospace;
+  font-family: 'Limgul14', 'Pretendard', sans-serif;
   font-size: 14px;
 }
 
@@ -376,15 +381,15 @@ body {
 }
 
 .markdown-content h1 {
-  font-family: 'Limgul20', 'Pretendard', monospace;
+  font-family: 'Limgul20', 'Pretendard', sans-serif;
   font-size: 20px;
 }
 .markdown-content h2 {
-  font-family: 'Limgul16', 'Pretendard', monospace;
+  font-family: 'Limgul16', 'Pretendard', sans-serif;
   font-size: 16px;
 }
 .markdown-content h3 {
-  font-family: 'Limgul14', 'Pretendard', monospace;
+  font-family: 'Limgul14', 'Pretendard', sans-serif;
   font-size: 14px;
 }
 
@@ -404,7 +409,7 @@ body {
   background: var(--kuromi-dark-purple);
   color: var(--kuromi-light-lavender);
   padding: 2px 6px;
-  font-family: 'Limgul13', 'Pretendard', monospace;
+  font-family: 'Limgul13', 'Pretendard', sans-serif;
   font-size: 13px;
 }
 
