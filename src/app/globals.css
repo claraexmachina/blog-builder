@@ -14,20 +14,8 @@
 }
 
 @font-face {
-  font-family: 'Limgul15';
-  src: url('/fonts/Limgul15.ttf') format('truetype');
-  font-display: swap;
-}
-
-@font-face {
   font-family: 'Limgul16';
   src: url('/fonts/Limgul16.ttf') format('truetype');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Limgul18';
-  src: url('/fonts/Limgul18.ttf') format('truetype');
   font-display: swap;
 }
 
@@ -101,8 +89,8 @@ body {
 }
 
 .font-pixel-base {
-  font-family: 'Limgul15', monospace;
-  font-size: 15px;
+  font-family: 'Limgul14', monospace;
+  font-size: 14px;
 }
 
 .font-pixel-md {
@@ -111,8 +99,8 @@ body {
 }
 
 .font-pixel-lg {
-  font-family: 'Limgul18', monospace;
-  font-size: 18px;
+  font-family: 'Limgul16', monospace;
+  font-size: 16px;
 }
 
 .font-pixel-xl {
@@ -370,8 +358,8 @@ body {
 .markdown-content {
   line-height: 1.8;
   color: var(--text-primary);
-  font-family: 'Limgul15', monospace;
-  font-size: 15px;
+  font-family: 'Limgul14', monospace;
+  font-size: 14px;
 }
 
 .markdown-content h1,
@@ -390,12 +378,12 @@ body {
   font-size: 20px;
 }
 .markdown-content h2 {
-  font-family: 'Limgul18', monospace;
-  font-size: 18px;
-}
-.markdown-content h3 {
   font-family: 'Limgul16', monospace;
   font-size: 16px;
+}
+.markdown-content h3 {
+  font-family: 'Limgul14', monospace;
+  font-size: 14px;
 }
 
 .markdown-content p {
