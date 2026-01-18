@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllCategories, createCategory } from '@/lib/db';
-import { cookies } from 'next/headers';
+import { getSession } from '@/lib/auth';
 
 export async function GET() {
   const categories = await getAllCategories();
@@ -9,8 +9,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   // Check authentication
-  const cookieStore = await cookies();
-  const session = cookieStore.get('session');
+  const session = await getSession();
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

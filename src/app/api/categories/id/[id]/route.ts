@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { updateCategory, deleteCategory } from '@/lib/db';
-import { cookies } from 'next/headers';
+import { getSession } from '@/lib/auth';
 
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   // Check authentication
-  const cookieStore = await cookies();
-  const session = cookieStore.get('session');
+  const session = await getSession();
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -38,8 +37,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   // Check authentication
-  const cookieStore = await cookies();
-  const session = cookieStore.get('session');
+  const session = await getSession();
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
