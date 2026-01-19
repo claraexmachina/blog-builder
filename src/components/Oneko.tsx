@@ -55,9 +55,10 @@ export default function Oneko() {
     let idleTime = 0;
     let idleAnimation: string | null = 'sleeping'; // 처음부터 자는 상태로 시작
     let idleAnimationFrame = 8; // tired 건너뛰고 바로 sleeping 시작
+    let lastFrameTimestamp = 0;
     let animationFrameId: number;
 
-    const nekoSpeed = 3; // 속도 줄임 (10 → 3)
+    const nekoSpeed = 10; // 원본 속도
     const spriteSets: Record<string, number[][]> = {
       idle: [[-3, -3]],
       alert: [[-7, -3]],
@@ -189,7 +190,6 @@ export default function Oneko() {
       // 거리가 가까우면 idle 상태
       if (distance < nekoSpeed || distance < 48) {
         idle();
-        animationFrameId = requestAnimationFrame(frame);
         return;
       }
 
@@ -215,8 +215,15 @@ export default function Oneko() {
         nekoEl.style.left = `${nekoPosX - 16}px`;
         nekoEl.style.top = `${nekoPosY - 16}px`;
       }
+    };
 
-      animationFrameId = requestAnimationFrame(frame);
+    // 원본처럼 100ms 간격으로 프레임 실행
+    const onAnimationFrame = (timestamp: number) => {
+      if (timestamp - lastFrameTimestamp > 100) {
+        lastFrameTimestamp = timestamp;
+        frame();
+      }
+      animationFrameId = requestAnimationFrame(onAnimationFrame);
     };
 
     // 초기 sleeping 스프라이트 설정
@@ -234,7 +241,7 @@ export default function Oneko() {
     window.addEventListener('resize', onResize);
 
     // 애니메이션 시작
-    animationFrameId = requestAnimationFrame(frame);
+    animationFrameId = requestAnimationFrame(onAnimationFrame);
 
     return () => {
       clearTimeout(initTimeout);
