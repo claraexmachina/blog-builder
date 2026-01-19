@@ -25,11 +25,8 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-5xl mx-auto">
-        {/* Mini Homepage Title */}
+        {/* Date Display */}
         <div className="text-center mb-8">
-          <h1 className="text-xl font-semibold text-[var(--text-primary)] mb-2 tracking-tight">
-            {siteConfig.title}
-          </h1>
           <div className="today-box mx-auto">
             {format(today, 'yyyy년 M월 d일 EEEE', { locale: ko })}
           </div>
