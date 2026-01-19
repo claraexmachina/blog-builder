@@ -65,6 +65,11 @@
   --color-bg-widget: var(--color-surface);
 }
 
+/* Override Tailwind text-xs to 13px */
+.text-xs {
+  font-size: 13px !important;
+}
+
 /* Base Styles */
 * {
   image-rendering: auto;
@@ -269,7 +274,7 @@ html, body, * {
   border: none;
   color: var(--text-secondary);
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   padding: 4px 10px;
   border-radius: 20px;
