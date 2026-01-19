@@ -9,8 +9,9 @@ export default function Oneko() {
     const nekoEl = nekoRef.current;
     if (!nekoEl) return;
 
-    // 768px 미만에서 비활성화 (Dock과 동일 기준)
-    if (window.innerWidth < 768) {
+    // 768px 미만에서 비활성화 (CSS 미디어 쿼리와 동일하게 matchMedia 사용)
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+    if (!mediaQuery.matches) {
       nekoEl.style.display = 'none';
       return;
     }
@@ -18,7 +19,7 @@ export default function Oneko() {
     // 프로필 위젯 위치 기반 초기 위치 계산 (약간 지연 후 계산)
     const getInitialPosition = () => {
       const profileWidget = document.querySelector('.widget-box');
-      if (profileWidget && window.innerWidth >= 768) {
+      if (profileWidget && mediaQuery.matches) {
         const rect = profileWidget.getBoundingClientRect();
         // 데스크톱: 프로필 위젯 내부 하단 근처
         return {
