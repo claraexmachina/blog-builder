@@ -31,9 +31,8 @@ export default function Header() {
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
-          <span className="flex items-center gap-2 text-sm font-semibold text-[var(--text-primary)]">
-            <span className="text-[var(--accent-warm)]">●</span>
-            <span>WELCOME</span>
+          <span className="text-xl">
+            🌱
           </span>
 
           {/* Desktop Navigation */}
