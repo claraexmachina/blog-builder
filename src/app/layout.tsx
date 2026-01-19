@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Dock from "@/components/Dock";
 import BubbleCursor from "@/components/BubbleCursor";
 import AnimatedFavicon from "@/components/AnimatedFavicon";
+import Oneko from "@/components/Oneko";
 
 export const metadata: Metadata = {
   title: "by claraexmachina",
@@ -34,6 +35,7 @@ export default function RootLayout({
         <Dock />
         <BubbleCursor />
         <AnimatedFavicon />
+        <Oneko />
       </body>
     </html>
   );
