@@ -66,7 +66,7 @@ export default function PostCard({
 
           {/* Content */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium text-[var(--text-primary)] truncate group-hover:text-[var(--accent-warm)] transition-colors">
+            <h3 className="text-base font-medium text-[var(--text-primary)] truncate group-hover:text-[var(--accent-warm)] transition-colors">
               {title}
             </h3>
             <p className="text-xs text-[var(--text-muted)] line-clamp-2 mt-1 leading-relaxed">
