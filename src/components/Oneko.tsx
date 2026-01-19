@@ -9,18 +9,16 @@ export default function Oneko() {
     const nekoEl = nekoRef.current;
     if (!nekoEl) return;
 
-    // 프로필 위젯 위치 기반 초기 위치 계산
+    // 프로필 위젯 위치 기반 초기 위치 계산 (약간 지연 후 계산)
     const getInitialPosition = () => {
       const profileWidget = document.querySelector('.widget-box');
-      if (profileWidget) {
+      if (profileWidget && window.innerWidth >= 1024) {
         const rect = profileWidget.getBoundingClientRect();
-        // 데스크톱: 프로필 위젯 오른쪽 하단 근처
-        if (window.innerWidth >= 1024) {
-          return {
-            x: rect.right - 40,
-            y: rect.bottom - 20,
-          };
-        }
+        // 데스크톱: 프로필 위젯 내부 하단 근처
+        return {
+          x: rect.left + rect.width / 2,
+          y: rect.bottom - 60,
+        };
       }
       // 모바일/태블릿: 화면 왼쪽 하단
       return {
@@ -29,17 +27,31 @@ export default function Oneko() {
       };
     };
 
-    let nekoPosX = getInitialPosition().x;
-    let nekoPosY = getInitialPosition().y;
-    let mousePosX = nekoPosX;
-    let mousePosY = nekoPosY;
+    // DOM이 완전히 렌더링된 후 위치 계산
+    const initTimeout = setTimeout(() => {
+      const pos = getInitialPosition();
+      nekoPosX = pos.x;
+      nekoPosY = pos.y;
+      mousePosX = pos.x;
+      mousePosY = pos.y;
+
+      if (nekoEl) {
+        nekoEl.style.left = `${nekoPosX - 16}px`;
+        nekoEl.style.top = `${nekoPosY - 16}px`;
+      }
+    }, 100);
+
+    let nekoPosX = 100;
+    let nekoPosY = 100;
+    let mousePosX = 100;
+    let mousePosY = 100;
     let frameCount = 0;
     let idleTime = 0;
-    let idleAnimation: string | null = null;
-    let idleAnimationFrame = 0;
+    let idleAnimation: string | null = 'sleeping'; // 처음부터 자는 상태로 시작
+    let idleAnimationFrame = 8; // tired 건너뛰고 바로 sleeping 시작
     let animationFrameId: number;
 
-    const nekoSpeed = 10;
+    const nekoSpeed = 3; // 속도 줄임 (10 → 3)
     const spriteSets: Record<string, number[][]> = {
       idle: [[-3, -3]],
       alert: [[-7, -3]],
@@ -168,6 +180,7 @@ export default function Oneko() {
       const diffY = nekoPosY - mousePosY;
       const distance = Math.sqrt(diffX ** 2 + diffY ** 2);
 
+      // 거리가 가까우면 idle 상태
       if (distance < nekoSpeed || distance < 48) {
         idle();
         animationFrameId = requestAnimationFrame(frame);
@@ -200,9 +213,8 @@ export default function Oneko() {
       animationFrameId = requestAnimationFrame(frame);
     };
 
-    // 초기 위치 설정
-    nekoEl.style.left = `${nekoPosX - 16}px`;
-    nekoEl.style.top = `${nekoPosY - 16}px`;
+    // 초기 sleeping 스프라이트 설정
+    setSprite('sleeping', 0);
 
     // 이벤트 리스너 등록
     document.addEventListener('mousemove', onMouseMove);
@@ -210,8 +222,6 @@ export default function Oneko() {
 
     // 리사이즈 시 위치 재조정
     const onResize = () => {
-      const pos = getInitialPosition();
-      // 고양이가 화면 밖으로 나가지 않도록
       nekoPosX = Math.min(Math.max(16, nekoPosX), window.innerWidth - 16);
       nekoPosY = Math.min(Math.max(16, nekoPosY), window.innerHeight - 16);
     };
@@ -221,6 +231,7 @@ export default function Oneko() {
     animationFrameId = requestAnimationFrame(frame);
 
     return () => {
+      clearTimeout(initTimeout);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('touchmove', onTouchMove);
       window.removeEventListener('resize', onResize);
@@ -239,7 +250,7 @@ export default function Oneko() {
         position: 'fixed',
         pointerEvents: 'none',
         imageRendering: 'pixelated',
-        backgroundImage: 'url(https://raw.githubusercontent.com/adryd325/oneko.js/main/oneko.gif)',
+        backgroundImage: 'url(/images/oneko.gif)',
         zIndex: 9999,
       }}
     />
