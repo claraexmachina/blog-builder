@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
+import { put } from '@vercel/blob';
 
 export async function POST(request: NextRequest) {
   const session = await getSession();
@@ -45,26 +44,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
     // Generate unique filename
-    const ext = path.extname(file.name) || `.${file.type.split('/')[1]}`;
-    const filename = `${Date.now()}-${Math.random().toString(36).substring(2)}${ext}`;
+    const ext = file.name.split('.').pop() || file.type.split('/')[1];
+    const filename = `${Date.now()}-${Math.random().toString(36).substring(2)}.${ext}`;
 
-    // Ensure uploads directory exists
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    await mkdir(uploadDir, { recursive: true });
+    // Upload to Vercel Blob
+    const blob = await put(filename, file, {
+      access: 'public',
+    });
 
-    // Write file
-    const filepath = path.join(uploadDir, filename);
-    await writeFile(filepath, buffer);
-
-    // Return the URL
-    const url = `/uploads/${filename}`;
-
-    return NextResponse.json({ url, filename });
-  } catch {
+    return NextResponse.json({ url: blob.url, filename });
+  } catch (error) {
+    console.error('Upload error:', error);
     return NextResponse.json(
       { error: '파일 업로드 중 오류가 발생했습니다.' },
       { status: 500 }
