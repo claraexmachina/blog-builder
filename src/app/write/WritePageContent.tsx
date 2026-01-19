@@ -25,6 +25,31 @@ function extractFirstImage(content: string): string | null {
   return null;
 }
 
+// 마크다운을 제거하고 순수 텍스트만 추출
+function stripMarkdown(text: string): string {
+  return text
+    // Remove images ![alt](url)
+    .replace(/!\[.*?\]\(.*?\)/g, '')
+    // Remove links [text](url) -> text
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    // Remove bold/italic **text** or *text* or __text__ or _text_
+    .replace(/(\*\*|__)(.*?)\1/g, '$2')
+    .replace(/(\*|_)(.*?)\1/g, '$2')
+    // Remove headers
+    .replace(/^#{1,6}\s+/gm, '')
+    // Remove code blocks
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`([^`]*)`/g, '$1')
+    // Remove blockquotes
+    .replace(/^>\s+/gm, '')
+    // Remove horizontal rules
+    .replace(/^[-*_]{3,}\s*$/gm, '')
+    // Remove extra whitespace
+    .replace(/\n+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 interface Category {
   id: string;
   name: string;
@@ -191,10 +216,7 @@ export default function WritePageContent() {
 
     setPublishing(true);
     try {
-      const excerpt = content
-        .replace(/[#*`>\-\[\]()!]/g, '')
-        .substring(0, 150)
-        .trim();
+      const excerpt = stripMarkdown(content).substring(0, 150);
 
       const thumbnail = extractFirstImage(content);
 

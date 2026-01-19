@@ -2,6 +2,31 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAllPosts, createPost } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 
+// Strip markdown syntax to create plain text excerpt
+function stripMarkdown(text: string): string {
+  return text
+    // Remove images ![alt](url)
+    .replace(/!\[.*?\]\(.*?\)/g, '')
+    // Remove links [text](url) -> text
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    // Remove bold/italic **text** or *text* or __text__ or _text_
+    .replace(/(\*\*|__)(.*?)\1/g, '$2')
+    .replace(/(\*|_)(.*?)\1/g, '$2')
+    // Remove headers
+    .replace(/^#{1,6}\s+/gm, '')
+    // Remove code blocks
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`([^`]*)`/g, '$1')
+    // Remove blockquotes
+    .replace(/^>\s+/gm, '')
+    // Remove horizontal rules
+    .replace(/^[-*_]{3,}\s*$/gm, '')
+    // Remove extra whitespace
+    .replace(/\n+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const limit = parseInt(searchParams.get('limit') || '0');
@@ -41,7 +66,7 @@ export async function POST(request: NextRequest) {
     const post = await createPost({
       title,
       content,
-      excerpt: excerpt || content.substring(0, 150) + '...',
+      excerpt: excerpt || stripMarkdown(content).substring(0, 150) + '...',
       thumbnail,
       categoryId,
       authorId: session.userId,
