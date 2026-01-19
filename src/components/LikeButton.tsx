@@ -63,7 +63,7 @@ export default function LikeButton({ postId, initialLikes = 0 }: LikeButtonProps
         size={12}
         fill={liked ? 'currentColor' : 'none'}
       />
-      <span>♥ {likes}</span>
+      <span>{likes}</span>
     </button>
   );
 }
