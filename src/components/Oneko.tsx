@@ -9,8 +9,10 @@ export default function Oneko() {
     const nekoEl = nekoRef.current;
     if (!nekoEl) return;
 
-    // 모바일에서 비활성화 (768px 미만)
-    if (window.innerWidth < 768) {
+    // 모바일/터치 디바이스에서 비활성화 (768px 미만 또는 터치 디바이스)
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    const isSmallScreen = window.innerWidth < 768;
+    if (isTouchDevice || isSmallScreen) {
       nekoEl.style.display = 'none';
       return;
     }
