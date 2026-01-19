@@ -13,7 +13,7 @@ const dockItems: DockItem[] = [
   { id: 1, color: 'linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%)', href: 'https://vidkidz.tistory.com/235', label: 'Blog 1' },
   { id: 2, color: 'linear-gradient(135deg, #98D8C8 0%, #7FCDCD 100%)', href: 'https://www.crazygames.com/game/cat-life-simulator-devil-cat', label: 'Cat Game' },
   { id: 3, color: 'linear-gradient(135deg, #DDA0DD 0%, #BA55D3 100%)', href: 'https://samandev.itch.io/tamaweb', label: 'Tamaweb' },
-  { id: 4, color: 'linear-gradient(135deg, #FFDAB9 0%, #FFA07A 100%)', href: 'https://www.youtube.com/watch?v=uuGyFpuHOoo', label: 'YouTube 1' },
+  { id: 4, color: 'linear-gradient(135deg, #FFDAB9 0%, #FFA07A 100%)', href: 'https://bongo.cat/', label: 'Bongo Cat' },
   { id: 5, color: 'linear-gradient(135deg, #87CEEB 0%, #6BB3D9 100%)', href: 'https://acidrain.hancomtaja.com/?gamekey=acidrain', label: 'Acid Rain' },
   { id: 6, color: 'linear-gradient(135deg, #FFFACD 0%, #F0E68C 100%)', href: 'https://www.youtube.com/watch?v=QwQnskHnoWg', label: 'YouTube 2' },
   { id: 7, color: 'linear-gradient(135deg, #F08080 0%, #E9967A 100%)', href: 'https://vidkidz.tistory.com/481', label: 'Blog 2' },
