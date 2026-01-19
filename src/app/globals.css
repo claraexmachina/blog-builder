@@ -1,7 +1,6 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
 
-/* Korean Font - Pretendard loaded via CDN stylesheet in layout.tsx */
+/* Google Fonts loaded via link tag in layout.tsx */
 
 /* Pastel Pink Palette */
 :root {
