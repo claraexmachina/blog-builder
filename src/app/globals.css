@@ -1,6 +1,13 @@
 @import "tailwindcss";
 
-/* Google Fonts loaded via link tag in layout.tsx */
+/* Local Font */
+@font-face {
+  font-family: 'Yeongdeok Sea';
+  src: url('/fonts/Yeongdeok Sea.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* Pastel Pink Palette */
 :root {
@@ -66,7 +73,7 @@
 body {
   background: var(--color-bg);
   color: var(--text-primary);
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-family: 'Yeongdeok Sea', -apple-system, BlinkMacSystemFont, sans-serif !important;
   min-height: 100vh;
   font-size: 14px;
   line-height: 1.7;
@@ -77,42 +84,42 @@ body {
 
 /* Force Noto Sans KR for all Korean text */
 html, body, * {
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Yeongdeok Sea', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* Font Size Utility Classes */
 .font-pixel-xs {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 12px;
   font-weight: 400;
 }
 
 .font-pixel-sm {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 13px;
   font-weight: 400;
 }
 
 .font-pixel-base {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 14px;
   font-weight: 400;
 }
 
 .font-pixel-md {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 15px;
   font-weight: 500;
 }
 
 .font-pixel-lg {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 16px;
   font-weight: 500;
 }
 
 .font-pixel-xl {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 18px;
   font-weight: 600;
 }
@@ -157,7 +164,7 @@ html, body, * {
   position: relative;
   z-index: 1;
   color: var(--text-primary);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 12px;
   font-weight: 600;
   padding: 10px 16px;
@@ -185,7 +192,7 @@ html, body, * {
   box-shadow: 0 2px 4px var(--shadow-medium);
   color: white;
   padding: 10px 20px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -238,7 +245,7 @@ html, body, * {
   border: 1px solid var(--border-medium);
   box-shadow: none;
   padding: 10px 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 14px;
   outline: none;
   width: 100%;
@@ -261,7 +268,7 @@ html, body, * {
   background: var(--accent-soft);
   border: none;
   color: var(--text-secondary);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 11px;
   font-weight: 500;
   padding: 4px 10px;
@@ -352,7 +359,7 @@ html, body, * {
   background: var(--color-surface-alt);
   border: 1px solid var(--border-light);
   padding: 6px 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 12px;
   display: inline-flex;
   align-items: center;
@@ -369,7 +376,7 @@ html, body, * {
 .markdown-content {
   line-height: 1.8;
   color: var(--text-primary);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 15px;
 }
 
@@ -385,17 +392,17 @@ html, body, * {
 }
 
 .markdown-content h1 {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 24px;
   letter-spacing: -0.02em;
 }
 .markdown-content h2 {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 20px;
   letter-spacing: -0.01em;
 }
 .markdown-content h3 {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 16px;
   border-bottom: none;
 }
