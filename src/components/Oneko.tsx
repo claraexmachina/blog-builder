@@ -9,6 +9,12 @@ export default function Oneko() {
     const nekoEl = nekoRef.current;
     if (!nekoEl) return;
 
+    // 모바일에서 비활성화 (768px 미만)
+    if (window.innerWidth < 768) {
+      nekoEl.style.display = 'none';
+      return;
+    }
+
     // 프로필 위젯 위치 기반 초기 위치 계산 (약간 지연 후 계산)
     const getInitialPosition = () => {
       const profileWidget = document.querySelector('.widget-box');
