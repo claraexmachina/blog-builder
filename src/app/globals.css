@@ -75,7 +75,7 @@ body {
   color: var(--text-primary);
   font-family: 'Yeongdeok Sea', -apple-system, BlinkMacSystemFont, sans-serif !important;
   min-height: 100vh;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.7;
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
@@ -90,37 +90,37 @@ html, body, * {
 /* Font Size Utility Classes */
 .font-pixel-xs {
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
 }
 
 .font-pixel-sm {
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 400;
 }
 
 .font-pixel-base {
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
 }
 
 .font-pixel-md {
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
 }
 
 .font-pixel-lg {
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
 }
 
 .font-pixel-xl {
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
 }
 
@@ -165,7 +165,7 @@ html, body, * {
   z-index: 1;
   color: var(--text-primary);
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   padding: 10px 16px;
   letter-spacing: 0.02em;
@@ -193,7 +193,7 @@ html, body, * {
   color: white;
   padding: 10px 20px;
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -246,7 +246,7 @@ html, body, * {
   box-shadow: none;
   padding: 10px 14px;
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   outline: none;
   width: 100%;
   border-radius: 8px;
@@ -269,7 +269,7 @@ html, body, * {
   border: none;
   color: var(--text-secondary);
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   padding: 4px 10px;
   border-radius: 20px;
@@ -360,7 +360,7 @@ html, body, * {
   border: 1px solid var(--border-light);
   padding: 6px 12px;
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -377,7 +377,7 @@ html, body, * {
   line-height: 1.8;
   color: var(--text-primary);
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .markdown-content h1,
@@ -393,17 +393,17 @@ html, body, * {
 
 .markdown-content h1 {
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 24px;
+  font-size: 26px;
   letter-spacing: -0.02em;
 }
 .markdown-content h2 {
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 20px;
+  font-size: 22px;
   letter-spacing: -0.01em;
 }
 .markdown-content h3 {
   font-family: 'Yeongdeok Sea', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   border-bottom: none;
 }
 
