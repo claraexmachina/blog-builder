@@ -144,7 +144,7 @@ export default function Oneko() {
     const idle = () => {
       idleTime += 1;
 
-      if (idleTime > 10 && Math.floor(Math.random() * 200) === 0 && idleAnimation === null) {
+      if (idleTime > 10 && Math.floor(Math.random() * 50) === 0 && idleAnimation === null) {
         const availableIdleAnimations = ['sleeping', 'scratchSelf'];
         idleAnimation = availableIdleAnimations[Math.floor(Math.random() * availableIdleAnimations.length)];
       }
