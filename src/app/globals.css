@@ -418,7 +418,7 @@ html, body, * {
   margin: 16px 0;
   color: var(--text-secondary);
   border-radius: 0 6px 6px 0;
-  font-size: 0.9em;
+  font-size: 1em;
 }
 
 .markdown-content code {
