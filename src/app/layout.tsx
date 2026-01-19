@@ -6,7 +6,7 @@ import Dock from "@/components/Dock";
 import BubbleCursor from "@/components/BubbleCursor";
 
 export const metadata: Metadata = {
-  title: "My Blog ★ 나의 일기장",
+  title: "by claraexmachina",
   description: "일상과 생각을 기록하는 나만의 공간",
 };
 
