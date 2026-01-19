@@ -57,6 +57,12 @@ export default function Oneko() {
     let idleAnimationFrame = 8; // tired 건너뛰고 바로 sleeping 시작
     let lastFrameTimestamp = 0;
     let animationFrameId: number;
+    let forceSleep = true; // 처음 2초 동안 강제로 자는 상태 유지
+
+    // 2초 후에 강제 수면 해제
+    const forceSleepTimeout = setTimeout(() => {
+      forceSleep = false;
+    }, 2000);
 
     const nekoSpeed = 10; // 원본 속도
     const spriteSets: Record<string, number[][]> = {
@@ -183,6 +189,13 @@ export default function Oneko() {
     const frame = () => {
       frameCount += 1;
 
+      // 강제 수면 상태일 때는 계속 자는 애니메이션
+      if (forceSleep) {
+        setSprite('sleeping', Math.floor(idleAnimationFrame / 4));
+        idleAnimationFrame += 1;
+        return;
+      }
+
       const diffX = nekoPosX - mousePosX;
       const diffY = nekoPosY - mousePosY;
       const distance = Math.sqrt(diffX ** 2 + diffY ** 2);
@@ -245,6 +258,7 @@ export default function Oneko() {
 
     return () => {
       clearTimeout(initTimeout);
+      clearTimeout(forceSleepTimeout);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('touchmove', onTouchMove);
       window.removeEventListener('resize', onResize);
