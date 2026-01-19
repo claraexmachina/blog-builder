@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { getAllPosts, getAllCategories } from '@/lib/db';
-import { Heart, Clock } from 'lucide-react';
+import { Heart, Clock, Twitter, Github } from 'lucide-react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { siteConfig } from '@/config/site';
@@ -65,6 +65,28 @@ export default async function HomePage() {
                     <div className="text-[var(--accent-warm)] font-semibold text-sm">{totalLikes}</div>
                     <div className="text-[var(--text-muted)]">{siteConfig.profile.statsLabels.likes}</div>
                   </div>
+                </div>
+                {/* Social Links */}
+                <div className="h-px bg-[var(--border-light)] my-4"></div>
+                <div className="flex justify-center gap-3">
+                  <a
+                    href="https://x.com/claraexmachina"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-center w-9 h-9 rounded-full bg-[var(--color-surface-alt)] border border-[var(--border-light)] hover:border-[var(--accent-warm)] hover:bg-[var(--accent-warm)] transition-all duration-200"
+                    aria-label="Twitter (X)"
+                  >
+                    <Twitter className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-white transition-colors duration-200" />
+                  </a>
+                  <a
+                    href="https://github.com/claraexmachina"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-center w-9 h-9 rounded-full bg-[var(--color-surface-alt)] border border-[var(--border-light)] hover:border-[var(--text-primary)] hover:bg-[var(--text-primary)] transition-all duration-200"
+                    aria-label="GitHub"
+                  >
+                    <Github className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-white transition-colors duration-200" />
+                  </a>
                 </div>
               </div>
             </div>
