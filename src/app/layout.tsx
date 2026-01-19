@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Dock from "@/components/Dock";
+import BubbleCursor from "@/components/BubbleCursor";
 
 export const metadata: Metadata = {
   title: "My Blog ★ 나의 일기장",
@@ -23,6 +24,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <Dock />
+        <BubbleCursor />
       </body>
     </html>
   );
