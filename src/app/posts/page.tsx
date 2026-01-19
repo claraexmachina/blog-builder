@@ -7,14 +7,7 @@ export default function PostsPage() {
     <div className="min-h-screen py-6 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="widget-box mb-6">
-          <div className="widget-title">ALL POSTS</div>
-          <div className="widget-content">
-            <p className="text-xs text-[var(--text-muted)]">
-              <span className="pixel-star">✦</span> 모든 글을 최신순으로 볼 수 있어요
-            </p>
-          </div>
-        </div>
+        <h1 className="text-lg font-semibold text-[var(--text-primary)] mb-6">ALL POSTS</h1>
 
         {/* Post List */}
         <PostList />

@@ -27,12 +27,12 @@ export default function Header() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 bg-[var(--kuromi-cream)] border-b-4 border-[var(--kuromi-purple)]">
+    <header className="sticky top-0 z-50 bg-[var(--color-surface)] border-b border-[var(--border-light)]" style={{ backdropFilter: 'blur(8px)', backgroundColor: 'rgba(255, 255, 255, 0.95)' }}>
       <div className="max-w-5xl mx-auto px-4">
-        <div className="flex items-center justify-between h-12">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
-          <span className="flex items-center gap-2 text-sm font-bold text-[var(--kuromi-dark-purple)]">
-            <span className="pixel-star">★</span>
+          <span className="flex items-center gap-2 text-sm font-semibold text-[var(--text-primary)]">
+            <span className="text-[var(--accent-warm)]">●</span>
             <span>WELCOME</span>
           </span>
 
@@ -40,39 +40,36 @@ export default function Header() {
           <nav className="hidden md:flex items-center gap-1">
             <Link
               href="/"
-              className={`px-3 py-1.5 text-xs font-bold transition-all ${
+              className={`px-4 py-2 text-xs font-medium tracking-wide transition-all rounded-md ${
                 isActive('/')
-                  ? 'bg-[var(--kuromi-purple)] text-white'
-                  : 'text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
+                  ? 'bg-[var(--text-primary)] text-white'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--accent-soft)]'
               }`}
-              style={{ boxShadow: isActive('/') ? '2px 2px 0 0 var(--kuromi-dark-purple)' : 'none' }}
             >
               HOME
             </Link>
 
             <Link
               href="/posts"
-              className={`px-3 py-1.5 text-xs font-bold transition-all ${
+              className={`px-4 py-2 text-xs font-medium tracking-wide transition-all rounded-md ${
                 isActive('/posts')
-                  ? 'bg-[var(--kuromi-purple)] text-white'
-                  : 'text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
+                  ? 'bg-[var(--text-primary)] text-white'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--accent-soft)]'
               }`}
-              style={{ boxShadow: isActive('/posts') ? '2px 2px 0 0 var(--kuromi-dark-purple)' : 'none' }}
             >
               POSTS
             </Link>
 
-            <div className="w-px h-4 bg-[var(--kuromi-lavender)] mx-2" />
+            <div className="w-px h-4 bg-[var(--border-light)] mx-3" />
 
             {isAuthenticated && (
               <Link
                 href="/write"
-                className={`px-3 py-1.5 text-xs font-bold transition-all ${
+                className={`px-4 py-2 text-xs font-medium tracking-wide transition-all rounded-md ${
                   isActive('/write')
-                    ? 'bg-[var(--kuromi-pink)] text-white'
-                    : 'text-[var(--kuromi-pink)] hover:bg-[var(--kuromi-soft-pink)]'
+                    ? 'bg-[var(--accent-warm)] text-white'
+                    : 'text-[var(--accent-warm)] hover:bg-[var(--accent-soft)]'
                 }`}
-                style={{ boxShadow: isActive('/write') ? '2px 2px 0 0 var(--kuromi-dark-purple)' : 'none' }}
               >
                 WRITE
               </Link>
@@ -82,21 +79,21 @@ export default function Header() {
               <>
                 <Link
                   href="/admin"
-                  className="p-1.5 text-[var(--kuromi-purple)] hover:text-[var(--kuromi-pink)] transition-colors"
+                  className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors rounded-md hover:bg-[var(--accent-soft)]"
                 >
-                  <User size={14} />
+                  <User size={16} />
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="p-1.5 text-[var(--text-muted)] hover:text-[var(--kuromi-pink)] transition-colors"
+                  className="p-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors rounded-md hover:bg-[var(--accent-soft)]"
                 >
-                  <LogOut size={14} />
+                  <LogOut size={16} />
                 </button>
               </>
             ) : (
               <Link
                 href="/login"
-                className="px-2 py-1 text-xs text-[var(--text-muted)] hover:text-[var(--kuromi-purple)] transition-colors"
+                className="px-3 py-2 text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
               >
                 LOGIN
               </Link>
@@ -106,21 +103,21 @@ export default function Header() {
           {/* Mobile menu button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-[var(--kuromi-dark-purple)]"
+            className="md:hidden p-2 text-[var(--text-primary)] rounded-md hover:bg-[var(--accent-soft)]"
           >
-            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-3 border-t-2 border-[var(--kuromi-lavender)]">
+          <div className="md:hidden py-4 border-t border-[var(--border-light)]">
             <nav className="flex flex-col gap-1">
               <Link
                 href="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`px-3 py-2 text-xs font-bold ${
-                  isActive('/') ? 'bg-[var(--kuromi-purple)] text-white' : 'text-[var(--kuromi-dark-purple)]'
+                className={`px-4 py-3 text-sm font-medium rounded-lg ${
+                  isActive('/') ? 'bg-[var(--text-primary)] text-white' : 'text-[var(--text-secondary)] hover:bg-[var(--accent-soft)]'
                 }`}
               >
                 HOME
@@ -129,8 +126,8 @@ export default function Header() {
               <Link
                 href="/posts"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`px-3 py-2 text-xs font-bold ${
-                  isActive('/posts') ? 'bg-[var(--kuromi-purple)] text-white' : 'text-[var(--kuromi-dark-purple)]'
+                className={`px-4 py-3 text-sm font-medium rounded-lg ${
+                  isActive('/posts') ? 'bg-[var(--text-primary)] text-white' : 'text-[var(--text-secondary)] hover:bg-[var(--accent-soft)]'
                 }`}
               >
                 POSTS
@@ -138,18 +135,18 @@ export default function Header() {
 
               {isAuthenticated && (
                 <>
-                  <div className="pixel-divider my-1"></div>
+                  <div className="h-px bg-[var(--border-light)] my-2"></div>
                   <Link
                     href="/write"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-3 py-2 text-xs font-bold text-[var(--kuromi-pink)]"
+                    className="px-4 py-3 text-sm font-medium text-[var(--accent-warm)] rounded-lg hover:bg-[var(--accent-soft)]"
                   >
                     WRITE
                   </Link>
                   <Link
                     href="/admin"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-3 py-2 text-xs text-[var(--kuromi-dark-purple)]"
+                    className="px-4 py-3 text-sm font-medium text-[var(--text-secondary)] rounded-lg hover:bg-[var(--accent-soft)]"
                   >
                     ADMIN
                   </Link>
@@ -158,7 +155,7 @@ export default function Header() {
                       handleLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="px-3 py-2 text-xs text-left text-[var(--text-muted)]"
+                    className="px-4 py-3 text-sm font-medium text-left text-[var(--text-muted)] rounded-lg hover:bg-[var(--accent-soft)]"
                   >
                     LOGOUT
                   </button>
@@ -167,11 +164,11 @@ export default function Header() {
 
               {!isAuthenticated && (
                 <>
-                  <div className="pixel-divider my-1"></div>
+                  <div className="h-px bg-[var(--border-light)] my-2"></div>
                   <Link
                     href="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-3 py-2 text-xs text-[var(--text-muted)]"
+                    className="px-4 py-3 text-sm font-medium text-[var(--text-muted)] rounded-lg hover:bg-[var(--accent-soft)]"
                   >
                     LOGIN
                   </Link>
