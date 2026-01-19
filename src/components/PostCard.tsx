@@ -5,6 +5,23 @@ import Image from 'next/image';
 import { Heart, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 
+// 마크다운 문법 제거
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/!\[.*?\]\(.*?\)/g, '')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/(\*\*|__)(.*?)\1/g, '$2')
+    .replace(/(\*|_)(.*?)\1/g, '$2')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`([^`]*)`/g, '$1')
+    .replace(/^>\s+/gm, '')
+    .replace(/^[-*_]{3,}\s*$/gm, '')
+    .replace(/\n+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 interface PostCardProps {
   id: string;
   title: string;
@@ -25,7 +42,8 @@ export default function PostCard({
   likes,
   categoryName,
 }: PostCardProps) {
-  const truncatedExcerpt = excerpt.length > 100 ? excerpt.substring(0, 100) + '...' : excerpt;
+  const cleanExcerpt = stripMarkdown(excerpt);
+  const truncatedExcerpt = cleanExcerpt.length > 100 ? cleanExcerpt.substring(0, 100) + '...' : cleanExcerpt;
 
   return (
     <Link href={`/posts/${id}`} className="block group">
