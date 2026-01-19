@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -56,18 +55,6 @@ export default async function PostPage({ params }: PostPageProps) {
             )}
           </div>
           <div className="widget-content">
-            {/* Thumbnail */}
-            {post.thumbnail && (
-              <div className="relative w-full h-48 md:h-64 mb-4 border-2 border-[var(--kuromi-lavender)] overflow-hidden">
-                <Image
-                  src={post.thumbnail}
-                  alt={post.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            )}
-
             {/* Title */}
             <h1 className="text-lg font-bold text-[var(--kuromi-dark-purple)] mb-3">
               {post.title}
