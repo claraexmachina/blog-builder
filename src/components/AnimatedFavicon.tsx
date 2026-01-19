@@ -89,7 +89,7 @@ export default function AnimatedFavicon() {
           const fullFrame = tempCtx.getImageData(0, 0, width, height);
           frames.push({
             imageData: fullFrame,
-            delay: frame.delay * 10 // Convert centiseconds to milliseconds
+            delay: Math.max(frame.delay * 5, 50) // Faster animation (half speed, min 50ms)
           });
 
           previousImageData = fullFrame;
