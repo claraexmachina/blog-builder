@@ -76,7 +76,7 @@ export default async function HomePage() {
                     className="group flex items-center justify-center w-9 h-9 rounded-full bg-[var(--color-surface-alt)] border border-[var(--border-light)] hover:border-[var(--accent-warm)] hover:bg-[var(--accent-warm)] transition-all duration-200"
                     aria-label="Twitter (X)"
                   >
-                    <Twitter className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-white transition-colors duration-200" />
+                    <Twitter className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-white transition-colors duration-200 pointer-events-none" />
                   </a>
                   <a
                     href="https://github.com/claraexmachina"
@@ -85,7 +85,7 @@ export default async function HomePage() {
                     className="group flex items-center justify-center w-9 h-9 rounded-full bg-[var(--color-surface-alt)] border border-[var(--border-light)] hover:border-[var(--text-primary)] hover:bg-[var(--text-primary)] transition-all duration-200"
                     aria-label="GitHub"
                   >
-                    <Github className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-white transition-colors duration-200" />
+                    <Github className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-white transition-colors duration-200 pointer-events-none" />
                   </a>
                 </div>
               </div>
