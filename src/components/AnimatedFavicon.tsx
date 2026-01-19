@@ -4,89 +4,103 @@ import { useEffect, useRef } from 'react';
 import { parseGIF, decompressFrames } from 'gifuct-js';
 
 export default function AnimatedFavicon() {
-  const frameIndexRef = useRef(0);
-  const framesRef = useRef<ImageData[]>([]);
-  const delaysRef = useRef<number[]>([]);
+  const isRunning = useRef(false);
 
   useEffect(() => {
-    const gifUrl = 'https://pixelsafari.neocities.org/favicon/animals/cat/cat61.gif';
+    if (isRunning.current) return;
+    isRunning.current = true;
+
+    const proxyUrl = '/api/proxy-favicon';
+    const fallbackUrl = 'https://pixelsafari.neocities.org/favicon/animals/cat/cat61.gif';
+    let timeoutId: ReturnType<typeof setTimeout>;
+    let frameIndex = 0;
+    let frames: { imageData: ImageData; delay: number }[] = [];
+
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    let timeoutId: ReturnType<typeof setTimeout>;
-
     if (!ctx) return;
 
-    const updateFavicon = () => {
-      const link = document.querySelector("link[rel='icon']") as HTMLLinkElement;
-      if (link) {
-        link.href = canvas.toDataURL('image/png');
-      }
-    };
+    // Create or get favicon link
+    let link = document.querySelector("link[rel='icon']") as HTMLLinkElement;
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.head.appendChild(link);
+    }
 
     const renderFrame = () => {
-      if (framesRef.current.length === 0) return;
+      if (frames.length === 0) return;
 
-      const frame = framesRef.current[frameIndexRef.current];
-      const delay = delaysRef.current[frameIndexRef.current] || 100;
+      const frame = frames[frameIndex];
+      ctx.putImageData(frame.imageData, 0, 0);
+      link.href = canvas.toDataURL('image/png');
 
-      ctx.putImageData(frame, 0, 0);
-      updateFavicon();
-
-      frameIndexRef.current = (frameIndexRef.current + 1) % framesRef.current.length;
-      timeoutId = setTimeout(renderFrame, delay);
+      frameIndex = (frameIndex + 1) % frames.length;
+      timeoutId = setTimeout(renderFrame, frame.delay || 100);
     };
 
     const loadGif = async () => {
       try {
-        const response = await fetch(gifUrl);
+        // Fetch through proxy to avoid CORS
+        const response = await fetch(proxyUrl);
+        if (!response.ok) throw new Error('Fetch failed');
+
         const buffer = await response.arrayBuffer();
         const gif = parseGIF(buffer);
-        const frames = decompressFrames(gif, true);
+        const decompressedFrames = decompressFrames(gif, true);
 
-        if (frames.length === 0) return;
+        if (decompressedFrames.length === 0) {
+          console.log('No frames found');
+          return;
+        }
 
-        // Set canvas size
-        canvas.width = frames[0].dims.width;
-        canvas.height = frames[0].dims.height;
+        // Set canvas size to GIF dimensions
+        const { width, height } = decompressedFrames[0].dims;
+        canvas.width = width;
+        canvas.height = height;
 
-        // Create ImageData for each frame
+        // Process each frame
         const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = width;
+        tempCanvas.height = height;
         const tempCtx = tempCanvas.getContext('2d');
         if (!tempCtx) return;
 
-        tempCanvas.width = canvas.width;
-        tempCanvas.height = canvas.height;
+        // Keep track of previous frame for disposal
+        let previousImageData: ImageData | null = null;
 
-        frames.forEach((frame) => {
-          // Create ImageData from frame patch
-          const imageData = new ImageData(
+        decompressedFrames.forEach((frame, index) => {
+          // Handle disposal method
+          if (index > 0 && previousImageData) {
+            tempCtx.putImageData(previousImageData, 0, 0);
+          }
+
+          // Create ImageData from patch
+          const patchData = new ImageData(
             new Uint8ClampedArray(frame.patch),
             frame.dims.width,
             frame.dims.height
           );
 
-          // Draw frame patch at correct position
-          tempCtx.putImageData(
-            imageData,
-            frame.dims.left,
-            frame.dims.top
-          );
+          // Draw patch at correct position
+          tempCtx.putImageData(patchData, frame.dims.left, frame.dims.top);
 
-          // Copy full frame
-          const fullFrame = tempCtx.getImageData(0, 0, canvas.width, canvas.height);
-          framesRef.current.push(fullFrame);
-          delaysRef.current.push(frame.delay * 10); // delay is in centiseconds
+          // Store full frame
+          const fullFrame = tempCtx.getImageData(0, 0, width, height);
+          frames.push({
+            imageData: fullFrame,
+            delay: frame.delay * 10 // Convert centiseconds to milliseconds
+          });
+
+          previousImageData = fullFrame;
         });
 
-        // Start animation
+        console.log(`Loaded ${frames.length} frames for animated favicon`);
         renderFrame();
       } catch (error) {
         console.error('Failed to load animated favicon:', error);
-        // Fallback to static favicon
-        const link = document.querySelector("link[rel='icon']") as HTMLLinkElement;
-        if (link) {
-          link.href = gifUrl;
-        }
+        // Keep static GIF as fallback
+        link.href = fallbackUrl;
       }
     };
 
