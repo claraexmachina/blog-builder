@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Dock from "@/components/Dock";
 
 export const metadata: Metadata = {
   title: "My Blog ★ 나의 일기장",
@@ -17,10 +18,11 @@ export default function RootLayout({
     <html lang="ko">
       <body className="antialiased flex flex-col min-h-screen">
         <Header />
-        <main className="flex-1">
+        <main className="flex-1 pb-20 md:pb-24">
           {children}
         </main>
         <Footer />
+        <Dock />
       </body>
     </html>
   );
