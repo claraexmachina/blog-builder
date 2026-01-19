@@ -407,10 +407,11 @@ html, body, * {
 .markdown-content blockquote {
   background: var(--color-surface-alt);
   border-left: 3px solid var(--accent-warm);
-  padding: 16px 20px;
-  margin: 24px 0;
+  padding: 10px 14px;
+  margin: 16px 0;
   color: var(--text-secondary);
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.9em;
 }
 
 .markdown-content code {

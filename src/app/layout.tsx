@@ -4,9 +4,10 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Dock from "@/components/Dock";
 import BubbleCursor from "@/components/BubbleCursor";
+import AnimatedFavicon from "@/components/AnimatedFavicon";
 
 export const metadata: Metadata = {
-  title: "My Blog ★ 나의 일기장",
+  title: "by claraexmachina",
   description: "일상과 생각을 기록하는 나만의 공간",
 };
 
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
+        <link rel="icon" type="image/gif" href="https://pixelsafari.neocities.org/favicon/animals/cat/cat61.gif" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -30,6 +32,7 @@ export default function RootLayout({
         <Footer />
         <Dock />
         <BubbleCursor />
+        <AnimatedFavicon />
       </body>
     </html>
   );
