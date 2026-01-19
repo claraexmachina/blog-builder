@@ -12,7 +12,6 @@ export default function AnimatedFavicon() {
     const gifUrl = 'https://pixelsafari.neocities.org/favicon/animals/cat/cat61.gif';
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    let animationId: number;
     let timeoutId: ReturnType<typeof setTimeout>;
 
     if (!ctx) return;
@@ -95,7 +94,6 @@ export default function AnimatedFavicon() {
 
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
-      if (animationId) cancelAnimationFrame(animationId);
     };
   }, []);
 
