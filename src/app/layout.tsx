@@ -20,6 +20,7 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <link rel="icon" type="image/gif" href="https://pixelsafari.neocities.org/favicon/animals/cat/cat61.gif" />
+        <link rel="preload" href="/fonts/Yeongdeok Sea.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
