@@ -60,11 +60,9 @@ const BubbleCursor: React.FC<BubbleCursorProps> = ({ wrapperElement }) => {
   const [isMobile, setIsMobile] = useState(true); // 기본값 true로 설정하여 SSR 시 렌더링 방지
 
   useEffect(() => {
-    // 모바일 체크 (768px 미만 또는 터치 디바이스)
+    // 768px 미만에서 비활성화 (Dock과 동일 기준)
     const checkMobile = () => {
-      const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
-      const isSmallScreen = window.innerWidth < 768;
-      setIsMobile(isTouchDevice || isSmallScreen);
+      setIsMobile(window.innerWidth < 768);
     };
 
     checkMobile();

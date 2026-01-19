@@ -9,10 +9,8 @@ export default function Oneko() {
     const nekoEl = nekoRef.current;
     if (!nekoEl) return;
 
-    // 모바일/터치 디바이스에서 비활성화 (768px 미만 또는 터치 디바이스)
-    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
-    const isSmallScreen = window.innerWidth < 768;
-    if (isTouchDevice || isSmallScreen) {
+    // 768px 미만에서 비활성화 (Dock과 동일 기준)
+    if (window.innerWidth < 768) {
       nekoEl.style.display = 'none';
       return;
     }
@@ -20,7 +18,7 @@ export default function Oneko() {
     // 프로필 위젯 위치 기반 초기 위치 계산 (약간 지연 후 계산)
     const getInitialPosition = () => {
       const profileWidget = document.querySelector('.widget-box');
-      if (profileWidget && window.innerWidth >= 1024) {
+      if (profileWidget && window.innerWidth >= 768) {
         const rect = profileWidget.getBoundingClientRect();
         // 데스크톱: 프로필 위젯 내부 하단 근처
         return {

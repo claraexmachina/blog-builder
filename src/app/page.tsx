@@ -33,12 +33,12 @@ export default async function HomePage() {
         </div>
 
         {/* Main Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-5">
 
           {/* Left Sidebar */}
-          <div className="space-y-5 contents lg:block">
+          <div className="space-y-5 contents md:block">
             {/* Profile Widget */}
-            <div className="widget-box order-1 lg:order-none">
+            <div className="widget-box order-1 md:order-none">
               <div className="widget-title">{siteConfig.widgetTitles.profile}</div>
               <div className="widget-content text-center">
                 <div className="profile-frame w-20 h-20 mx-auto mb-4">
@@ -89,7 +89,7 @@ export default async function HomePage() {
             </div>
 
             {/* Music/Mood Widget with YouTube - Last on mobile */}
-            <div className="widget-box order-4 lg:order-none">
+            <div className="widget-box order-4 md:order-none">
               <div className="widget-title">{siteConfig.widgetTitles.nowPlaying}</div>
               <div className="widget-content">
                 <div className="mini-widget">
@@ -120,9 +120,9 @@ export default async function HomePage() {
           </div>
 
           {/* Main Content Area */}
-          <div className="space-y-5 contents lg:block">
+          <div className="space-y-5 contents md:block">
             {/* Pixel Room Image */}
-            <div className="widget-box order-2 lg:order-none">
+            <div className="widget-box order-2 md:order-none">
               <div className="widget-title">MY ROOM</div>
               <div className="widget-content p-0 overflow-hidden">
                 <div className="relative w-full rounded-b-xl overflow-hidden">
@@ -139,7 +139,7 @@ export default async function HomePage() {
             </div>
 
             {/* Recent Posts Widget */}
-            <div className="widget-box order-3 lg:order-none">
+            <div className="widget-box order-3 md:order-none">
               <div className="widget-title">{siteConfig.widgetTitles.recentPosts}</div>
               <div className="widget-content">
                 {posts.length > 0 ? (
@@ -214,7 +214,7 @@ export default async function HomePage() {
             </div>
 
             {/* Footer */}
-            <div className="mini-widget text-center order-5 lg:order-none">
+            <div className="mini-widget text-center order-5 md:order-none">
               <p className="text-xs text-[var(--text-muted)]">
                 {siteConfig.footer.message}
               </p>
