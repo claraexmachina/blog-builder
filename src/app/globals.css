@@ -3,32 +3,32 @@
 
 /* Korean Font - Pretendard loaded via CDN stylesheet in layout.tsx */
 
-/* Modern Minimal Palette */
+/* Pastel Pink Palette */
 :root {
   /* Primary Colors */
   --color-bg: #fff3f5;
   --color-surface: #ffffff;
-  --color-surface-alt: #f0f0ee;
+  --color-surface-alt: #fff0f3;
 
   /* Text Colors */
-  --text-primary: #1a1a1a;
-  --text-secondary: #4a4a4a;
-  --text-muted: #8a8a8a;
-  --text-accent: #2d2d2d;
+  --text-primary: #5c4a4d;
+  --text-secondary: #8b7578;
+  --text-muted: #c4a5aa;
+  --text-accent: #6b5558;
 
   /* Accent Colors */
-  --accent-primary: #3d3d3d;
-  --accent-secondary: #6b6b6b;
-  --accent-soft: #e8e8e6;
-  --accent-warm: #c4a77d;
-  --accent-highlight: #9a8866;
+  --accent-primary: #e8a4b4;
+  --accent-secondary: #f5c6d0;
+  --accent-soft: #ffe8ed;
+  --accent-warm: #f4a5b8;
+  --accent-highlight: #e88a9f;
 
   /* Borders & Shadows */
-  --border-light: #e5e5e3;
-  --border-medium: #d0d0ce;
-  --border-dark: #b0b0ae;
-  --shadow-color: rgba(0, 0, 0, 0.06);
-  --shadow-medium: rgba(0, 0, 0, 0.1);
+  --border-light: #ffd9e0;
+  --border-medium: #f5c6cf;
+  --border-dark: #e8a5b0;
+  --shadow-color: rgba(232, 164, 180, 0.15);
+  --shadow-medium: rgba(232, 164, 180, 0.25);
 
   /* Legacy variable mappings for compatibility */
   --kuromi-black: var(--text-primary);
@@ -37,7 +37,7 @@
   --kuromi-lavender: var(--border-medium);
   --kuromi-light-lavender: var(--accent-soft);
   --kuromi-pink: var(--accent-warm);
-  --kuromi-soft-pink: #f5efe6;
+  --kuromi-soft-pink: #fff0f3;
   --kuromi-cream: var(--color-surface);
   --kuromi-white: #ffffff;
   --pixel-shadow: var(--shadow-color);
@@ -48,13 +48,13 @@
 }
 
 @theme inline {
-  --color-kuromi-black: var(--text-primary);
-  --color-kuromi-dark: var(--accent-primary);
-  --color-kuromi-purple: var(--accent-secondary);
-  --color-kuromi-lavender: var(--border-medium);
-  --color-kuromi-light: var(--accent-soft);
-  --color-kuromi-pink: var(--accent-warm);
-  --color-kuromi-cream: var(--color-surface);
+  --color-pink-dark: var(--text-primary);
+  --color-pink-primary: var(--accent-primary);
+  --color-pink-secondary: var(--accent-secondary);
+  --color-pink-light: var(--border-medium);
+  --color-pink-soft: var(--accent-soft);
+  --color-pink-warm: var(--accent-warm);
+  --color-pink-cream: var(--color-surface);
   --color-bg-main: var(--color-bg);
   --color-bg-widget: var(--color-surface);
 }
