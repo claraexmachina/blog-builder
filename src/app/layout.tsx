@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Dock from "@/components/Dock";
 import BubbleCursor from "@/components/BubbleCursor";
+import HorrorCursorTrail from "@/components/HorrorCursorTrail";
 import AnimatedFavicon from "@/components/AnimatedFavicon";
 import Oneko from "@/components/Oneko";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -36,6 +37,7 @@ export default function RootLayout({
           <Footer />
           <Dock />
           <BubbleCursor />
+          <HorrorCursorTrail />
           <AnimatedFavicon />
           <Oneko />
         </ThemeProvider>

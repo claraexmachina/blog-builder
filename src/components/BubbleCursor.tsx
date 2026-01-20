@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useTheme } from './ThemeProvider';
 
 interface BubbleCursorProps {
   wrapperElement?: HTMLElement;
@@ -58,6 +59,7 @@ const BubbleCursor: React.FC<BubbleCursorProps> = ({ wrapperElement }) => {
   const cursorRef = useRef({ x: 0, y: 0 });
   const animationFrameRef = useRef<number | null>(null);
   const [isMobile, setIsMobile] = useState(true); // 기본값 true로 설정하여 SSR 시 렌더링 방지
+  const { isHorrorMode } = useTheme();
 
   useEffect(() => {
     // 768px 미만에서 비활성화 (CSS 미디어 쿼리와 동일하게 matchMedia 사용)
@@ -77,8 +79,8 @@ const BubbleCursor: React.FC<BubbleCursorProps> = ({ wrapperElement }) => {
   }, []);
 
   useEffect(() => {
-    // 모바일이면 효과 비활성화
-    if (isMobile) return;
+    // 모바일이거나 공포 모드이면 효과 비활성화
+    if (isMobile || isHorrorMode) return;
 
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
@@ -204,10 +206,10 @@ const BubbleCursor: React.FC<BubbleCursorProps> = ({ wrapperElement }) => {
       element.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('resize', onWindowResize);
     };
-  }, [wrapperElement, isMobile]);
+  }, [wrapperElement, isMobile, isHorrorMode]);
 
-  // 모바일이면 아무것도 렌더링하지 않음
-  if (isMobile) return null;
+  // 모바일이거나 공포 모드이면 아무것도 렌더링하지 않음
+  if (isMobile || isHorrorMode) return null;
 
   return <canvas ref={canvasRef} />;
 };
