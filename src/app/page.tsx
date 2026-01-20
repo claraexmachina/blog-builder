@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { siteConfig } from '@/config/site';
 import ProfileEmoji from '@/components/ProfileEmoji';
+import ProfileName from '@/components/ProfileName';
 import ProfileBio from '@/components/ProfileBio';
 import PixelRoom from '@/components/PixelRoom';
 
@@ -50,7 +51,7 @@ export default async function HomePage() {
                   </div>
                 </div>
                 <p className="text-sm text-[var(--text-primary)] font-semibold mb-1">
-                  {siteConfig.profile.name}
+                  <ProfileName />
                 </p>
                 <p className="text-xs text-[var(--text-muted)] mb-4 leading-relaxed">
                   <ProfileBio />
