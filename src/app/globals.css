@@ -121,8 +121,23 @@
 /* Horror Mode Font Override - 공포모드 폰트 */
 [data-theme="horror"] body,
 [data-theme="horror"] html,
-[data-theme="horror"] * {
-  font-family: 'Thorn Font', 'Yeongdeok Sea', -apple-system, BlinkMacSystemFont, sans-serif;
+[data-theme="horror"] *,
+[data-theme="horror"] .font-pixel-xs,
+[data-theme="horror"] .font-pixel-sm,
+[data-theme="horror"] .font-pixel-base,
+[data-theme="horror"] .font-pixel-md,
+[data-theme="horror"] .font-pixel-lg,
+[data-theme="horror"] .font-pixel-xl,
+[data-theme="horror"] .widget-title,
+[data-theme="horror"] .pixel-btn,
+[data-theme="horror"] .pixel-input,
+[data-theme="horror"] .pixel-badge,
+[data-theme="horror"] .today-box,
+[data-theme="horror"] .markdown-content,
+[data-theme="horror"] .markdown-content h1,
+[data-theme="horror"] .markdown-content h2,
+[data-theme="horror"] .markdown-content h3 {
+  font-family: 'Thorn Font', 'Yeongdeok Sea', -apple-system, BlinkMacSystemFont, sans-serif !important;
 }
 
 @theme inline {
