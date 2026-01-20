@@ -49,7 +49,7 @@ export default function Header() {
               href="/"
               className={`px-4 py-2 text-xs font-medium tracking-wide transition-all rounded-md ${
                 isActive('/')
-                  ? 'bg-[var(--text-primary)] text-white'
+                  ? 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--accent-soft)]'
               }`}
             >
@@ -60,7 +60,7 @@ export default function Header() {
               href="/posts"
               className={`px-4 py-2 text-xs font-medium tracking-wide transition-all rounded-md ${
                 isActive('/posts')
-                  ? 'bg-[var(--text-primary)] text-white'
+                  ? 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--accent-soft)]'
               }`}
             >
@@ -124,7 +124,7 @@ export default function Header() {
                 href="/"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`px-4 py-3 text-sm font-medium rounded-lg ${
-                  isActive('/') ? 'bg-[var(--text-primary)] text-white' : 'text-[var(--text-secondary)] hover:bg-[var(--accent-soft)]'
+                  isActive('/') ? 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]' : 'text-[var(--text-secondary)] hover:bg-[var(--accent-soft)]'
                 }`}
               >
                 HOME
@@ -134,7 +134,7 @@ export default function Header() {
                 href="/posts"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`px-4 py-3 text-sm font-medium rounded-lg ${
-                  isActive('/posts') ? 'bg-[var(--text-primary)] text-white' : 'text-[var(--text-secondary)] hover:bg-[var(--accent-soft)]'
+                  isActive('/posts') ? 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]' : 'text-[var(--text-secondary)] hover:bg-[var(--accent-soft)]'
                 }`}
               >
                 POSTS

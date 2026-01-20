@@ -29,6 +29,12 @@
   --accent-warm: #f4a5b8;
   --accent-highlight: #e88a9f;
 
+  /* Interactive Element Colors */
+  --btn-primary-bg: #5c4a4d;
+  --btn-primary-text: #ffffff;
+  --icon-box-bg: #5c4a4d;
+  --icon-box-text: #ffffff;
+
   /* Borders & Shadows */
   --border-light: #ffd9e0;
   --border-medium: #f5c6cf;
@@ -58,27 +64,33 @@
   /* Primary Colors - 어둡고 음산한 배경 */
   --color-bg: #0d0d0d;
   --color-surface: #1a1a1a;
-  --color-surface-alt: #222222;
+  --color-surface-alt: #252525;
 
   /* Text Colors - 높은 대비 */
   --text-primary: #f0e8e8;
-  --text-secondary: #c8b8b8;
-  --text-muted: #9a8888;
+  --text-secondary: #d0c4c4;
+  --text-muted: #a89090;
   --text-accent: #ff5555;
 
   /* Accent Colors - 더 밝은 레드 */
   --accent-primary: #cc2233;
-  --accent-secondary: #991122;
+  --accent-secondary: #aa1a2a;
   --accent-soft: #2d1818;
   --accent-warm: #e63946;
   --accent-highlight: #ff4d4d;
 
-  /* Borders & Shadows - 더 보이는 보더 */
-  --border-light: #3d2525;
-  --border-medium: #4d3030;
-  --border-dark: #5d3a3a;
-  --shadow-color: rgba(200, 50, 50, 0.25);
-  --shadow-medium: rgba(230, 57, 70, 0.35);
+  /* Interactive Element Colors - 버튼/아이콘 박스 */
+  --btn-primary-bg: #cc2233;
+  --btn-primary-text: #ffffff;
+  --icon-box-bg: #8b1a1a;
+  --icon-box-text: #f0e8e8;
+
+  /* Borders & Shadows - 훨씬 더 보이는 보더 */
+  --border-light: #4a3030;
+  --border-medium: #5a3838;
+  --border-dark: #6a4444;
+  --shadow-color: rgba(200, 50, 50, 0.3);
+  --shadow-medium: rgba(230, 57, 70, 0.4);
 
   /* Legacy variable mappings for horror */
   --kuromi-black: var(--text-primary);
@@ -236,10 +248,10 @@ html, body, * {
 
 /* Modern Button */
 .pixel-btn {
-  background: var(--text-primary);
+  background: var(--btn-primary-bg);
   border: none;
   box-shadow: 0 2px 4px var(--shadow-medium);
-  color: white;
+  color: var(--btn-primary-text);
   padding: 10px 20px;
   font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 14px;

@@ -100,7 +100,7 @@ export default async function HomePage() {
               <div className="widget-content">
                 <div className="mini-widget">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-[var(--text-primary)] rounded-lg flex items-center justify-center text-white text-sm">
+                    <div className="w-10 h-10 bg-[var(--icon-box-bg)] rounded-lg flex items-center justify-center text-[var(--icon-box-text)] text-sm">
                       ♪
                     </div>
                     <div className="text-xs">
