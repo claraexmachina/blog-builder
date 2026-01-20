@@ -540,10 +540,16 @@ html, body, * {
   font-size: 13px;
 }
 
-.markdown-content ul,
+.markdown-content ul {
+  margin-left: 24px;
+  margin-bottom: 20px;
+  list-style-type: disc;
+}
+
 .markdown-content ol {
   margin-left: 24px;
   margin-bottom: 20px;
+  list-style-type: decimal;
 }
 
 .markdown-content li {

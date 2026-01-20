@@ -248,8 +248,8 @@ export default function AdminPage() {
             onClick={() => setActiveTab('posts')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
               activeTab === 'posts'
-                ? 'bg-[var(--kuromi-purple)] text-white'
-                : 'bg-[var(--kuromi-white)] text-[var(--kuromi-black)] border-2 border-[var(--kuromi-lavender)]'
+                ? 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]'
+                : 'bg-[var(--color-surface)] text-[var(--text-primary)] border-2 border-[var(--border-medium)]'
             }`}
           >
             <FileText size={18} />
@@ -259,8 +259,8 @@ export default function AdminPage() {
             onClick={() => setActiveTab('drafts')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
               activeTab === 'drafts'
-                ? 'bg-[var(--kuromi-purple)] text-white'
-                : 'bg-[var(--kuromi-white)] text-[var(--kuromi-black)] border-2 border-[var(--kuromi-lavender)]'
+                ? 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]'
+                : 'bg-[var(--color-surface)] text-[var(--text-primary)] border-2 border-[var(--border-medium)]'
             }`}
           >
             <Clock size={18} />
@@ -270,8 +270,8 @@ export default function AdminPage() {
             onClick={() => setActiveTab('categories')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
               activeTab === 'categories'
-                ? 'bg-[var(--kuromi-purple)] text-white'
-                : 'bg-[var(--kuromi-white)] text-[var(--kuromi-black)] border-2 border-[var(--kuromi-lavender)]'
+                ? 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]'
+                : 'bg-[var(--color-surface)] text-[var(--text-primary)] border-2 border-[var(--border-medium)]'
             }`}
           >
             <FolderOpen size={18} />
