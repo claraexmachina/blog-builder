@@ -8,8 +8,6 @@ import { ko } from 'date-fns/locale';
 import {
   FileText,
   Clock,
-  Eye,
-  EyeOff,
   Edit,
   Trash2,
   PenSquare,
@@ -90,26 +88,6 @@ export default function AdminPage() {
         .catch(() => setCategories([]));
     }
   }, [isAuthenticated]);
-
-  const handleTogglePublish = async (postId: string, currentStatus: boolean) => {
-    try {
-      const res = await fetch(`/api/posts/${postId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ published: !currentStatus }),
-      });
-
-      if (res.ok) {
-        setPosts((prev) =>
-          prev.map((p) =>
-            p.id === postId ? { ...p, published: !currentStatus } : p
-          )
-        );
-      }
-    } catch {
-      alert('상태 변경에 실패했습니다.');
-    }
-  };
 
   const handleDeletePost = async (postId: string) => {
     if (!confirm('이 글을 삭제하시겠습니까?')) return;
@@ -440,11 +418,6 @@ export default function AdminPage() {
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        {post.published ? (
-                          <Eye size={16} className="text-green-500" />
-                        ) : (
-                          <EyeOff size={16} className="text-[var(--text-muted)]" />
-                        )}
                         <Link
                           href={`/posts/${post.id}`}
                           className="font-medium text-[var(--kuromi-dark-purple)] hover:text-[var(--kuromi-purple)] truncate"
@@ -461,17 +434,6 @@ export default function AdminPage() {
                     </div>
 
                     <div className="flex items-center gap-2 ml-4">
-                      <button
-                        onClick={() => handleTogglePublish(post.id, post.published)}
-                        className={`p-2 rounded transition-colors ${
-                          post.published
-                            ? 'text-green-500 hover:bg-green-100'
-                            : 'text-[var(--text-muted)] hover:bg-[var(--kuromi-light-lavender)]'
-                        }`}
-                        title={post.published ? '비공개로 전환' : '공개로 전환'}
-                      >
-                        {post.published ? <Eye size={18} /> : <EyeOff size={18} />}
-                      </button>
                       <Link
                         href={`/write?edit=${post.id}`}
                         className="p-2 text-[var(--kuromi-purple)] hover:bg-[var(--kuromi-light-lavender)] rounded transition-colors"
