@@ -7,13 +7,14 @@ export default function PixelRoom() {
   const { isHorrorMode } = useTheme();
 
   return (
-    <Image
-      src={isHorrorMode ? '/images/pixel-room-horror.png' : '/images/pixel-room.png'}
-      alt="My Pixel Room"
-      width={1280}
-      height={853}
-      className="w-full h-auto"
-      priority
-    />
+    <div className="relative w-full" style={{ aspectRatio: '1280 / 853' }}>
+      <Image
+        src={isHorrorMode ? '/images/pixel-room-horror.png' : '/images/pixel-room.png'}
+        alt="My Pixel Room"
+        fill
+        className="object-cover"
+        priority
+      />
+    </div>
   );
 }
