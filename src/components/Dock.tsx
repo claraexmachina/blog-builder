@@ -25,15 +25,15 @@ const normalDockItems: DockItem[] = [
 
 // 호러 모드 - 어둡고 음산한 그라디언트 🎃
 const horrorDockItems: DockItem[] = [
-  { id: 1, color: 'linear-gradient(135deg, #8b1a1a 0%, #cc2233 100%)', href: 'https://vidkidz.tistory.com/235', label: 'Blog 1' }, // 핏빛 빨강
-  { id: 2, color: 'linear-gradient(135deg, #1a3d2a 0%, #2d6d4a 100%)', href: 'https://www.crazygames.com/game/cat-life-simulator-devil-cat', label: 'Cat Game' }, // 독 녹색
-  { id: 3, color: 'linear-gradient(135deg, #3d1a3d 0%, #6a2d6a 100%)', href: 'https://samandev.itch.io/tamaweb', label: 'Tamaweb' }, // 자주색 보라
-  { id: 4, color: 'linear-gradient(135deg, #4d2800 0%, #8b4a00 100%)', href: 'https://bongo.cat/', label: 'Bongo Cat' }, // 호박 오렌지
-  { id: 5, color: 'linear-gradient(135deg, #1a2a4d 0%, #2d4a7a 100%)', href: 'https://acidrain.hancomtaja.com/?gamekey=acidrain', label: 'Acid Rain' }, // 심연 블루
-  { id: 6, color: 'linear-gradient(135deg, #4d4a00 0%, #7a7314 100%)', href: 'https://www.youtube.com/watch?v=QwQnskHnoWg', label: 'YouTube 2' }, // 독 황금
-  { id: 7, color: 'linear-gradient(135deg, #6d1a2a 0%, #a62d4a 100%)', href: 'https://vidkidz.tistory.com/481', label: 'Blog 2' }, // 크림슨
-  { id: 8, color: 'linear-gradient(135deg, #2d1f3d 0%, #4a3d6a 100%)', href: 'https://www.astrology.com/compatibility/fortune-cookie.html', label: 'Fortune' }, // 자정 보라
-  { id: 9, color: 'linear-gradient(135deg, #0d3d4d 0%, #1a5d6d 100%)', href: 'https://www.youtube.com/watch?v=UJs6__K7gSY', label: 'YouTube 3' }, // 유령 청록
+  { id: 1, color: 'linear-gradient(135deg, #8b1a1a 0%, #cc2233 100%)', href: 'https://youtu.be/hyJtGlvVzDQ?si=2sYykPOFGMnKY8N9', label: 'Spooky Music' }, // 핏빛 빨강
+  { id: 2, color: 'linear-gradient(135deg, #1a3d2a 0%, #2d6d4a 100%)', href: 'https://www.boredbutton.com/', label: 'Bored Button' }, // 독 녹색
+  { id: 3, color: 'linear-gradient(135deg, #3d1a3d 0%, #6a2d6a 100%)', href: 'https://vidkidz.tistory.com/1617', label: 'Blog' }, // 자주색 보라
+  { id: 4, color: 'linear-gradient(135deg, #4d2800 0%, #8b4a00 100%)', href: 'https://90s.myretrotvs.com/#lLvsnkQtZLI', label: 'Retro TV' }, // 호박 오렌지
+  { id: 5, color: 'linear-gradient(135deg, #1a2a4d 0%, #2d4a7a 100%)', href: 'https://ncase.me/trust/', label: 'Trust Game' }, // 심연 블루
+  { id: 6, color: 'linear-gradient(135deg, #4d4a00 0%, #7a7314 100%)', href: 'https://www.youtube.com/watch?v=zjNZJ6Z93Z0', label: 'YouTube' }, // 독 황금
+  { id: 7, color: 'linear-gradient(135deg, #6d1a2a 0%, #a62d4a 100%)', href: 'https://www.webhamster.com/', label: 'Hamster' }, // 크림슨
+  { id: 8, color: 'linear-gradient(135deg, #2d1f3d 0%, #4a3d6a 100%)', href: 'https://http.cat/', label: 'HTTP Cat' }, // 자정 보라
+  { id: 9, color: 'linear-gradient(135deg, #0d3d4d 0%, #1a5d6d 100%)', href: 'https://www.cameronsworld.net/', label: 'Camerons World' }, // 유령 청록
 ];
 
 export default function Dock() {
