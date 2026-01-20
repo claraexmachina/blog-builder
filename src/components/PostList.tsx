@@ -62,8 +62,10 @@ export default function PostList({ initialPosts, categorySlug, showAll = false }
     return { name: cat?.name, slug: cat?.slug };
   };
 
-  const displayedPosts = showAll ? posts : posts.slice(0, displayCount);
-  const hasMore = !showAll && posts.length > displayCount;
+  // Filter out corrupted posts (missing required fields)
+  const validPosts = posts.filter((post) => post.title && post.excerpt);
+  const displayedPosts = showAll ? validPosts : validPosts.slice(0, displayCount);
+  const hasMore = !showAll && validPosts.length > displayCount;
 
   if (loading) {
     return (
@@ -77,7 +79,7 @@ export default function PostList({ initialPosts, categorySlug, showAll = false }
     );
   }
 
-  if (posts.length === 0) {
+  if (validPosts.length === 0) {
     return (
       <div className="widget-box">
         <div className="widget-title">POSTS</div>
@@ -115,7 +117,7 @@ export default function PostList({ initialPosts, categorySlug, showAll = false }
           className="pixel-btn pixel-btn-secondary w-full flex items-center justify-center gap-2"
         >
           <ChevronDown size={14} />
-          더보기 ({posts.length - displayCount}개 더)
+          더보기 ({validPosts.length - displayCount}개 더)
         </button>
       )}
     </div>
