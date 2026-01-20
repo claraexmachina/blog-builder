@@ -49,7 +49,7 @@ export default function LikeButton({ postId, initialLikes = 0 }: LikeButtonProps
     <button
       onClick={handleLike}
       disabled={loading}
-      className={`inline-flex items-center gap-1 px-3 py-1.5 text-xs font-bold transition-all ${
+      className={`inline-flex items-center gap-1 px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${
         liked
           ? 'bg-[var(--kuromi-pink)] text-white'
           : 'bg-[var(--kuromi-soft-pink)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-pink)] hover:text-white'

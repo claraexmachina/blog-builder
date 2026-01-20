@@ -127,7 +127,7 @@ export default function MarkdownEditor({
       type="button"
       onClick={onClick}
       title={title}
-      className="p-2 rounded hover:bg-[var(--kuromi-light-lavender)] text-[var(--kuromi-dark-purple)] transition-colors"
+      className="p-2 rounded hover:bg-[var(--kuromi-light-lavender)] text-[var(--kuromi-dark-purple)] transition-colors cursor-pointer"
     >
       <Icon size={18} />
     </button>
@@ -163,7 +163,7 @@ export default function MarkdownEditor({
         <button
           type="button"
           onClick={() => setIsPreview(!isPreview)}
-          className={`flex items-center gap-2 px-3 py-1 rounded font-medium transition-colors ${
+          className={`flex items-center gap-2 px-3 py-1 rounded font-medium transition-colors cursor-pointer ${
             isPreview
               ? 'bg-[var(--kuromi-purple)] text-white'
               : 'bg-[var(--kuromi-light-lavender)] text-[var(--kuromi-dark-purple)]'

@@ -49,7 +49,7 @@ export default function DeleteButton({ postId }: DeleteButtonProps) {
         <button
           onClick={handleDelete}
           disabled={deleting}
-          className="px-2 py-1 text-xs font-bold bg-[var(--kuromi-pink)] text-white disabled:opacity-50"
+          className="px-2 py-1 text-xs font-bold bg-[var(--kuromi-pink)] text-white disabled:opacity-50 cursor-pointer"
           style={{ boxShadow: '2px 2px 0 0 var(--kuromi-dark-purple)' }}
         >
           {deleting ? '...' : '확인'}
@@ -57,7 +57,7 @@ export default function DeleteButton({ postId }: DeleteButtonProps) {
         <button
           onClick={handleCancel}
           disabled={deleting}
-          className="px-2 py-1 text-xs font-bold bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)]"
+          className="px-2 py-1 text-xs font-bold bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)] cursor-pointer"
           style={{ boxShadow: '2px 2px 0 0 var(--kuromi-lavender)' }}
         >
           취소
@@ -69,7 +69,7 @@ export default function DeleteButton({ postId }: DeleteButtonProps) {
   return (
     <button
       onClick={handleDelete}
-      className="inline-flex items-center gap-1 px-2 py-1 text-xs font-bold text-[var(--kuromi-pink)] bg-[var(--kuromi-cream)] hover:bg-[var(--kuromi-soft-pink)] transition-colors"
+      className="inline-flex items-center gap-1 px-2 py-1 text-xs font-bold text-[var(--kuromi-pink)] bg-[var(--kuromi-cream)] hover:bg-[var(--kuromi-soft-pink)] transition-colors cursor-pointer"
       style={{ boxShadow: '2px 2px 0 0 var(--kuromi-lavender)' }}
     >
       <Trash2 size={12} />

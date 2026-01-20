@@ -356,7 +356,7 @@ export default function WritePageContent() {
                 >
                   <button
                     onClick={() => handleLoadDraft(draft)}
-                    className="flex-1 text-left"
+                    className="flex-1 text-left cursor-pointer"
                   >
                     <p className="font-medium text-[var(--kuromi-black)]">
                       {draft.title || '제목 없음'}
@@ -367,7 +367,7 @@ export default function WritePageContent() {
                   </button>
                   <button
                     onClick={() => handleDeleteDraft(draft.id)}
-                    className="p-2 text-red-500 hover:bg-red-100 rounded transition-colors"
+                    className="p-2 text-red-500 hover:bg-red-100 rounded transition-colors cursor-pointer"
                   >
                     <Trash2 size={16} />
                   </button>

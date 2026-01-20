@@ -246,7 +246,7 @@ export default function AdminPage() {
         <div className="flex gap-2 mb-6">
           <button
             onClick={() => setActiveTab('posts')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all cursor-pointer ${
               activeTab === 'posts'
                 ? 'bg-[var(--kuromi-purple)] text-white'
                 : 'bg-[var(--kuromi-white)] text-[var(--kuromi-black)] border-2 border-[var(--kuromi-lavender)]'
@@ -257,7 +257,7 @@ export default function AdminPage() {
           </button>
           <button
             onClick={() => setActiveTab('drafts')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all cursor-pointer ${
               activeTab === 'drafts'
                 ? 'bg-[var(--kuromi-purple)] text-white'
                 : 'bg-[var(--kuromi-white)] text-[var(--kuromi-black)] border-2 border-[var(--kuromi-lavender)]'
@@ -268,7 +268,7 @@ export default function AdminPage() {
           </button>
           <button
             onClick={() => setActiveTab('categories')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all cursor-pointer ${
               activeTab === 'categories'
                 ? 'bg-[var(--kuromi-purple)] text-white'
                 : 'bg-[var(--kuromi-white)] text-[var(--kuromi-black)] border-2 border-[var(--kuromi-lavender)]'
@@ -304,7 +304,7 @@ export default function AdminPage() {
                     />
                     <button
                       onClick={handleAddCategory}
-                      className="p-2 text-green-500 hover:bg-green-100 rounded transition-colors"
+                      className="p-2 text-green-500 hover:bg-green-100 rounded transition-colors cursor-pointer"
                       title="저장"
                     >
                       <Check size={18} />
@@ -314,7 +314,7 @@ export default function AdminPage() {
                         setIsAddingCategory(false);
                         setNewCategoryName('');
                       }}
-                      className="p-2 text-[var(--text-muted)] hover:bg-[var(--kuromi-light-lavender)] rounded transition-colors"
+                      className="p-2 text-[var(--text-muted)] hover:bg-[var(--kuromi-light-lavender)] rounded transition-colors cursor-pointer"
                       title="취소"
                     >
                       <X size={18} />
@@ -323,7 +323,7 @@ export default function AdminPage() {
                 ) : (
                   <button
                     onClick={() => setIsAddingCategory(true)}
-                    className="flex items-center gap-2 px-4 py-2 text-[var(--kuromi-purple)] hover:bg-[var(--kuromi-light-lavender)] rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 text-[var(--kuromi-purple)] hover:bg-[var(--kuromi-light-lavender)] rounded-lg transition-colors cursor-pointer"
                   >
                     <Plus size={18} />
                     카테고리 추가
@@ -358,14 +358,14 @@ export default function AdminPage() {
                           />
                           <button
                             onClick={() => handleUpdateCategory(category.id)}
-                            className="p-2 text-green-500 hover:bg-green-100 rounded transition-colors"
+                            className="p-2 text-green-500 hover:bg-green-100 rounded transition-colors cursor-pointer"
                             title="저장"
                           >
                             <Check size={18} />
                           </button>
                           <button
                             onClick={cancelEditCategory}
-                            className="p-2 text-[var(--text-muted)] hover:bg-[var(--kuromi-light-lavender)] rounded transition-colors"
+                            className="p-2 text-[var(--text-muted)] hover:bg-[var(--kuromi-light-lavender)] rounded transition-colors cursor-pointer"
                             title="취소"
                           >
                             <X size={18} />
@@ -384,14 +384,14 @@ export default function AdminPage() {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => startEditCategory(category)}
-                              className="p-2 text-[var(--kuromi-purple)] hover:bg-[var(--kuromi-light-lavender)] rounded transition-colors"
+                              className="p-2 text-[var(--kuromi-purple)] hover:bg-[var(--kuromi-light-lavender)] rounded transition-colors cursor-pointer"
                               title="수정"
                             >
                               <Edit size={18} />
                             </button>
                             <button
                               onClick={() => handleDeleteCategory(category.id)}
-                              className="p-2 text-red-500 hover:bg-red-100 rounded transition-colors"
+                              className="p-2 text-red-500 hover:bg-red-100 rounded transition-colors cursor-pointer"
                               title="삭제"
                             >
                               <Trash2 size={18} />
@@ -447,7 +447,7 @@ export default function AdminPage() {
                       </Link>
                       <button
                         onClick={() => handleDeletePost(post.id)}
-                        className="p-2 text-red-500 hover:bg-red-100 rounded transition-colors"
+                        className="p-2 text-red-500 hover:bg-red-100 rounded transition-colors cursor-pointer"
                         title="삭제"
                       >
                         <Trash2 size={18} />
@@ -493,7 +493,7 @@ export default function AdminPage() {
                       </Link>
                       <button
                         onClick={() => handleDeleteDraft(draft.id)}
-                        className="p-2 text-red-500 hover:bg-red-100 rounded transition-colors"
+                        className="p-2 text-red-500 hover:bg-red-100 rounded transition-colors cursor-pointer"
                         title="삭제"
                       >
                         <Trash2 size={18} />
