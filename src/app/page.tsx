@@ -79,10 +79,10 @@ export default async function HomePage() {
                     href="https://github.com/claraexmachina"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-center w-9 h-9 rounded-full bg-[var(--color-surface-alt)] border border-[var(--border-light)] hover:border-[var(--text-primary)] hover:bg-[var(--text-primary)] transition-all duration-200"
+                    className="group flex items-center justify-center w-9 h-9 rounded-full bg-[var(--color-surface-alt)] border border-[var(--border-light)] hover:border-[var(--icon-box-bg)] hover:bg-[var(--icon-box-bg)] transition-all duration-200"
                     aria-label="GitHub"
                   >
-                    <Github className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-white transition-colors duration-200 pointer-events-none" />
+                    <Github className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-[var(--icon-box-text)] transition-colors duration-200 pointer-events-none" />
                   </a>
                 </div>
               </div>
@@ -94,7 +94,7 @@ export default async function HomePage() {
               <div className="widget-content">
                 <div className="mini-widget">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-[var(--text-primary)] rounded-lg flex items-center justify-center text-white text-sm">
+                    <div className="w-10 h-10 bg-[var(--icon-box-bg)] rounded-lg flex items-center justify-center text-[var(--icon-box-text)] text-sm">
                       ♪
                     </div>
                     <div className="text-xs">

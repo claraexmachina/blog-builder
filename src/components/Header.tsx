@@ -4,12 +4,15 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { User, LogOut, Menu, X } from 'lucide-react';
+import { useTheme } from './ThemeProvider';
+import HorrorModeToggle from './HorrorModeToggle';
 
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isHorrorMode } = useTheme();
 
   useEffect(() => {
     fetch('/api/auth/check')
@@ -27,13 +30,22 @@ export default function Header() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 bg-[var(--color-surface)] border-b border-[var(--border-light)]" style={{ backdropFilter: 'blur(8px)', backgroundColor: 'rgba(255, 255, 255, 0.95)' }}>
+    <header
+      className="sticky top-0 z-50 bg-[var(--color-surface)] border-b border-[var(--border-light)]"
+      style={{
+        backdropFilter: 'blur(8px)',
+        backgroundColor: isHorrorMode ? 'rgba(26, 26, 26, 0.95)' : 'rgba(255, 255, 255, 0.95)'
+      }}
+    >
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex items-center justify-between h-14">
-          {/* Logo */}
-          <span className="text-xl">
-            🌱
-          </span>
+          {/* Logo + Theme Toggle */}
+          <div className="flex items-center gap-3">
+            <span className="text-xl">
+              🌱
+            </span>
+            <HorrorModeToggle />
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
@@ -41,7 +53,7 @@ export default function Header() {
               href="/"
               className={`px-4 py-2 text-xs font-medium tracking-wide transition-all rounded-md ${
                 isActive('/')
-                  ? 'bg-[var(--text-primary)] text-white'
+                  ? 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--accent-soft)]'
               }`}
             >
@@ -52,7 +64,7 @@ export default function Header() {
               href="/posts"
               className={`px-4 py-2 text-xs font-medium tracking-wide transition-all rounded-md ${
                 isActive('/posts')
-                  ? 'bg-[var(--text-primary)] text-white'
+                  ? 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--accent-soft)]'
               }`}
             >
@@ -116,7 +128,7 @@ export default function Header() {
                 href="/"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`px-4 py-3 text-sm font-medium rounded-lg ${
-                  isActive('/') ? 'bg-[var(--text-primary)] text-white' : 'text-[var(--text-secondary)] hover:bg-[var(--accent-soft)]'
+                  isActive('/') ? 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]' : 'text-[var(--text-secondary)] hover:bg-[var(--accent-soft)]'
                 }`}
               >
                 HOME
@@ -126,7 +138,7 @@ export default function Header() {
                 href="/posts"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`px-4 py-3 text-sm font-medium rounded-lg ${
-                  isActive('/posts') ? 'bg-[var(--text-primary)] text-white' : 'text-[var(--text-secondary)] hover:bg-[var(--accent-soft)]'
+                  isActive('/posts') ? 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]' : 'text-[var(--text-secondary)] hover:bg-[var(--accent-soft)]'
                 }`}
               >
                 POSTS

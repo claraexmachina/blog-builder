@@ -29,6 +29,12 @@
   --accent-warm: #f4a5b8;
   --accent-highlight: #e88a9f;
 
+  /* Interactive Element Colors */
+  --btn-primary-bg: #5c4a4d;
+  --btn-primary-text: #ffffff;
+  --icon-box-bg: #5c4a4d;
+  --icon-box-text: #ffffff;
+
   /* Borders & Shadows */
   --border-light: #ffd9e0;
   --border-medium: #f5c6cf;
@@ -46,6 +52,56 @@
   --kuromi-soft-pink: #fff0f3;
   --kuromi-cream: var(--color-surface);
   --kuromi-white: #ffffff;
+  --pixel-shadow: var(--shadow-color);
+  --pixel-highlight: var(--color-surface);
+  --bg-main: var(--color-bg);
+  --bg-widget: var(--color-surface);
+  --border-pixel: var(--border-medium);
+}
+
+/* Horror Mode Palette - 공포모드 */
+[data-theme="horror"] {
+  /* Primary Colors - 어둡고 음산한 배경 */
+  --color-bg: #0d0d0d;
+  --color-surface: #1a1a1a;
+  --color-surface-alt: #252525;
+
+  /* Text Colors - 높은 대비 */
+  --text-primary: #f0e8e8;
+  --text-secondary: #d0c4c4;
+  --text-muted: #a89090;
+  --text-accent: #ff5555;
+
+  /* Accent Colors - 더 밝은 레드 */
+  --accent-primary: #cc2233;
+  --accent-secondary: #aa1a2a;
+  --accent-soft: #2d1818;
+  --accent-warm: #e63946;
+  --accent-highlight: #ff4d4d;
+
+  /* Interactive Element Colors - 버튼/아이콘 박스 */
+  --btn-primary-bg: #cc2233;
+  --btn-primary-text: #ffffff;
+  --icon-box-bg: #8b1a1a;
+  --icon-box-text: #f0e8e8;
+
+  /* Borders & Shadows - 훨씬 더 보이는 보더 */
+  --border-light: #4a3030;
+  --border-medium: #5a3838;
+  --border-dark: #6a4444;
+  --shadow-color: rgba(200, 50, 50, 0.3);
+  --shadow-medium: rgba(230, 57, 70, 0.4);
+
+  /* Legacy variable mappings for horror */
+  --kuromi-black: var(--text-primary);
+  --kuromi-dark-purple: var(--accent-primary);
+  --kuromi-purple: var(--accent-secondary);
+  --kuromi-lavender: var(--border-medium);
+  --kuromi-light-lavender: var(--accent-soft);
+  --kuromi-pink: var(--accent-warm);
+  --kuromi-soft-pink: #2a1515;
+  --kuromi-cream: var(--color-surface);
+  --kuromi-white: #f0e8e8;
   --pixel-shadow: var(--shadow-color);
   --pixel-highlight: var(--color-surface);
   --bg-main: var(--color-bg);
@@ -192,10 +248,10 @@ html, body, * {
 
 /* Modern Button */
 .pixel-btn {
-  background: var(--text-primary);
+  background: var(--btn-primary-bg);
   border: none;
   box-shadow: 0 2px 4px var(--shadow-medium);
-  color: white;
+  color: var(--btn-primary-text);
   padding: 10px 20px;
   font-family: 'Yeongdeok Sea', sans-serif;
   font-size: 14px;
@@ -544,4 +600,31 @@ button:focus-visible,
 input:focus-visible {
   outline: 2px solid var(--accent-warm);
   outline-offset: 2px;
+}
+
+/* Horror Mode Cursors - 공포모드 커서 */
+[data-theme="horror"] * {
+  cursor: url('data:image/x-icon;base64,AAACAAEAICACAAAAAAAwAQAAFgAAACgAAAAgAAAAQAAAAAEAAQAAAAAAgAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA////AAAAAAAAAAAAAAAAAAAH4AAcP/4AD///4Af///AH///8D///+A////Af///gf///wB///4AP//+AB///AAf//wAD//8AA///AAP//gAD//4AAf/+AAH//gAB//4AAfe+AAHjHgAB4x4AAOMcAADjHABAd7gAYD/wAHAPwAAAAAAA////////////+B//w8AB/8AAAB/gAAAP8AAAAfAAAAHgAAAD4AAAB4AAAA8AAAAfgAAAP+AAAD/wAAB/8AAAf/gAAH/4AAB/+AAA//gAAP/8AAD//AAA//wAAP/8AAD//AAA//wAAP9+AAH/PgAB/x8AA/8PgAf/B8AP/wPwP/8='), auto;
+}
+
+[data-theme="horror"] a,
+[data-theme="horror"] button,
+[data-theme="horror"] [role="button"],
+[data-theme="horror"] input[type="submit"],
+[data-theme="horror"] input[type="button"],
+[data-theme="horror"] .pixel-btn,
+[data-theme="horror"] .pixel-card {
+  cursor: url('data:image/x-icon;base64,AAACAAEAICAQAAAAAADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAAAAA9/8AAIIpAAAAAAAA4f8AAIj/AABZHAAdVzMAHH7UAABq/wAAv/8AAAD/AA5ntQAAqv8AAAAAAAAAAAAAAAAAIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiS0RLtES0IiIiIiIiIiIixLtEQiREu0ciIiIiIiIiLEK0RCIiREskciIiIiIiIkQiJCIgAiJCIkQiIiIiIitCICIpmZmSIgIksiIiIiK0IpmSmQIgmSmZIksiIiIssimSmZIiIimZKZIrciIiJCKQIiAiS7QiAiIJIkIiIsQpkisiJES0QiKyKZJHIiLCICJLQkREtEQktCICJyIiwgAkS0RES7RERLRCACciIsIiJEtCIitCIiS0QiInIiLEtEQiIpArQgkiIkRLRyIixLIiKZmSK7IpmZIiK0ciIsQikAAJkkS0KQAACSJHIiLEKZAAmSJEtCKZAAmSRyIiJCKZIiIkS7RCIiKZIkIiIixCKZJEtEtES0QpkiRyIiIixCICJLtLRLtCICJHIiIiIixCIiJLS0S0IiIkQiIiIiIiS7tES7u7tES7tHIiIiIiIixLu0VVVVS7tHIiIiIiIiIiIkuyVVUrtCIiIiIiIqIiIiIiIiESIiIiIiIiIiKDIiIiIiJmEiIiIiIiIiIoOKIiIiIiESIRYiIiIiIiI4IiIiIiImERFiIiIiIiIiIiIiIiIiIhYRIiIiIiIiL/////////////////gAH//gAAf/wAAD/4AAAf8AAAD+AAAAfAAAADwAAAA4AAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAHAAAADwAAAA+AAAAfwAAAP+AAAH4wAAD+HgkH/A/x//wP8x/8D/A//D/4f/w=='), pointer;
+}
+
+[data-theme="horror"] input[type="text"],
+[data-theme="horror"] input[type="password"],
+[data-theme="horror"] input[type="email"],
+[data-theme="horror"] input[type="search"],
+[data-theme="horror"] input[type="url"],
+[data-theme="horror"] input[type="tel"],
+[data-theme="horror"] input[type="number"],
+[data-theme="horror"] textarea,
+[data-theme="horror"] [contenteditable="true"] {
+  cursor: url('data:image/x-icon;base64,AAACAAEAICAQABEAEADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAAAAAAAAA6OjoAP///wC9vb0A8PDwADAwMAD39/cA1tbWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAMAAAAAAAAAAAAAAAADdwB3MAAAAAAAAAAAAAAAAxF3ETAAAAAAAAAAAAAAAABxERcAAAAAAAAAAAAAAAAAAUQQAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAAAAAAAAAAAABmAAAAAAAAAAAAAAAAAAAAIgAAAAAAAAAAAAAAAAAAACIAAAAAAAAAAAAAAAAAAAAiAAAAAAAAAAAAAAAAAAAAIgAAAAAAAAAAAAAAAAAAACIAAAAAAAAAAAAAAAAAAAAiAAAAAAAAAAAAAAAAAAAAIgAAAAAAAAAAAAAAAAAAACIAAAAAAAAAAAAAAAAAAABmUAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAABERAAAAAAAAAAAAAAAAAAcREXAAAAAAAAAAAAAAAAAxF3ETAAAAAAAAAAAAAAAAN3AHcwAAAAAAAAAAAAAAAAMAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD////////////73///8Y///+AH///gB///8A////gf///8P////D////w////8P////D////w////8P////D////w////8P////D////w////8P///+B////AP///gB///4Af///GP///73////////////w=='), text;
 }
