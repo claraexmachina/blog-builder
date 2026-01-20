@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
+import { sanitizeSchema } from '@/lib/markdown-sanitize';
 import {
   Bold,
   Italic,
@@ -179,7 +180,7 @@ export default function MarkdownEditor({
         <div className="p-4 min-h-[400px] markdown-content">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw, rehypeSanitize]}
+            rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
           >
             {value || '*내용을 입력해주세요...*'}
           </ReactMarkdown>
