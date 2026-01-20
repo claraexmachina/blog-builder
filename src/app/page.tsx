@@ -80,10 +80,10 @@ export default async function HomePage() {
                     href="https://github.com/claraexmachina"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-center w-9 h-9 rounded-full bg-[var(--color-surface-alt)] border border-[var(--border-light)] hover:border-[var(--text-primary)] hover:bg-[var(--text-primary)] transition-all duration-200"
+                    className="group flex items-center justify-center w-9 h-9 rounded-full bg-[var(--color-surface-alt)] border border-[var(--border-light)] hover:border-[var(--icon-box-bg)] hover:bg-[var(--icon-box-bg)] transition-all duration-200"
                     aria-label="GitHub"
                   >
-                    <Github className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-white transition-colors duration-200 pointer-events-none" />
+                    <Github className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-[var(--icon-box-text)] transition-colors duration-200 pointer-events-none" />
                   </a>
                 </div>
               </div>
