@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { User, LogOut, Menu, X } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
+import HorrorModeToggle from './HorrorModeToggle';
 
 export default function Header() {
   const pathname = usePathname();
@@ -38,10 +39,13 @@ export default function Header() {
     >
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex items-center justify-between h-14">
-          {/* Logo */}
-          <span className="text-xl">
-            🌱
-          </span>
+          {/* Logo + Theme Toggle */}
+          <div className="flex items-center gap-3">
+            <span className="text-xl">
+              🌱
+            </span>
+            <HorrorModeToggle />
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
