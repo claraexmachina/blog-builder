@@ -75,14 +75,14 @@ const HorrorCursorTrail: React.FC = () => {
 
     const createStar = (x: number, y: number): Star => {
       const angle = Math.random() * Math.PI * 2;
-      const speed = Math.random() * 2 + 1;
+      const speed = Math.random() * 1.5 + 0.5;
       return {
         x,
         y,
-        vx: Math.cos(angle) * speed * 0.5,
-        vy: Math.sin(angle) * speed * 0.5 + 1, // Falling down
+        vx: Math.cos(angle) * speed * 0.3,
+        vy: Math.sin(angle) * speed * 0.3 + 0.8, // Gentle falling
         life: 1,
-        maxLife: Math.random() * 40 + 30,
+        maxLife: Math.random() * 50 + 40, // Longer life for smoother trail
         size: Math.random() * 3 + 2,
         color: HORROR_COLORS[Math.floor(Math.random() * HORROR_COLORS.length)],
       };
@@ -122,19 +122,22 @@ const HorrorCursorTrail: React.FC = () => {
 
       context.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Add new stars if mouse moved
+      // Add new stars along the path from previous to current mouse position
       const dx = mouseRef.current.x - mouseRef.current.prevX;
       const dy = mouseRef.current.y - mouseRef.current.prevY;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      if (distance > 5) {
-        // Add multiple stars based on distance
-        const starsToAdd = Math.min(Math.floor(distance / 10) + 1, 3);
-        for (let i = 0; i < starsToAdd; i++) {
+      if (distance > 2) {
+        // Interpolate along the path to create smooth trail
+        const steps = Math.max(1, Math.floor(distance / 8));
+        for (let i = 0; i < steps; i++) {
+          const t = i / steps;
+          const interpX = mouseRef.current.prevX + dx * t;
+          const interpY = mouseRef.current.prevY + dy * t;
           starsRef.current.push(
             createStar(
-              mouseRef.current.x + (Math.random() - 0.5) * 10,
-              mouseRef.current.y + (Math.random() - 0.5) * 10
+              interpX + (Math.random() - 0.5) * 6,
+              interpY + (Math.random() - 0.5) * 6
             )
           );
         }
@@ -143,8 +146,8 @@ const HorrorCursorTrail: React.FC = () => {
       }
 
       // Limit total stars
-      if (starsRef.current.length > 100) {
-        starsRef.current = starsRef.current.slice(-100);
+      if (starsRef.current.length > 150) {
+        starsRef.current = starsRef.current.slice(-150);
       }
 
       // Update and draw stars
