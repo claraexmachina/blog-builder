@@ -5,6 +5,7 @@ import { Heart, Clock, Twitter, Github } from 'lucide-react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { siteConfig } from '@/config/site';
+import ProfileEmoji from '@/components/ProfileEmoji';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,7 +44,7 @@ export default async function HomePage() {
               <div className="widget-content text-center">
                 <div className="profile-frame w-20 h-20 mx-auto mb-4">
                   <div className="profile-inner w-full h-full flex items-center justify-center text-3xl">
-                    {siteConfig.profile.emoji}
+                    <ProfileEmoji />
                   </div>
                 </div>
                 <p className="text-sm text-[var(--text-primary)] font-semibold mb-1">
