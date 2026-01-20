@@ -9,6 +9,15 @@
   font-display: swap;
 }
 
+/* Horror Mode Font */
+@font-face {
+  font-family: 'Thorn Font';
+  src: url('/fonts/Thorn Font.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Pastel Pink Palette */
 :root {
   /* Primary Colors */
@@ -107,6 +116,13 @@
   --bg-main: var(--color-bg);
   --bg-widget: var(--color-surface);
   --border-pixel: var(--border-medium);
+}
+
+/* Horror Mode Font Override - 공포모드 폰트 */
+[data-theme="horror"] body,
+[data-theme="horror"] html,
+[data-theme="horror"] * {
+  font-family: 'Thorn Font', 'Yeongdeok Sea', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 @theme inline {
