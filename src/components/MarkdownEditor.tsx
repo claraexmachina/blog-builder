@@ -190,7 +190,7 @@ export default function MarkdownEditor({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="마크다운으로 내용을 작성해주세요..."
-          className="w-full min-h-[400px] p-4 resize-y outline-none font-mono text-sm"
+          className="w-full min-h-[400px] p-4 resize-y outline-none font-mono text-sm bg-[var(--color-surface)] text-[var(--text-primary)]"
         />
       )}
 
