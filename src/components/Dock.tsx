@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { useTheme } from './ThemeProvider';
 
 interface DockItem {
   id: number;
@@ -24,6 +25,7 @@ const dockItems: DockItem[] = [
 export default function Dock() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const dockRef = useRef<HTMLDivElement>(null);
+  const { isHorrorMode } = useTheme();
 
   const getLerp = (index: number): number => {
     if (hoveredIndex === null) return 0;
@@ -40,7 +42,11 @@ export default function Dock() {
     >
       <div
         ref={dockRef}
-        className="dock-container flex items-end justify-center gap-1 sm:gap-2 lg:gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-2xl bg-white/50 dark:bg-black/50 backdrop-blur-md border border-white/30 dark:border-white/10 shadow-lg"
+        className={`dock-container flex items-end justify-center gap-1 sm:gap-2 lg:gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-2xl backdrop-blur-md shadow-lg ${
+          isHorrorMode
+            ? 'bg-black/60 border border-red-900/30'
+            : 'bg-white/50 border border-white/30'
+        }`}
       >
         {dockItems.map((item, index) => {
           const lerp = getLerp(index);

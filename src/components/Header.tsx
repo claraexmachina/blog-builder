@@ -4,12 +4,14 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { User, LogOut, Menu, X } from 'lucide-react';
+import { useTheme } from './ThemeProvider';
 
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isHorrorMode } = useTheme();
 
   useEffect(() => {
     fetch('/api/auth/check')
@@ -27,7 +29,13 @@ export default function Header() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 bg-[var(--color-surface)] border-b border-[var(--border-light)]" style={{ backdropFilter: 'blur(8px)', backgroundColor: 'rgba(255, 255, 255, 0.95)' }}>
+    <header
+      className="sticky top-0 z-50 bg-[var(--color-surface)] border-b border-[var(--border-light)]"
+      style={{
+        backdropFilter: 'blur(8px)',
+        backgroundColor: isHorrorMode ? 'rgba(26, 26, 26, 0.95)' : 'rgba(255, 255, 255, 0.95)'
+      }}
+    >
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
