@@ -84,7 +84,7 @@ export default function Header() {
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="p-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors rounded-md hover:bg-[var(--accent-soft)]"
+                  className="p-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors rounded-md hover:bg-[var(--accent-soft)] cursor-pointer"
                 >
                   <LogOut size={16} />
                 </button>
@@ -102,7 +102,7 @@ export default function Header() {
           {/* Mobile menu button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-[var(--text-primary)] rounded-md hover:bg-[var(--accent-soft)]"
+            className="md:hidden p-2 text-[var(--text-primary)] rounded-md hover:bg-[var(--accent-soft)] cursor-pointer"
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -154,7 +154,7 @@ export default function Header() {
                       handleLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="px-4 py-3 text-sm font-medium text-left text-[var(--text-muted)] rounded-lg hover:bg-[var(--accent-soft)]"
+                    className="px-4 py-3 text-sm font-medium text-left text-[var(--text-muted)] rounded-lg hover:bg-[var(--accent-soft)] cursor-pointer"
                   >
                     LOGOUT
                   </button>

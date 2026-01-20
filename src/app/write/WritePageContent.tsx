@@ -401,7 +401,7 @@ export default function WritePageContent() {
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
-              className="input-kuromi w-full"
+              className="input-kuromi w-full cursor-pointer"
             >
               <option value="">카테고리 없음</option>
               {categories.map((cat) => (
