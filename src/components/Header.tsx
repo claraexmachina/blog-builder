@@ -42,7 +42,7 @@ export default function Header() {
           {/* Logo + Theme Toggle */}
           <div className="flex items-center gap-3">
             <span className="text-xl">
-              🌱
+              {isHorrorMode ? '🎃' : '🌱'}
             </span>
             <HorrorModeToggle />
           </div>

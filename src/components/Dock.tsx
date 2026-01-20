@@ -59,7 +59,7 @@ export default function Dock() {
               href={item.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="dock-item block transition-transform duration-150 ease-out"
+              className="dock-item block transition-transform duration-150 ease-out cursor-pointer"
               style={{
                 transform: `translateY(${translateY}px) scale(${scale})`,
                 zIndex: hoveredIndex === index ? 10 : 5 - Math.abs(index - (hoveredIndex ?? 0)),
