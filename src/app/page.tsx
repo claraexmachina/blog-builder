@@ -5,6 +5,7 @@ import { Heart, Clock, Twitter, Github } from 'lucide-react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { siteConfig } from '@/config/site';
+import HorrorModeToggle from '@/components/HorrorModeToggle';
 
 export const dynamic = 'force-dynamic';
 
@@ -86,6 +87,11 @@ export default async function HomePage() {
                   </a>
                 </div>
               </div>
+            </div>
+
+            {/* Horror Mode Toggle */}
+            <div className="order-1 md:order-none">
+              <HorrorModeToggle />
             </div>
 
             {/* Music/Mood Widget with YouTube - Last on mobile */}

@@ -53,6 +53,50 @@
   --border-pixel: var(--border-medium);
 }
 
+/* Horror Mode Palette - 공포모드 */
+[data-theme="horror"] {
+  /* Primary Colors - 어둡고 음산한 배경 */
+  --color-bg: #0a0a0a;
+  --color-surface: #141414;
+  --color-surface-alt: #1a1a1a;
+
+  /* Text Colors - 피빛 강조 */
+  --text-primary: #e8e0e0;
+  --text-secondary: #a89999;
+  --text-muted: #6b5555;
+  --text-accent: #ff4444;
+
+  /* Accent Colors - 핏빛 레드 */
+  --accent-primary: #8b0000;
+  --accent-secondary: #660000;
+  --accent-soft: #1f0a0a;
+  --accent-warm: #c41e3a;
+  --accent-highlight: #ff3333;
+
+  /* Borders & Shadows - 어두운 레드 */
+  --border-light: #2a1515;
+  --border-medium: #3d1f1f;
+  --border-dark: #4a2525;
+  --shadow-color: rgba(139, 0, 0, 0.3);
+  --shadow-medium: rgba(196, 30, 58, 0.4);
+
+  /* Legacy variable mappings for horror */
+  --kuromi-black: var(--text-primary);
+  --kuromi-dark-purple: var(--accent-primary);
+  --kuromi-purple: var(--accent-secondary);
+  --kuromi-lavender: var(--border-medium);
+  --kuromi-light-lavender: var(--accent-soft);
+  --kuromi-pink: var(--accent-warm);
+  --kuromi-soft-pink: #1a0a0a;
+  --kuromi-cream: var(--color-surface);
+  --kuromi-white: #e8e0e0;
+  --pixel-shadow: var(--shadow-color);
+  --pixel-highlight: var(--color-surface);
+  --bg-main: var(--color-bg);
+  --bg-widget: var(--color-surface);
+  --border-pixel: var(--border-medium);
+}
+
 @theme inline {
   --color-pink-dark: var(--text-primary);
   --color-pink-primary: var(--accent-primary);

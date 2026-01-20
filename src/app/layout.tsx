@@ -6,6 +6,7 @@ import Dock from "@/components/Dock";
 import BubbleCursor from "@/components/BubbleCursor";
 import AnimatedFavicon from "@/components/AnimatedFavicon";
 import Oneko from "@/components/Oneko";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "by claraexmachina",
@@ -27,15 +28,17 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-1 pb-20 md:pb-24">
-          {children}
-        </main>
-        <Footer />
-        <Dock />
-        <BubbleCursor />
-        <AnimatedFavicon />
-        <Oneko />
+        <ThemeProvider>
+          <Header />
+          <main className="flex-1 pb-20 md:pb-24">
+            {children}
+          </main>
+          <Footer />
+          <Dock />
+          <BubbleCursor />
+          <AnimatedFavicon />
+          <Oneko />
+        </ThemeProvider>
       </body>
     </html>
   );
