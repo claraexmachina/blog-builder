@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { siteConfig } from '@/config/site';
 import ProfileEmoji from '@/components/ProfileEmoji';
+import PixelRoom from '@/components/PixelRoom';
 
 export const dynamic = 'force-dynamic';
 
@@ -127,14 +128,7 @@ export default async function HomePage() {
               <div className="widget-title">MY ROOM</div>
               <div className="widget-content p-0 overflow-hidden">
                 <div className="relative w-full rounded-b-xl overflow-hidden">
-                  <Image
-                    src="/images/pixel-room.png"
-                    alt="My Pixel Room"
-                    width={1280}
-                    height={853}
-                    className="w-full h-auto"
-                    priority
-                  />
+                  <PixelRoom />
                 </div>
               </div>
             </div>
