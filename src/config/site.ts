@@ -25,6 +25,13 @@ export const siteConfig = {
     youtubeId: 'rgNdeflYdYw',              // YouTube 영상 ID
   },
 
+  // NOW PLAYING 위젯 (호러 모드)
+  nowPlayingHorror: {
+    artist: 'Camille',                     // 아티스트 명
+    title: 'Home Is Where It Hurts',       // 곡 제목
+    youtubeId: 'rNGpQ_WXTUM',              // YouTube 영상 ID
+  },
+
   // 위젯 타이틀들
   widgetTitles: {
     profile: 'PROFILE',

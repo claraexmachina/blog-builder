@@ -9,6 +9,7 @@ import ProfileEmoji from '@/components/ProfileEmoji';
 import ProfileName from '@/components/ProfileName';
 import ProfileBio from '@/components/ProfileBio';
 import PixelRoom from '@/components/PixelRoom';
+import NowPlaying from '@/components/NowPlaying';
 
 export const dynamic = 'force-dynamic';
 
@@ -96,29 +97,7 @@ export default async function HomePage() {
             <div className="widget-box order-4 md:order-none">
               <div className="widget-title">{siteConfig.widgetTitles.nowPlaying}</div>
               <div className="widget-content">
-                <div className="mini-widget">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-[var(--icon-box-bg)] rounded-lg flex items-center justify-center text-[var(--icon-box-text)] text-sm">
-                      ♪
-                    </div>
-                    <div className="text-xs">
-                      <p className="text-[var(--text-primary)] font-medium">{siteConfig.nowPlaying.title}</p>
-                      <p className="text-[var(--text-muted)]">{siteConfig.nowPlaying.artist}</p>
-                    </div>
-                  </div>
-                  <div className="aspect-video w-full rounded-lg overflow-hidden">
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      src={`https://www.youtube.com/embed/${siteConfig.nowPlaying.youtubeId}`}
-                      title="Now Playing"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="border border-[var(--border-light)] rounded-lg"
-                    ></iframe>
-                  </div>
-                </div>
+                <NowPlaying />
               </div>
             </div>
           </div>
