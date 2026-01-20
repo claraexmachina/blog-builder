@@ -420,9 +420,13 @@ export default function AdminPage() {
                       <div className="flex items-center gap-2 mb-1">
                         <Link
                           href={`/posts/${post.id}`}
-                          className="font-medium text-[var(--kuromi-dark-purple)] hover:text-[var(--kuromi-purple)] truncate"
+                          className={`font-medium truncate ${
+                            post.title
+                              ? 'text-[var(--kuromi-dark-purple)] hover:text-[var(--kuromi-purple)]'
+                              : 'text-red-500'
+                          }`}
                         >
-                          {post.title}
+                          {post.title || '(손상된 글 - 삭제 필요)'}
                         </Link>
                       </div>
                       <p className="text-xs text-[var(--text-muted)]">
