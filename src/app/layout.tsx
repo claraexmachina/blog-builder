@@ -10,7 +10,12 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "by claraexmachina",
-  description: "일상과 생각을 기록하는 나만의 공간",
+  description: "always brewing",
+  openGraph: {
+    title: "by claraexmachina",
+    description: "always brewing",
+    images: ["/images/OG.png"],
+  },
 };
 
 export default function RootLayout({
