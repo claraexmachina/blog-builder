@@ -1,5 +1,4 @@
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import MarkdownEditor from './MarkdownEditor';
 
@@ -18,12 +17,12 @@ vi.mock('@/lib/markdown-sanitize', () => ({
 }));
 
 describe('MarkdownEditor', () => {
-  let mockOnChange: ReturnType<typeof vi.fn>;
-  let mockOnImageUpload: ReturnType<typeof vi.fn>;
+  let mockOnChange: ReturnType<typeof vi.fn<(value: string) => void>>;
+  let mockOnImageUpload: ReturnType<typeof vi.fn<(file: File) => Promise<string>>>;
 
   beforeEach(() => {
-    mockOnChange = vi.fn();
-    mockOnImageUpload = vi.fn().mockResolvedValue('https://example.com/image.png');
+    mockOnChange = vi.fn<(value: string) => void>();
+    mockOnImageUpload = vi.fn<(file: File) => Promise<string>>().mockResolvedValue('https://example.com/image.png');
   });
 
   function renderEditor(value = '', props = {}) {
@@ -489,14 +488,6 @@ describe('MarkdownEditor', () => {
       renderEditor('테스트');
       const textarea = screen.getByRole('textbox', { name: '마크다운 편집기' }) as HTMLTextAreaElement;
 
-      const event = new KeyboardEvent('keydown', {
-        key: 'z',
-        ctrlKey: true,
-        bubbles: true,
-        cancelable: true,
-      });
-      const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
-
       // Use fireEvent directly since we need to check preventDefault
       fireEvent.keyDown(textarea, { key: 'z', ctrlKey: true });
       // The handler should have been called (we can't easily check preventDefault with fireEvent)
@@ -742,7 +733,7 @@ describe('MarkdownEditor', () => {
       renderEditor('');
       const textarea = screen.getByRole('textbox', { name: '마크다운 편집기' }) as HTMLTextAreaElement;
 
-      const event = fireEvent.paste(textarea, {
+      fireEvent.paste(textarea, {
         clipboardData: {
           items: [
             {
