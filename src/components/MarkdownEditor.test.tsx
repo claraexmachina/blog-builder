@@ -1053,8 +1053,8 @@ describe('MarkdownEditor', () => {
 
       await waitFor(() => {
         expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
-        expect(screen.getByText('2열 그리드')).toBeInTheDocument();
-        expect(screen.getByText('3열 그리드')).toBeInTheDocument();
+        expect(screen.getByText('2열')).toBeInTheDocument();
+        expect(screen.getByText('3열')).toBeInTheDocument();
       });
     });
 
@@ -1084,7 +1084,7 @@ describe('MarkdownEditor', () => {
       });
 
       expect(mockOnChange).toHaveBeenCalledWith(
-        expect.stringContaining('image-gallery-2')
+        expect.stringContaining('image-gallery image-gallery-cols-2')
       );
     });
 
@@ -1118,6 +1118,254 @@ describe('MarkdownEditor', () => {
 
       const preview = screen.getByTestId('markdown-preview');
       expect(preview).toHaveTextContent('![기존 이미지](https://example.com/old.jpg)');
+    });
+
+    it('4열 옵션이 표시된다', async () => {
+      renderEditor('');
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const files = [
+        new File(['test1'], 'img1.png', { type: 'image/png' }),
+        new File(['test2'], 'img2.png', { type: 'image/png' }),
+      ];
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+        expect(screen.getByText('4열')).toBeInTheDocument();
+      });
+    });
+
+    it('이미지 표시 옵션이 다중 이미지 + 2열 이상일 때 표시된다', async () => {
+      renderEditor('');
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const files = [
+        new File(['test1'], 'img1.png', { type: 'image/png' }),
+        new File(['test2'], 'img2.png', { type: 'image/png' }),
+      ];
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+        expect(screen.getByText('이미지 표시')).toBeInTheDocument();
+        expect(screen.getByText('원본 비율')).toBeInTheDocument();
+        expect(screen.getByText('채우기')).toBeInTheDocument();
+        expect(screen.getByText('맞춤')).toBeInTheDocument();
+      });
+    });
+
+    it('간격 옵션이 다중 이미지 + 2열 이상일 때 표시된다', async () => {
+      renderEditor('');
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const files = [
+        new File(['test1'], 'img1.png', { type: 'image/png' }),
+        new File(['test2'], 'img2.png', { type: 'image/png' }),
+      ];
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+        expect(screen.getByText('간격')).toBeInTheDocument();
+        expect(screen.getByText('없음')).toBeInTheDocument();
+        expect(screen.getByText('좁게')).toBeInTheDocument();
+        expect(screen.getByText('보통')).toBeInTheDocument();
+        expect(screen.getByText('넓게')).toBeInTheDocument();
+      });
+    });
+
+    it('채우기 모드를 선택하면 종횡비 옵션이 표시된다', async () => {
+      renderEditor('');
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const files = [
+        new File(['test1'], 'img1.png', { type: 'image/png' }),
+        new File(['test2'], 'img2.png', { type: 'image/png' }),
+      ];
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+      });
+
+      // Click 채우기 (cover) mode
+      fireEvent.click(screen.getByText('채우기'));
+
+      await waitFor(() => {
+        expect(screen.getByText('종횡비')).toBeInTheDocument();
+        expect(screen.getByText('1:1')).toBeInTheDocument();
+        expect(screen.getByText('4:3')).toBeInTheDocument();
+        expect(screen.getByText('3:4')).toBeInTheDocument();
+        expect(screen.getByText('16:9')).toBeInTheDocument();
+      });
+    });
+
+    it('원본 비율 모드에서는 종횡비 옵션이 표시되지 않는다', async () => {
+      renderEditor('');
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const files = [
+        new File(['test1'], 'img1.png', { type: 'image/png' }),
+        new File(['test2'], 'img2.png', { type: 'image/png' }),
+      ];
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+      });
+
+      // Default is 'auto' (원본 비율), so 종횡비 should not show
+      expect(screen.queryByText('종횡비')).not.toBeInTheDocument();
+    });
+
+    it('채우기 모드 + 1:1 비율로 삽입하면 올바른 클래스가 생성된다', async () => {
+      renderEditor('');
+      const textarea = screen.getByRole('textbox', { name: '마크다운 편집기' }) as HTMLTextAreaElement;
+      Object.defineProperty(textarea, 'selectionStart', { value: 0, writable: true });
+      Object.defineProperty(textarea, 'selectionEnd', { value: 0, writable: true });
+
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const files = [
+        new File(['test1'], 'img1.png', { type: 'image/png' }),
+        new File(['test2'], 'img2.png', { type: 'image/png' }),
+      ];
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+      });
+
+      // Select cover mode
+      fireEvent.click(screen.getByText('채우기'));
+      await waitFor(() => {
+        expect(screen.getByText('종횡비')).toBeInTheDocument();
+      });
+
+      // Select 1:1 ratio
+      fireEvent.click(screen.getByText('1:1'));
+
+      // Insert
+      await act(async () => {
+        fireEvent.click(screen.getByText('삽입'));
+      });
+
+      expect(mockOnChange).toHaveBeenCalledWith(
+        expect.stringContaining('image-gallery-fit-cover')
+      );
+      expect(mockOnChange).toHaveBeenCalledWith(
+        expect.stringContaining('image-gallery-ratio-1x1')
+      );
+    });
+
+    it('3열 + 넓은 간격으로 삽입하면 올바른 클래스가 생성된다', async () => {
+      renderEditor('');
+      const textarea = screen.getByRole('textbox', { name: '마크다운 편집기' }) as HTMLTextAreaElement;
+      Object.defineProperty(textarea, 'selectionStart', { value: 0, writable: true });
+      Object.defineProperty(textarea, 'selectionEnd', { value: 0, writable: true });
+
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const files = [
+        new File(['test1'], 'img1.png', { type: 'image/png' }),
+        new File(['test2'], 'img2.png', { type: 'image/png' }),
+        new File(['test3'], 'img3.png', { type: 'image/png' }),
+      ];
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+      });
+
+      // Select 3 columns
+      fireEvent.click(screen.getByText('3열'));
+      // Select large gap
+      fireEvent.click(screen.getByText('넓게'));
+
+      await act(async () => {
+        fireEvent.click(screen.getByText('삽입'));
+      });
+
+      expect(mockOnChange).toHaveBeenCalledWith(
+        expect.stringContaining('image-gallery-cols-3')
+      );
+      expect(mockOnChange).toHaveBeenCalledWith(
+        expect.stringContaining('image-gallery-gap-lg')
+      );
+    });
+
+    it('원본 비율 모드에서는 ratio 클래스가 생성되지 않는다', async () => {
+      renderEditor('');
+      const textarea = screen.getByRole('textbox', { name: '마크다운 편집기' }) as HTMLTextAreaElement;
+      Object.defineProperty(textarea, 'selectionStart', { value: 0, writable: true });
+      Object.defineProperty(textarea, 'selectionEnd', { value: 0, writable: true });
+
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const files = [
+        new File(['test1'], 'img1.png', { type: 'image/png' }),
+        new File(['test2'], 'img2.png', { type: 'image/png' }),
+      ];
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+      });
+
+      // Default is 'auto' fit mode, just insert
+      await act(async () => {
+        fireEvent.click(screen.getByText('삽입'));
+      });
+
+      expect(mockOnChange).toHaveBeenCalledWith(
+        expect.stringContaining('image-gallery-fit-auto')
+      );
+      // Should NOT contain any ratio class
+      const lastCall = mockOnChange.mock.calls[mockOnChange.mock.calls.length - 1][0];
+      expect(lastCall).not.toContain('image-gallery-ratio-');
+    });
+
+    it('1열 모드에서는 표시 옵션이 숨겨진다', async () => {
+      renderEditor('');
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const files = [
+        new File(['test1'], 'img1.png', { type: 'image/png' }),
+        new File(['test2'], 'img2.png', { type: 'image/png' }),
+      ];
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+        expect(screen.getByText('이미지 표시')).toBeInTheDocument();
+      });
+
+      // Switch to 1 column
+      fireEvent.click(screen.getByText('1열 (세로)'));
+
+      await waitFor(() => {
+        expect(screen.queryByText('이미지 표시')).not.toBeInTheDocument();
+        expect(screen.queryByText('간격')).not.toBeInTheDocument();
+      });
     });
   });
 });

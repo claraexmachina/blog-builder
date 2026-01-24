@@ -42,7 +42,10 @@ interface MarkdownEditorProps {
 type ViewMode = 'edit' | 'split' | 'preview';
 type ImageSize = '25%' | '50%' | '75%' | '100%';
 type ImageAlign = 'left' | 'center' | 'right';
-type GalleryLayout = '1' | '2' | '3';
+type GalleryColumns = '1' | '2' | '3' | '4';
+type GalleryFit = 'cover' | 'contain' | 'auto';
+type GalleryRatio = 'auto' | '1:1' | '4:3' | '3:4' | '16:9';
+type GalleryGap = 'none' | 'sm' | 'md' | 'lg';
 
 interface UploadedImage {
   url: string;
@@ -56,7 +59,10 @@ interface ImageDialogState {
   size: ImageSize;
   align: ImageAlign;
   caption: string;
-  layout: GalleryLayout;
+  galleryColumns: GalleryColumns;
+  galleryFit: GalleryFit;
+  galleryRatio: GalleryRatio;
+  galleryGap: GalleryGap;
 }
 
 interface HistoryEntry {
@@ -83,7 +89,10 @@ export default function MarkdownEditor({
     size: '100%',
     align: 'center',
     caption: '',
-    layout: '1',
+    galleryColumns: '2',
+    galleryFit: 'auto',
+    galleryRatio: 'auto',
+    galleryGap: 'md',
   });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -284,7 +293,7 @@ export default function MarkdownEditor({
       ...prev,
       images: uploaded,
       uploading: false,
-      layout: uploaded.length > 1 ? '2' : '1',
+      galleryColumns: uploaded.length > 1 ? '2' : '1',
     }));
   }, [onImageUpload]);
 
@@ -316,7 +325,7 @@ export default function MarkdownEditor({
 
   // Generate image markdown from dialog settings
   const handleImageDialogInsert = useCallback(() => {
-    const { images, size, align, caption, layout } = imageDialog;
+    const { images, size, align, caption, galleryColumns, galleryFit, galleryRatio, galleryGap } = imageDialog;
     if (images.length === 0) return;
 
     let markup = '';
@@ -337,19 +346,30 @@ export default function MarkdownEditor({
       }
     } else {
       // Multiple images
-      if (layout === '1') {
+      if (galleryColumns === '1') {
         // Stack vertically, each with its own figure
         markup = '\n' + images.map(img => {
           const widthAttr = size !== '100%' ? ` width="${size}"` : '';
           return `<figure style="text-align: ${align};">\n<img src="${img.url}" alt="이미지"${widthAttr} />\n</figure>`;
         }).join('\n') + '\n';
       } else {
-        // Gallery grid
-        const galleryClass = `image-gallery-${layout}`;
+        // Gallery grid with customization classes
+        const classes = [
+          'image-gallery',
+          `image-gallery-cols-${galleryColumns}`,
+          `image-gallery-fit-${galleryFit}`,
+          `image-gallery-gap-${galleryGap}`,
+        ];
+        // Only add ratio class when fit mode uses it (cover or contain)
+        if (galleryFit !== 'auto' && galleryRatio !== 'auto') {
+          const ratioClass = `image-gallery-ratio-${galleryRatio.replace(':', 'x')}`;
+          classes.push(ratioClass);
+        }
+        const classStr = classes.join(' ');
         const imgTags = images.map(img =>
           `<img src="${img.url}" alt="이미지" />`
         ).join('\n');
-        markup = `\n<div class="${galleryClass}">\n${imgTags}\n</div>\n`;
+        markup = `\n<div class="${classStr}">\n${imgTags}\n</div>\n`;
       }
 
       if (caption) {
@@ -360,14 +380,16 @@ export default function MarkdownEditor({
     insertText(markup, '', '');
     setImageDialog({
       show: false, images: [], uploading: false,
-      size: '100%', align: 'center', caption: '', layout: '1',
+      size: '100%', align: 'center', caption: '',
+      galleryColumns: '2', galleryFit: 'auto', galleryRatio: 'auto', galleryGap: 'md',
     });
   }, [imageDialog, insertText]);
 
   const handleImageDialogClose = useCallback(() => {
     setImageDialog({
       show: false, images: [], uploading: false,
-      size: '100%', align: 'center', caption: '', layout: '1',
+      size: '100%', align: 'center', caption: '',
+      galleryColumns: '2', galleryFit: 'auto', galleryRatio: 'auto', galleryGap: 'md',
     });
   }, []);
 
@@ -766,10 +788,27 @@ export default function MarkdownEditor({
                   <p className="text-[var(--text-muted)]">업로드 중...</p>
                 </div>
               ) : (
-                <div className={`grid gap-2 ${imageDialog.images.length > 1 ? 'grid-cols-3' : 'grid-cols-1'}`}>
+                <div className={`grid gap-2 ${
+                  imageDialog.images.length > 1
+                    ? imageDialog.galleryColumns === '1' ? 'grid-cols-1' :
+                      imageDialog.galleryColumns === '2' ? 'grid-cols-2' :
+                      imageDialog.galleryColumns === '3' ? 'grid-cols-3' : 'grid-cols-4'
+                    : 'grid-cols-1'
+                }`}>
                   {imageDialog.images.map((img, i) => (
-                    <div key={i} className="relative aspect-video bg-[var(--kuromi-cream)] rounded overflow-hidden border border-[var(--kuromi-lavender)]">
-                      <img src={img.url} alt={img.name} className="w-full h-full object-cover" />
+                    <div key={i} className={`relative bg-[var(--kuromi-cream)] rounded overflow-hidden border border-[var(--kuromi-lavender)] ${
+                      imageDialog.images.length > 1 && imageDialog.galleryColumns !== '1'
+                        ? imageDialog.galleryFit === 'auto' ? '' :
+                          imageDialog.galleryRatio === '1:1' ? 'aspect-square' :
+                          imageDialog.galleryRatio === '3:4' ? 'aspect-[3/4]' :
+                          imageDialog.galleryRatio === '16:9' ? 'aspect-video' :
+                          'aspect-[4/3]'
+                        : 'aspect-video'
+                    }`}>
+                      <img src={img.url} alt={img.name} className={`w-full h-full ${
+                        imageDialog.galleryFit === 'contain' ? 'object-contain' :
+                        imageDialog.galleryFit === 'auto' ? 'object-contain' : 'object-cover'
+                      }`} />
                     </div>
                   ))}
                 </div>
@@ -825,31 +864,120 @@ export default function MarkdownEditor({
                     </div>
                   </div>
 
-                  {/* Layout selector (only for multiple images) */}
+                  {/* Gallery options (only for multiple images) */}
                   {imageDialog.images.length > 1 && (
-                    <div>
-                      <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">레이아웃</label>
-                      <div className="flex gap-2">
-                        {([
-                          { value: '1' as GalleryLayout, label: '1열 (세로)' },
-                          { value: '2' as GalleryLayout, label: '2열 그리드' },
-                          { value: '3' as GalleryLayout, label: '3열 그리드' },
-                        ]).map(({ value: v, label }) => (
-                          <button
-                            key={v}
-                            type="button"
-                            onClick={() => setImageDialog(prev => ({ ...prev, layout: v }))}
-                            className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-                              imageDialog.layout === v
-                                ? 'bg-[var(--kuromi-purple)] text-white'
-                                : 'bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
-                            }`}
-                          >
-                            {label}
-                          </button>
-                        ))}
+                    <>
+                      {/* Column count */}
+                      <div>
+                        <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">열 수</label>
+                        <div className="flex gap-2">
+                          {(['1', '2', '3', '4'] as GalleryColumns[]).map((v) => (
+                            <button
+                              key={v}
+                              type="button"
+                              onClick={() => setImageDialog(prev => ({ ...prev, galleryColumns: v }))}
+                              className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                                imageDialog.galleryColumns === v
+                                  ? 'bg-[var(--kuromi-purple)] text-white'
+                                  : 'bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
+                              }`}
+                            >
+                              {v === '1' ? '1열 (세로)' : `${v}열`}
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+
+                      {/* Display options (only when columns > 1) */}
+                      {imageDialog.galleryColumns !== '1' && (
+                        <>
+                          {/* Fit mode */}
+                          <div>
+                            <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">이미지 표시</label>
+                            <div className="flex gap-2">
+                              {([
+                                { value: 'auto' as GalleryFit, label: '원본 비율' },
+                                { value: 'cover' as GalleryFit, label: '채우기' },
+                                { value: 'contain' as GalleryFit, label: '맞춤' },
+                              ]).map(({ value: v, label }) => (
+                                <button
+                                  key={v}
+                                  type="button"
+                                  onClick={() => setImageDialog(prev => ({ ...prev, galleryFit: v }))}
+                                  className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                                    imageDialog.galleryFit === v
+                                      ? 'bg-[var(--kuromi-purple)] text-white'
+                                      : 'bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
+                                  }`}
+                                >
+                                  {label}
+                                </button>
+                              ))}
+                            </div>
+                            <p className="text-xs text-[var(--text-muted)] mt-1">
+                              {imageDialog.galleryFit === 'auto' && '각 이미지의 원래 비율을 유지합니다'}
+                              {imageDialog.galleryFit === 'cover' && '영역을 꽉 채우며, 넘치는 부분은 잘립니다'}
+                              {imageDialog.galleryFit === 'contain' && '이미지 전체가 보이도록 맞춥니다'}
+                            </p>
+                          </div>
+
+                          {/* Aspect ratio (only when fit is cover or contain) */}
+                          {imageDialog.galleryFit !== 'auto' && (
+                            <div>
+                              <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">종횡비</label>
+                              <div className="flex gap-2 flex-wrap">
+                                {([
+                                  { value: 'auto' as GalleryRatio, label: '자동' },
+                                  { value: '1:1' as GalleryRatio, label: '1:1' },
+                                  { value: '4:3' as GalleryRatio, label: '4:3' },
+                                  { value: '3:4' as GalleryRatio, label: '3:4' },
+                                  { value: '16:9' as GalleryRatio, label: '16:9' },
+                                ]).map(({ value: v, label }) => (
+                                  <button
+                                    key={v}
+                                    type="button"
+                                    onClick={() => setImageDialog(prev => ({ ...prev, galleryRatio: v }))}
+                                    className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                                      imageDialog.galleryRatio === v
+                                        ? 'bg-[var(--kuromi-purple)] text-white'
+                                        : 'bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
+                                    }`}
+                                  >
+                                    {label}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Gap */}
+                          <div>
+                            <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">간격</label>
+                            <div className="flex gap-2">
+                              {([
+                                { value: 'none' as GalleryGap, label: '없음' },
+                                { value: 'sm' as GalleryGap, label: '좁게' },
+                                { value: 'md' as GalleryGap, label: '보통' },
+                                { value: 'lg' as GalleryGap, label: '넓게' },
+                              ]).map(({ value: v, label }) => (
+                                <button
+                                  key={v}
+                                  type="button"
+                                  onClick={() => setImageDialog(prev => ({ ...prev, galleryGap: v }))}
+                                  className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                                    imageDialog.galleryGap === v
+                                      ? 'bg-[var(--kuromi-purple)] text-white'
+                                      : 'bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
+                                  }`}
+                                >
+                                  {label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </>
                   )}
 
                   {/* Caption input */}

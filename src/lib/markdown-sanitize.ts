@@ -11,7 +11,7 @@ export const sanitizeSchema: Options = {
     div: [
       ...(defaultSchema.attributes?.div || []),
       ['style', /^text-align:\s*(left|center|right|justify);?$/],
-      ['className', /^image-gallery-[23]$/],
+      ['className', /^image-gallery(-cols-[1-4]|-fit-(cover|contain|auto)|-ratio-(auto|1x1|4x3|3x4|16x9)|-gap-(none|sm|md|lg)|-[23])?$/],
     ],
     p: [
       ...(defaultSchema.attributes?.p || []),
