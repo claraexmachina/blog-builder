@@ -9,6 +9,7 @@ import Oneko from "@/components/Oneko";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://example.com"),
   title: "by claraexmachina",
   description: "always brewing",
   openGraph: {
