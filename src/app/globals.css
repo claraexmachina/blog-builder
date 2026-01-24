@@ -585,6 +585,121 @@ html, body, * {
   margin: 24px 0;
 }
 
+.markdown-content figure {
+  margin: 24px 0;
+}
+
+.markdown-content figure img {
+  margin: 0;
+}
+
+.markdown-content figcaption {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* Legacy gallery classes (backward compat for existing posts) */
+.markdown-content .image-gallery-2,
+.markdown-content .image-gallery-3 {
+  display: grid;
+  gap: 8px;
+  margin: 24px 0;
+}
+
+.markdown-content .image-gallery-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.markdown-content .image-gallery-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.markdown-content .image-gallery-2 img,
+.markdown-content .image-gallery-3 img {
+  margin: 0;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* New gallery system with customization */
+.markdown-content .image-gallery {
+  display: grid;
+  margin: 24px 0;
+}
+
+/* Column variants */
+.markdown-content .image-gallery.image-gallery-cols-1 {
+  grid-template-columns: 1fr;
+}
+.markdown-content .image-gallery.image-gallery-cols-2 {
+  grid-template-columns: 1fr 1fr;
+}
+.markdown-content .image-gallery.image-gallery-cols-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.markdown-content .image-gallery.image-gallery-cols-4 {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+/* Gap variants */
+.markdown-content .image-gallery.image-gallery-gap-none {
+  gap: 0;
+}
+.markdown-content .image-gallery.image-gallery-gap-sm {
+  gap: 4px;
+}
+.markdown-content .image-gallery.image-gallery-gap-md {
+  gap: 8px;
+}
+.markdown-content .image-gallery.image-gallery-gap-lg {
+  gap: 16px;
+}
+
+/* Base image styling in new gallery */
+.markdown-content .image-gallery img {
+  margin: 0;
+  width: 100%;
+  border-radius: 6px;
+}
+
+/* Fit: cover (crop to fill) */
+.markdown-content .image-gallery.image-gallery-fit-cover img {
+  object-fit: cover;
+}
+
+/* Fit: contain (show full image, letterbox) */
+.markdown-content .image-gallery.image-gallery-fit-contain img {
+  object-fit: contain;
+  background: var(--color-surface-alt);
+}
+
+/* Fit: auto (natural size, no height constraint) */
+.markdown-content .image-gallery.image-gallery-fit-auto img {
+  object-fit: contain;
+  height: auto;
+}
+
+/* Aspect ratio variants (applied to img when fit is cover or contain) */
+.markdown-content .image-gallery.image-gallery-ratio-1x1 img {
+  aspect-ratio: 1 / 1;
+}
+.markdown-content .image-gallery.image-gallery-ratio-4x3 img {
+  aspect-ratio: 4 / 3;
+}
+.markdown-content .image-gallery.image-gallery-ratio-3x4 img {
+  aspect-ratio: 3 / 4;
+}
+.markdown-content .image-gallery.image-gallery-ratio-16x9 img {
+  aspect-ratio: 16 / 9;
+}
+.markdown-content .image-gallery.image-gallery-ratio-auto img {
+  aspect-ratio: auto;
+}
+
 /* Loading */
 .pixel-loading {
   display: inline-block;

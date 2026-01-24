@@ -11,6 +11,7 @@ export const sanitizeSchema: Options = {
     div: [
       ...(defaultSchema.attributes?.div || []),
       ['style', /^text-align:\s*(left|center|right|justify);?$/],
+      ['className', /^image-gallery(-cols-[1-4]|-fit-(cover|contain|auto)|-ratio-(auto|1x1|4x3|3x4|16x9)|-gap-(none|sm|md|lg)|-[23])?$/],
     ],
     p: [
       ...(defaultSchema.attributes?.p || []),
@@ -20,11 +21,22 @@ export const sanitizeSchema: Options = {
       ...(defaultSchema.attributes?.span || []),
       ['style', /^text-align:\s*(left|center|right|justify);?$/],
     ],
+    // img 태그 속성 허용 (width, height for resizing)
+    img: [
+      ...(defaultSchema.attributes?.img || []),
+      'src', 'alt', 'title', 'width', 'height',
+    ],
+    // figure 태그에 style 허용
+    figure: [
+      ['style', /^text-align:\s*(left|center|right);?$/],
+    ],
     // video 태그 속성 허용
     video: ['src', 'controls', 'width', 'height', 'autoplay', 'loop', 'muted', 'poster'],
   },
   tagNames: [
     ...(defaultSchema.tagNames || []),
     'video',
+    'figure',
+    'figcaption',
   ],
 };
