@@ -560,7 +560,11 @@ export default function MarkdownEditor({
               onPaste={handlePaste}
               placeholder="마크다운으로 내용을 작성해주세요..."
               aria-label="마크다운 편집기"
-              className="w-full min-h-[400px] p-4 resize-y outline-none font-mono text-sm bg-[var(--color-surface)] text-[var(--text-primary)]"
+              className={`w-full p-4 outline-none font-mono text-sm bg-[var(--color-surface)] text-[var(--text-primary)] ${
+                viewMode === 'split'
+                  ? 'h-[500px] overflow-y-auto resize-none'
+                  : 'min-h-[400px] resize-y'
+              }`}
             />
             {isDragging && (
               <div className="absolute inset-0 bg-[var(--kuromi-light-lavender)] bg-opacity-80 flex items-center justify-center border-2 border-dashed border-[var(--kuromi-purple)] rounded pointer-events-none">
@@ -574,7 +578,11 @@ export default function MarkdownEditor({
 
         {(viewMode === 'preview' || viewMode === 'split') && (
           <div
-            className={`p-4 min-h-[400px] markdown-content overflow-y-auto ${viewMode === 'split' ? 'w-1/2' : 'w-full'}`}
+            className={`p-4 markdown-content overflow-y-auto ${
+              viewMode === 'split'
+                ? 'w-1/2 h-[500px]'
+                : 'w-full min-h-[400px]'
+            }`}
             aria-label="마크다운 미리보기"
             aria-live="polite"
           >
