@@ -218,10 +218,18 @@ describe('MarkdownEditor', () => {
 
       await waitFor(() => {
         expect(mockOnImageUpload).toHaveBeenCalledWith(file);
-        expect(mockOnChange).toHaveBeenCalledWith(
-          expect.stringContaining('![이미지 설명](https://example.com/image.png)')
-        );
+        // Dialog should appear
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
       });
+
+      // Click insert button
+      await act(async () => {
+        fireEvent.click(screen.getByText('삽입'));
+      });
+
+      expect(mockOnChange).toHaveBeenCalledWith(
+        expect.stringContaining('![이미지](https://example.com/image.png)')
+      );
     });
 
     it('비디오 파일 업로드가 정상 동작한다', async () => {
@@ -286,7 +294,7 @@ describe('MarkdownEditor', () => {
       expect(mockOnChange).toHaveBeenCalledWith('[링크](url)');
     });
 
-    it('이미지 형식은 ![alt](url) 그대로이다', async () => {
+    it('이미지 형식은 ![alt](url) 그대로이다 (기본 설정)', async () => {
       renderEditor('');
       const textarea = screen.getByRole('textbox', { name: '마크다운 편집기' }) as HTMLTextAreaElement;
       Object.defineProperty(textarea, 'selectionStart', { value: 0, writable: true });
@@ -300,8 +308,15 @@ describe('MarkdownEditor', () => {
       });
 
       await waitFor(() => {
-        expect(mockOnChange).toHaveBeenCalledWith('\n![이미지 설명](https://example.com/image.png)\n');
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
       });
+
+      // Default settings (100%, center, no caption) should produce standard markdown
+      await act(async () => {
+        fireEvent.click(screen.getByText('삽입'));
+      });
+
+      expect(mockOnChange).toHaveBeenCalledWith('\n![이미지](https://example.com/image.png)\n');
     });
 
     it('비디오 형식은 <video> 태그 그대로이다', async () => {
@@ -679,10 +694,17 @@ describe('MarkdownEditor', () => {
 
       await waitFor(() => {
         expect(mockOnImageUpload).toHaveBeenCalledWith(file);
-        expect(mockOnChange).toHaveBeenCalledWith(
-          expect.stringContaining('![이미지 설명](https://example.com/image.png)')
-        );
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
       });
+
+      // Insert from dialog
+      await act(async () => {
+        fireEvent.click(screen.getByText('삽입'));
+      });
+
+      expect(mockOnChange).toHaveBeenCalledWith(
+        expect.stringContaining('![이미지](https://example.com/image.png)')
+      );
     });
   });
 
@@ -890,6 +912,212 @@ describe('MarkdownEditor', () => {
       expect(preview).toHaveTextContent('헤더2');
       expect(preview).toHaveTextContent('셀1');
       expect(preview).toHaveTextContent('셀2');
+    });
+  });
+
+  // ===================================================================
+  // 새 기능: 이미지 다이얼로그
+  // ===================================================================
+  describe('이미지 다이얼로그', () => {
+    it('이미지 업로드 시 다이얼로그가 표시된다', async () => {
+      renderEditor('');
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const file = new File(['test'], 'test.png', { type: 'image/png' });
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files: [file] } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+      });
+    });
+
+    it('다이얼로그에서 취소하면 삽입되지 않는다', async () => {
+      renderEditor('');
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const file = new File(['test'], 'test.png', { type: 'image/png' });
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files: [file] } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('취소'));
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(mockOnChange).not.toHaveBeenCalled();
+    });
+
+    it('크기를 50%로 설정하면 width 속성이 포함된다', async () => {
+      renderEditor('');
+      const textarea = screen.getByRole('textbox', { name: '마크다운 편집기' }) as HTMLTextAreaElement;
+      Object.defineProperty(textarea, 'selectionStart', { value: 0, writable: true });
+      Object.defineProperty(textarea, 'selectionEnd', { value: 0, writable: true });
+
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const file = new File(['test'], 'test.png', { type: 'image/png' });
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files: [file] } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+      });
+
+      // Select 50% size
+      fireEvent.click(screen.getByText('50%'));
+
+      await act(async () => {
+        fireEvent.click(screen.getByText('삽입'));
+      });
+
+      expect(mockOnChange).toHaveBeenCalledWith(
+        expect.stringContaining('width="50%"')
+      );
+    });
+
+    it('캡션을 입력하면 figcaption이 포함된다', async () => {
+      renderEditor('');
+      const textarea = screen.getByRole('textbox', { name: '마크다운 편집기' }) as HTMLTextAreaElement;
+      Object.defineProperty(textarea, 'selectionStart', { value: 0, writable: true });
+      Object.defineProperty(textarea, 'selectionEnd', { value: 0, writable: true });
+
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const file = new File(['test'], 'test.png', { type: 'image/png' });
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files: [file] } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+      });
+
+      // Enter caption
+      const captionInput = screen.getByPlaceholderText('이미지 설명을 입력하세요...');
+      fireEvent.change(captionInput, { target: { value: '테스트 캡션' } });
+
+      await act(async () => {
+        fireEvent.click(screen.getByText('삽입'));
+      });
+
+      expect(mockOnChange).toHaveBeenCalledWith(
+        expect.stringContaining('<figcaption>테스트 캡션</figcaption>')
+      );
+    });
+
+    it('정렬을 왼쪽으로 설정하면 text-align: left가 포함된다', async () => {
+      renderEditor('');
+      const textarea = screen.getByRole('textbox', { name: '마크다운 편집기' }) as HTMLTextAreaElement;
+      Object.defineProperty(textarea, 'selectionStart', { value: 0, writable: true });
+      Object.defineProperty(textarea, 'selectionEnd', { value: 0, writable: true });
+
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const file = new File(['test'], 'test.png', { type: 'image/png' });
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files: [file] } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+      });
+
+      // Select left alignment
+      fireEvent.click(screen.getByRole('button', { name: '왼쪽' }));
+
+      await act(async () => {
+        fireEvent.click(screen.getByText('삽입'));
+      });
+
+      expect(mockOnChange).toHaveBeenCalledWith(
+        expect.stringContaining('text-align: left;')
+      );
+    });
+
+    it('여러 이미지를 업로드하면 레이아웃 선택이 표시된다', async () => {
+      renderEditor('');
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const files = [
+        new File(['test1'], 'img1.png', { type: 'image/png' }),
+        new File(['test2'], 'img2.png', { type: 'image/png' }),
+      ];
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+        expect(screen.getByText('2열 그리드')).toBeInTheDocument();
+        expect(screen.getByText('3열 그리드')).toBeInTheDocument();
+      });
+    });
+
+    it('2열 그리드 레이아웃으로 삽입하면 gallery 클래스가 포함된다', async () => {
+      renderEditor('');
+      const textarea = screen.getByRole('textbox', { name: '마크다운 편집기' }) as HTMLTextAreaElement;
+      Object.defineProperty(textarea, 'selectionStart', { value: 0, writable: true });
+      Object.defineProperty(textarea, 'selectionEnd', { value: 0, writable: true });
+
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const files = [
+        new File(['test1'], 'img1.png', { type: 'image/png' }),
+        new File(['test2'], 'img2.png', { type: 'image/png' }),
+      ];
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+      });
+
+      // Default is 2-column for multiple images
+      await act(async () => {
+        fireEvent.click(screen.getByText('삽입'));
+      });
+
+      expect(mockOnChange).toHaveBeenCalledWith(
+        expect.stringContaining('image-gallery-2')
+      );
+    });
+
+    it('다이얼로그 닫기 버튼이 동작한다', async () => {
+      renderEditor('');
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      const file = new File(['test'], 'test.png', { type: 'image/png' });
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files: [file] } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog', { name: '이미지 설정' })).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: '닫기' }));
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+
+    it('다중 이미지 input에 multiple 속성이 있다', () => {
+      renderEditor('');
+      const fileInput = document.querySelector('input[accept="image/*"]') as HTMLInputElement;
+      expect(fileInput).toHaveAttribute('multiple');
+    });
+
+    it('기존 ![alt](url) 형식의 글이 여전히 미리보기에서 표시된다', () => {
+      renderEditor('![기존 이미지](https://example.com/old.jpg)');
+      const previewBtn = screen.getByRole('button', { name: '미리보기 모드' });
+      fireEvent.click(previewBtn);
+
+      const preview = screen.getByTestId('markdown-preview');
+      expect(preview).toHaveTextContent('![기존 이미지](https://example.com/old.jpg)');
     });
   });
 });

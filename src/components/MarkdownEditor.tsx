@@ -30,6 +30,7 @@ import {
   Table,
   Columns,
   Eraser,
+  X,
 } from 'lucide-react';
 
 interface MarkdownEditorProps {
@@ -39,6 +40,24 @@ interface MarkdownEditorProps {
 }
 
 type ViewMode = 'edit' | 'split' | 'preview';
+type ImageSize = '25%' | '50%' | '75%' | '100%';
+type ImageAlign = 'left' | 'center' | 'right';
+type GalleryLayout = '1' | '2' | '3';
+
+interface UploadedImage {
+  url: string;
+  name: string;
+}
+
+interface ImageDialogState {
+  show: boolean;
+  images: UploadedImage[];
+  uploading: boolean;
+  size: ImageSize;
+  align: ImageAlign;
+  caption: string;
+  layout: GalleryLayout;
+}
 
 interface HistoryEntry {
   value: string;
@@ -57,6 +76,15 @@ export default function MarkdownEditor({
   const [showTableGrid, setShowTableGrid] = useState(false);
   const [tableHover, setTableHover] = useState({ rows: 0, cols: 0 });
   const [isDragging, setIsDragging] = useState(false);
+  const [imageDialog, setImageDialog] = useState<ImageDialogState>({
+    show: false,
+    images: [],
+    uploading: false,
+    size: '100%',
+    align: 'center',
+    caption: '',
+    layout: '1',
+  });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -230,30 +258,118 @@ export default function MarkdownEditor({
     videoInputRef.current?.click();
   };
 
+  // Upload multiple images and show dialog
+  const uploadImagesAndShowDialog = useCallback(async (files: File[]) => {
+    if (!onImageUpload || files.length === 0) return;
+
+    setImageDialog(prev => ({ ...prev, show: true, uploading: true, images: [] }));
+
+    const uploaded: UploadedImage[] = [];
+    for (const file of files) {
+      try {
+        const url = await onImageUpload(file);
+        uploaded.push({ url, name: file.name });
+      } catch (error) {
+        console.error('Upload failed:', error);
+      }
+    }
+
+    if (uploaded.length === 0) {
+      alert('이미지 업로드에 실패했습니다.');
+      setImageDialog(prev => ({ ...prev, show: false, uploading: false }));
+      return;
+    }
+
+    setImageDialog(prev => ({
+      ...prev,
+      images: uploaded,
+      uploading: false,
+      layout: uploaded.length > 1 ? '2' : '1',
+    }));
+  }, [onImageUpload]);
+
   const handleFileUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
     type: 'image' | 'video'
   ) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
-    if (onImageUpload) {
-      try {
-        const url = await onImageUpload(file);
-        if (type === 'image') {
-          insertText(`\n![이미지 설명](${url})\n`, '', '');
-        } else {
+    if (type === 'image') {
+      await uploadImagesAndShowDialog(Array.from(files));
+    } else if (type === 'video') {
+      const file = files[0];
+      if (onImageUpload) {
+        try {
+          const url = await onImageUpload(file);
           insertText(`\n<video src="${url}" controls width="100%"></video>\n`, '', '');
+        } catch (error) {
+          console.error('Upload failed:', error);
+          alert('파일 업로드에 실패했습니다.');
         }
-      } catch (error) {
-        console.error('Upload failed:', error);
-        alert('파일 업로드에 실패했습니다.');
       }
     }
 
     // Reset input
     e.target.value = '';
   };
+
+  // Generate image markdown from dialog settings
+  const handleImageDialogInsert = useCallback(() => {
+    const { images, size, align, caption, layout } = imageDialog;
+    if (images.length === 0) return;
+
+    let markup = '';
+
+    if (images.length === 1) {
+      // Single image
+      const img = images[0];
+      const widthAttr = size !== '100%' ? ` width="${size}"` : '';
+      const imgTag = `<img src="${img.url}" alt="${caption || '이미지'}"${widthAttr} />`;
+
+      if (caption) {
+        markup = `\n<figure style="text-align: ${align};">\n${imgTag}\n<figcaption>${caption}</figcaption>\n</figure>\n`;
+      } else if (size !== '100%' || align !== 'center') {
+        markup = `\n<figure style="text-align: ${align};">\n${imgTag}\n</figure>\n`;
+      } else {
+        // Default: use standard markdown for maximum compatibility
+        markup = `\n![${caption || '이미지'}](${img.url})\n`;
+      }
+    } else {
+      // Multiple images
+      if (layout === '1') {
+        // Stack vertically, each with its own figure
+        markup = '\n' + images.map(img => {
+          const widthAttr = size !== '100%' ? ` width="${size}"` : '';
+          return `<figure style="text-align: ${align};">\n<img src="${img.url}" alt="이미지"${widthAttr} />\n</figure>`;
+        }).join('\n') + '\n';
+      } else {
+        // Gallery grid
+        const galleryClass = `image-gallery-${layout}`;
+        const imgTags = images.map(img =>
+          `<img src="${img.url}" alt="이미지" />`
+        ).join('\n');
+        markup = `\n<div class="${galleryClass}">\n${imgTags}\n</div>\n`;
+      }
+
+      if (caption) {
+        markup = markup.trimEnd() + `\n<p style="text-align: center;"><em>${caption}</em></p>\n`;
+      }
+    }
+
+    insertText(markup, '', '');
+    setImageDialog({
+      show: false, images: [], uploading: false,
+      size: '100%', align: 'center', caption: '', layout: '1',
+    });
+  }, [imageDialog, insertText]);
+
+  const handleImageDialogClose = useCallback(() => {
+    setImageDialog({
+      show: false, images: [], uploading: false,
+      size: '100%', align: 'center', caption: '', layout: '1',
+    });
+  }, []);
 
   // Drag and drop handling
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -274,18 +390,12 @@ export default function MarkdownEditor({
     setIsDragging(false);
 
     const files = Array.from(e.dataTransfer.files);
-    const imageFile = files.find(f => f.type.startsWith('image/'));
+    const imageFiles = files.filter(f => f.type.startsWith('image/'));
 
-    if (imageFile && onImageUpload) {
-      try {
-        const url = await onImageUpload(imageFile);
-        insertText(`\n![이미지 설명](${url})\n`, '', '');
-      } catch (error) {
-        console.error('Drop upload failed:', error);
-        alert('이미지 업로드에 실패했습니다.');
-      }
+    if (imageFiles.length > 0 && onImageUpload) {
+      await uploadImagesAndShowDialog(imageFiles);
     }
-  }, [onImageUpload, insertText]);
+  }, [onImageUpload, uploadImagesAndShowDialog]);
 
   // Paste image from clipboard
   const handlePaste = useCallback(async (e: React.ClipboardEvent) => {
@@ -297,15 +407,9 @@ export default function MarkdownEditor({
       const file = imageItem.getAsFile();
       if (!file) return;
 
-      try {
-        const url = await onImageUpload(file);
-        insertText(`\n![이미지 설명](${url})\n`, '', '');
-      } catch (error) {
-        console.error('Paste upload failed:', error);
-        alert('이미지 업로드에 실패했습니다.');
-      }
+      await uploadImagesAndShowDialog([file]);
     }
-  }, [onImageUpload, insertText]);
+  }, [onImageUpload, uploadImagesAndShowDialog]);
 
   // Handle textarea changes with history
   const handleTextareaChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -618,6 +722,7 @@ export default function MarkdownEditor({
         ref={fileInputRef}
         type="file"
         accept="image/*"
+        multiple
         onChange={(e) => handleFileUpload(e, 'image')}
         className="hidden"
         aria-hidden="true"
@@ -630,6 +735,160 @@ export default function MarkdownEditor({
         className="hidden"
         aria-hidden="true"
       />
+
+      {/* Image insertion dialog */}
+      {imageDialog.show && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={handleImageDialogClose}>
+          <div
+            className="bg-[var(--kuromi-white)] rounded-lg border-2 border-[var(--kuromi-black)] shadow-xl w-full max-w-lg mx-4 max-h-[80vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-label="이미지 설정"
+          >
+            {/* Dialog header */}
+            <div className="flex items-center justify-between p-4 border-b border-[var(--kuromi-lavender)]">
+              <h3 className="font-medium text-[var(--text-primary)]">이미지 설정</h3>
+              <button
+                type="button"
+                onClick={handleImageDialogClose}
+                className="p-1 rounded hover:bg-[var(--kuromi-light-lavender)] text-[var(--text-muted)]"
+                aria-label="닫기"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Dialog body */}
+            <div className="p-4 space-y-4">
+              {/* Image previews */}
+              {imageDialog.uploading ? (
+                <div className="flex items-center justify-center py-8">
+                  <p className="text-[var(--text-muted)]">업로드 중...</p>
+                </div>
+              ) : (
+                <div className={`grid gap-2 ${imageDialog.images.length > 1 ? 'grid-cols-3' : 'grid-cols-1'}`}>
+                  {imageDialog.images.map((img, i) => (
+                    <div key={i} className="relative aspect-video bg-[var(--kuromi-cream)] rounded overflow-hidden border border-[var(--kuromi-lavender)]">
+                      <img src={img.url} alt={img.name} className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {!imageDialog.uploading && imageDialog.images.length > 0 && (
+                <>
+                  {/* Size selector */}
+                  <div>
+                    <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">크기</label>
+                    <div className="flex gap-2">
+                      {(['25%', '50%', '75%', '100%'] as ImageSize[]).map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => setImageDialog(prev => ({ ...prev, size: s }))}
+                          className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                            imageDialog.size === s
+                              ? 'bg-[var(--kuromi-purple)] text-white'
+                              : 'bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Alignment selector */}
+                  <div>
+                    <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">정렬</label>
+                    <div className="flex gap-2">
+                      {([
+                        { value: 'left' as ImageAlign, icon: AlignLeft, label: '왼쪽' },
+                        { value: 'center' as ImageAlign, icon: AlignCenter, label: '가운데' },
+                        { value: 'right' as ImageAlign, icon: AlignRight, label: '오른쪽' },
+                      ]).map(({ value: v, icon: Icon, label }) => (
+                        <button
+                          key={v}
+                          type="button"
+                          onClick={() => setImageDialog(prev => ({ ...prev, align: v }))}
+                          className={`flex items-center gap-1 px-3 py-1 rounded text-xs font-medium transition-colors ${
+                            imageDialog.align === v
+                              ? 'bg-[var(--kuromi-purple)] text-white'
+                              : 'bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
+                          }`}
+                          aria-label={label}
+                        >
+                          <Icon size={14} />
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Layout selector (only for multiple images) */}
+                  {imageDialog.images.length > 1 && (
+                    <div>
+                      <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">레이아웃</label>
+                      <div className="flex gap-2">
+                        {([
+                          { value: '1' as GalleryLayout, label: '1열 (세로)' },
+                          { value: '2' as GalleryLayout, label: '2열 그리드' },
+                          { value: '3' as GalleryLayout, label: '3열 그리드' },
+                        ]).map(({ value: v, label }) => (
+                          <button
+                            key={v}
+                            type="button"
+                            onClick={() => setImageDialog(prev => ({ ...prev, layout: v }))}
+                            className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                              imageDialog.layout === v
+                                ? 'bg-[var(--kuromi-purple)] text-white'
+                                : 'bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Caption input */}
+                  <div>
+                    <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">캡션 (선택사항)</label>
+                    <input
+                      type="text"
+                      value={imageDialog.caption}
+                      onChange={(e) => setImageDialog(prev => ({ ...prev, caption: e.target.value }))}
+                      placeholder="이미지 설명을 입력하세요..."
+                      className="w-full px-3 py-2 rounded border border-[var(--kuromi-lavender)] bg-[var(--color-surface)] text-sm text-[var(--text-primary)] outline-none focus:border-[var(--kuromi-purple)]"
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Dialog footer */}
+            {!imageDialog.uploading && imageDialog.images.length > 0 && (
+              <div className="flex justify-end gap-2 p-4 border-t border-[var(--kuromi-lavender)]">
+                <button
+                  type="button"
+                  onClick={handleImageDialogClose}
+                  className="px-4 py-2 rounded text-sm font-medium bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)] transition-colors"
+                >
+                  취소
+                </button>
+                <button
+                  type="button"
+                  onClick={handleImageDialogInsert}
+                  className="px-4 py-2 rounded text-sm font-medium bg-[var(--kuromi-purple)] text-white hover:opacity-90 transition-colors"
+                >
+                  삽입
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
