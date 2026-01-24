@@ -132,6 +132,7 @@ export default function MarkdownEditor({
 
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
+      const savedScrollTop = textarea.scrollTop;
       const selectedText = value.substring(start, end) || placeholder;
       const newText =
         value.substring(0, start) + before + selectedText + after + value.substring(end);
@@ -141,7 +142,7 @@ export default function MarkdownEditor({
       const newCursorPos = start + before.length + selectedText.length;
       pushHistory(newText, newCursorPos, newCursorPos);
 
-      // Restore cursor position
+      // Restore cursor position and scroll
       setTimeout(() => {
         textarea.focus();
         if (value.substring(start, end)) {
@@ -153,6 +154,7 @@ export default function MarkdownEditor({
           const selectEnd = selectStart + selectedText.length;
           textarea.setSelectionRange(selectStart, selectEnd);
         }
+        textarea.scrollTop = savedScrollTop;
       }, 0);
     },
     [value, onChange, pushHistory]
@@ -184,6 +186,7 @@ export default function MarkdownEditor({
     const end = textarea.selectionEnd;
     if (start === end) return; // No selection
 
+    const savedScrollTop = textarea.scrollTop;
     const selectedText = value.substring(start, end);
     const stripped = selectedText
       .replace(/(\*\*|__)(.*?)\1/g, '$2')
@@ -202,6 +205,7 @@ export default function MarkdownEditor({
     setTimeout(() => {
       textarea.focus();
       textarea.setSelectionRange(start, start + stripped.length);
+      textarea.scrollTop = savedScrollTop;
     }, 0);
   }, [value, onChange, pushHistory]);
 
@@ -337,6 +341,7 @@ export default function MarkdownEditor({
       const textarea = e.currentTarget;
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
+      const savedScrollTop = textarea.scrollTop;
 
       if (start === end) {
         // No selection: insert two spaces
@@ -345,6 +350,7 @@ export default function MarkdownEditor({
         pushHistory(newText, start + 2, start + 2);
         setTimeout(() => {
           textarea.setSelectionRange(start + 2, start + 2);
+          textarea.scrollTop = savedScrollTop;
         }, 0);
       } else {
         // Indent selected lines
@@ -356,6 +362,7 @@ export default function MarkdownEditor({
         pushHistory(newText, lineStart, lineStart + indented.length);
         setTimeout(() => {
           textarea.setSelectionRange(lineStart, lineStart + indented.length);
+          textarea.scrollTop = savedScrollTop;
         }, 0);
       }
     } else if (e.key === 'Tab' && e.shiftKey) {
@@ -363,6 +370,7 @@ export default function MarkdownEditor({
       const textarea = e.currentTarget;
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
+      const savedScrollTop = textarea.scrollTop;
       const lineStart = value.lastIndexOf('\n', start - 1) + 1;
       const selectedBlock = value.substring(lineStart, end);
       const dedented = selectedBlock.replace(/^  /gm, '');
@@ -371,6 +379,7 @@ export default function MarkdownEditor({
       pushHistory(newText, lineStart, lineStart + dedented.length);
       setTimeout(() => {
         textarea.setSelectionRange(lineStart, lineStart + dedented.length);
+        textarea.scrollTop = savedScrollTop;
       }, 0);
     }
   }, [value, onChange, pushHistory, handleBold, handleItalic, handleLink, handleUndo, handleRedo]);
