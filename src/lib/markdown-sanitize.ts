@@ -11,7 +11,8 @@ export const sanitizeSchema: Options = {
     div: [
       ...(defaultSchema.attributes?.div || []),
       ['style', /^text-align:\s*(left|center|right|justify);?$/],
-      ['className', /^image-gallery(-cols-[1-4]|-fit-(cover|contain|auto)|-ratio-(auto|1x1|4x3|3x4|16x9)|-gap-(none|sm|md|lg)|-[23])?$/],
+      ['style', /^position:\s*relative;\s*padding-bottom:\s*[\d.]+%;\s*height:\s*0;\s*overflow:\s*hidden;?$/],
+      ['className', /^(youtube-embed|image-gallery(-cols-[1-4]|-fit-(cover|contain|auto)|-ratio-(auto|1x1|4x3|3x4|16x9)|-gap-(none|sm|md|lg)|-[23])?)$/],
     ],
     p: [
       ...(defaultSchema.attributes?.p || []),
@@ -35,6 +36,7 @@ export const sanitizeSchema: Options = {
     // iframe 태그 속성 허용 (YouTube 임베드용, src는 youtube.com만 허용)
     iframe: [
       ['src', /^https:\/\/www\.youtube\.com\/embed\/[\w-]+(\?.*)?$/],
+      ['style', /^position:\s*absolute;\s*top:\s*0;\s*left:\s*0;\s*width:\s*100%;\s*height:\s*100%;?$/],
       'width',
       'height',
       'title',

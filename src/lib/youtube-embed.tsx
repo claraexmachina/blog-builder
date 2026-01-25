@@ -17,6 +17,12 @@ export function extractYouTubeId(input: string): string | null {
     return input;
   }
 
+  // VIDEO_ID?start=123 형식 (마크다운에서 시작 시간과 함께 저장된 경우)
+  const idWithParams = input.match(/^([\w-]{11})\?/);
+  if (idWithParams) {
+    return idWithParams[1];
+  }
+
   // URL 패턴들
   const patterns = [
     // https://www.youtube.com/watch?v=VIDEO_ID
@@ -140,7 +146,7 @@ export function createMarkdownComponents(baseComponents?: Components): Component
   };
 }
 
-// YouTube 마크다운 문법 생성 헬퍼
+// YouTube 마크다운 문법 생성 헬퍼 (deprecated - HTML 블록 안에서 작동하지 않음)
 export function generateYouTubeMarkdown(
   videoIdOrUrl: string,
   size: YouTubeSize = 'medium'
@@ -153,6 +159,29 @@ export function generateYouTubeMarkdown(
   const sizeStr = size === 'medium' ? '' : `:${size}`;
 
   return `![youtube${sizeStr}](${src})`;
+}
+
+// YouTube HTML iframe 생성 헬퍼 (HTML 블록 안에서도 작동)
+export function generateYouTubeHtml(
+  videoIdOrUrl: string,
+  size: YouTubeSize = 'medium'
+): string | null {
+  const videoId = extractYouTubeId(videoIdOrUrl);
+  if (!videoId) return null;
+
+  const startTime = extractStartTime(videoIdOrUrl);
+  const embedUrl = buildYouTubeEmbedUrl(videoId, startTime);
+  const dimensions = YOUTUBE_SIZES[size];
+
+  if (size === 'full') {
+    return `<div class="youtube-embed" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe src="${embedUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>`;
+  }
+
+  return `<div class="youtube-embed">
+<iframe src="${embedUrl}" width="${dimensions.width}" height="${dimensions.height}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>`;
 }
 
 export { YOUTUBE_SIZES };

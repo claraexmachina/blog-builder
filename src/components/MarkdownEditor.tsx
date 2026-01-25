@@ -35,7 +35,7 @@ import {
 } from 'lucide-react';
 import {
   createMarkdownComponents,
-  generateYouTubeMarkdown,
+  generateYouTubeHtml,
   extractYouTubeId,
   type YouTubeSize,
   YOUTUBE_SIZES,
@@ -472,9 +472,9 @@ export default function MarkdownEditor({
       return;
     }
 
-    const markdown = generateYouTubeMarkdown(url.trim(), size);
-    if (markdown) {
-      insertText(`\n${markdown}\n`, '', '');
+    const html = generateYouTubeHtml(url.trim(), size);
+    if (html) {
+      insertText(`\n${html}\n`, '', '');
       handleYoutubeDialogClose();
     }
   }, [youtubeDialog, insertText, handleYoutubeDialogClose]);
