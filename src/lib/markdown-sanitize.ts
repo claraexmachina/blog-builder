@@ -32,11 +32,23 @@ export const sanitizeSchema: Options = {
     ],
     // video 태그 속성 허용
     video: ['src', 'controls', 'width', 'height', 'autoplay', 'loop', 'muted', 'poster'],
+    // iframe 태그 속성 허용 (YouTube 임베드용, src는 youtube.com만 허용)
+    iframe: [
+      ['src', /^https:\/\/www\.youtube\.com\/embed\/[\w-]+(\?.*)?$/],
+      'width',
+      'height',
+      'title',
+      'frameBorder',
+      'allow',
+      'allowFullScreen',
+      'referrerPolicy',
+    ],
   },
   tagNames: [
     ...(defaultSchema.tagNames || []),
     'video',
     'figure',
     'figcaption',
+    'iframe',
   ],
 };

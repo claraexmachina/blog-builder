@@ -31,7 +31,15 @@ import {
   Columns,
   Eraser,
   X,
+  Youtube,
 } from 'lucide-react';
+import {
+  createMarkdownComponents,
+  generateYouTubeMarkdown,
+  extractYouTubeId,
+  type YouTubeSize,
+  YOUTUBE_SIZES,
+} from '@/lib/youtube-embed';
 
 interface MarkdownEditorProps {
   value: string;
@@ -71,7 +79,42 @@ interface HistoryEntry {
   cursorEnd: number;
 }
 
+interface YouTubeDialogState {
+  show: boolean;
+  url: string;
+  size: YouTubeSize;
+  error: string;
+}
+
 const MAX_HISTORY = 100;
+
+// Toolbar button component (defined outside to avoid recreation on each render)
+function ToolButton({
+  onClick,
+  icon: Icon,
+  title,
+  shortcut,
+  disabled,
+}: {
+  onClick: () => void;
+  icon: React.ElementType;
+  title: string;
+  shortcut?: string;
+  disabled?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={shortcut ? `${title} (${shortcut})` : title}
+      aria-label={title}
+      disabled={disabled}
+      className="p-2 rounded hover:bg-[var(--kuromi-light-lavender)] text-[var(--kuromi-dark-purple)] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+    >
+      <Icon size={18} />
+    </button>
+  );
+}
 
 export default function MarkdownEditor({
   value,
@@ -94,72 +137,85 @@ export default function MarkdownEditor({
     galleryRatio: 'auto',
     galleryGap: 'md',
   });
+  const [youtubeDialog, setYoutubeDialog] = useState<YouTubeDialogState>({
+    show: false,
+    url: '',
+    size: 'medium',
+    error: '',
+  });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const tableGridRef = useRef<HTMLDivElement>(null);
 
-  // Undo/Redo history
-  const historyRef = useRef<HistoryEntry[]>([{ value: '', cursorStart: 0, cursorEnd: 0 }]);
-  const historyIndexRef = useRef(0);
+  // Undo/Redo history - initialize with current value
+  // Note: useRef only uses the initial value on first render, so this is safe
+  const historyRef = useRef<HistoryEntry[]>([{
+    value,
+    cursorStart: value.length,
+    cursorEnd: value.length
+  }]);
+  const [historyIndex, setHistoryIndex] = useState(0);
+  const [historyLength, setHistoryLength] = useState(1);
   const isUndoRedoRef = useRef(false);
-
-  // Initialize history with current value
-  useEffect(() => {
-    if (historyRef.current.length === 1 && historyRef.current[0].value === '' && value !== '') {
-      historyRef.current = [{ value, cursorStart: value.length, cursorEnd: value.length }];
-      historyIndexRef.current = 0;
-    }
-  }, [value]);
 
   const pushHistory = useCallback((newValue: string, cursorStart: number, cursorEnd: number) => {
     if (isUndoRedoRef.current) return;
 
-    const current = historyRef.current[historyIndexRef.current];
-    if (current && current.value === newValue) return;
+    setHistoryIndex(currentIndex => {
+      const current = historyRef.current[currentIndex];
+      if (current && current.value === newValue) return currentIndex;
 
-    // Trim future entries
-    historyRef.current = historyRef.current.slice(0, historyIndexRef.current + 1);
-    historyRef.current.push({ value: newValue, cursorStart, cursorEnd });
+      // Trim future entries
+      historyRef.current = historyRef.current.slice(0, currentIndex + 1);
+      historyRef.current.push({ value: newValue, cursorStart, cursorEnd });
 
-    // Limit history size
-    if (historyRef.current.length > MAX_HISTORY) {
-      historyRef.current = historyRef.current.slice(historyRef.current.length - MAX_HISTORY);
-    }
+      // Limit history size
+      if (historyRef.current.length > MAX_HISTORY) {
+        historyRef.current = historyRef.current.slice(historyRef.current.length - MAX_HISTORY);
+      }
 
-    historyIndexRef.current = historyRef.current.length - 1;
+      setHistoryLength(historyRef.current.length);
+      return historyRef.current.length - 1;
+    });
   }, []);
 
   const handleUndo = useCallback(() => {
-    if (historyIndexRef.current <= 0) return;
-    isUndoRedoRef.current = true;
-    historyIndexRef.current--;
-    const entry = historyRef.current[historyIndexRef.current];
-    onChange(entry.value);
-    setTimeout(() => {
-      const textarea = textareaRef.current;
-      if (textarea) {
-        textarea.focus();
-        textarea.setSelectionRange(entry.cursorStart, entry.cursorEnd);
-      }
-      isUndoRedoRef.current = false;
-    }, 0);
+    setHistoryIndex(currentIndex => {
+      if (currentIndex <= 0) return currentIndex;
+      isUndoRedoRef.current = true;
+      const newIndex = currentIndex - 1;
+      const entry = historyRef.current[newIndex];
+      onChange(entry.value);
+      setTimeout(() => {
+        const textarea = textareaRef.current;
+        if (textarea) {
+          textarea.focus();
+          textarea.setSelectionRange(entry.cursorStart, entry.cursorEnd);
+        }
+        isUndoRedoRef.current = false;
+      }, 0);
+      return newIndex;
+    });
   }, [onChange]);
 
   const handleRedo = useCallback(() => {
-    if (historyIndexRef.current >= historyRef.current.length - 1) return;
-    isUndoRedoRef.current = true;
-    historyIndexRef.current++;
-    const entry = historyRef.current[historyIndexRef.current];
-    onChange(entry.value);
-    setTimeout(() => {
-      const textarea = textareaRef.current;
-      if (textarea) {
-        textarea.focus();
-        textarea.setSelectionRange(entry.cursorStart, entry.cursorEnd);
-      }
-      isUndoRedoRef.current = false;
-    }, 0);
+    setHistoryIndex(currentIndex => {
+      if (currentIndex >= historyRef.current.length - 1) return currentIndex;
+      isUndoRedoRef.current = true;
+      const newIndex = currentIndex + 1;
+      const entry = historyRef.current[newIndex];
+      onChange(entry.value);
+      setTimeout(() => {
+        const textarea = textareaRef.current;
+        if (textarea) {
+          textarea.focus();
+          textarea.setSelectionRange(entry.cursorStart, entry.cursorEnd);
+        }
+        isUndoRedoRef.current = false;
+      }, 0);
+      return newIndex;
+    });
   }, [onChange]);
 
   const insertText = useCallback(
@@ -393,6 +449,36 @@ export default function MarkdownEditor({
     });
   }, []);
 
+  // YouTube 다이얼로그 핸들러
+  const handleYoutubeClick = useCallback(() => {
+    setYoutubeDialog({ show: true, url: '', size: 'medium', error: '' });
+  }, []);
+
+  const handleYoutubeDialogClose = useCallback(() => {
+    setYoutubeDialog({ show: false, url: '', size: 'medium', error: '' });
+  }, []);
+
+  const handleYoutubeInsert = useCallback(() => {
+    const { url, size } = youtubeDialog;
+
+    if (!url.trim()) {
+      setYoutubeDialog(prev => ({ ...prev, error: 'URL을 입력해주세요.' }));
+      return;
+    }
+
+    const videoId = extractYouTubeId(url.trim());
+    if (!videoId) {
+      setYoutubeDialog(prev => ({ ...prev, error: '올바른 YouTube URL이 아닙니다.' }));
+      return;
+    }
+
+    const markdown = generateYouTubeMarkdown(url.trim(), size);
+    if (markdown) {
+      insertText(`\n${markdown}\n`, '', '');
+      handleYoutubeDialogClose();
+    }
+  }, [youtubeDialog, insertText, handleYoutubeDialogClose]);
+
   // Drag and drop handling
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -522,33 +608,8 @@ export default function MarkdownEditor({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showTableGrid]);
 
-  const ToolButton = ({
-    onClick,
-    icon: Icon,
-    title,
-    shortcut,
-    disabled,
-  }: {
-    onClick: () => void;
-    icon: React.ElementType;
-    title: string;
-    shortcut?: string;
-    disabled?: boolean;
-  }) => (
-    <button
-      type="button"
-      onClick={onClick}
-      title={shortcut ? `${title} (${shortcut})` : title}
-      aria-label={title}
-      disabled={disabled}
-      className="p-2 rounded hover:bg-[var(--kuromi-light-lavender)] text-[var(--kuromi-dark-purple)] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-    >
-      <Icon size={18} />
-    </button>
-  );
-
-  const canUndo = historyIndexRef.current > 0;
-  const canRedo = historyIndexRef.current < historyRef.current.length - 1;
+  const canUndo = historyIndex > 0;
+  const canRedo = historyIndex < historyLength - 1;
 
   const charCount = value.length;
   const wordCount = value.trim() ? value.trim().split(/\s+/).length : 0;
@@ -594,6 +655,7 @@ export default function MarkdownEditor({
         <ToolButton onClick={handleLink} icon={LinkIcon} title="링크" shortcut="Ctrl+K" />
         <ToolButton onClick={handleImageClick} icon={ImageIcon} title="이미지" />
         <ToolButton onClick={handleVideoClick} icon={Film} title="영상" />
+        <ToolButton onClick={handleYoutubeClick} icon={Youtube} title="YouTube" />
 
         {/* Table grid button */}
         <div className="relative" ref={tableGridRef}>
@@ -724,6 +786,7 @@ export default function MarkdownEditor({
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
+              components={createMarkdownComponents()}
             >
               {value || '*내용을 입력해주세요...*'}
             </ReactMarkdown>
@@ -805,6 +868,7 @@ export default function MarkdownEditor({
                           'aspect-[4/3]'
                         : 'aspect-video'
                     }`}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={img.url} alt={img.name} className={`w-full h-full ${
                         imageDialog.galleryFit === 'contain' ? 'object-contain' :
                         imageDialog.galleryFit === 'auto' ? 'object-contain' : 'object-cover'
@@ -1014,6 +1078,133 @@ export default function MarkdownEditor({
                 </button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* YouTube insertion dialog */}
+      {youtubeDialog.show && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={handleYoutubeDialogClose}>
+          <div
+            className="bg-[var(--kuromi-white)] rounded-lg border-2 border-[var(--kuromi-black)] shadow-xl w-full max-w-md mx-4"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-label="YouTube 삽입"
+          >
+            {/* Dialog header */}
+            <div className="flex items-center justify-between p-4 border-b border-[var(--kuromi-lavender)]">
+              <h3 className="font-medium text-[var(--text-primary)] flex items-center gap-2">
+                <Youtube size={20} className="text-red-500" />
+                YouTube 삽입
+              </h3>
+              <button
+                type="button"
+                onClick={handleYoutubeDialogClose}
+                className="p-1 rounded hover:bg-[var(--kuromi-light-lavender)] text-[var(--text-muted)]"
+                aria-label="닫기"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Dialog body */}
+            <div className="p-4 space-y-4">
+              {/* URL input */}
+              <div>
+                <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">
+                  YouTube URL 또는 영상 ID
+                </label>
+                <input
+                  type="text"
+                  value={youtubeDialog.url}
+                  onChange={(e) => setYoutubeDialog(prev => ({ ...prev, url: e.target.value, error: '' }))}
+                  placeholder="https://www.youtube.com/watch?v=... 또는 영상 ID"
+                  className="w-full px-3 py-2 rounded border border-[var(--kuromi-lavender)] bg-[var(--color-surface)] text-sm text-[var(--text-primary)] outline-none focus:border-[var(--kuromi-purple)]"
+                  autoFocus
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleYoutubeInsert();
+                    }
+                  }}
+                />
+                {youtubeDialog.error && (
+                  <p className="text-xs text-red-500 mt-1">{youtubeDialog.error}</p>
+                )}
+                <p className="text-xs text-[var(--text-muted)] mt-1">
+                  예: https://youtu.be/dQw4w9WgXcQ 또는 dQw4w9WgXcQ
+                </p>
+              </div>
+
+              {/* Size selector */}
+              <div>
+                <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">크기</label>
+                <div className="flex gap-2 flex-wrap">
+                  {([
+                    { value: 'small' as YouTubeSize, label: '작게', desc: '320×180' },
+                    { value: 'medium' as YouTubeSize, label: '보통', desc: '560×315' },
+                    { value: 'large' as YouTubeSize, label: '크게', desc: '853×480' },
+                    { value: 'full' as YouTubeSize, label: '전체', desc: '100%' },
+                  ]).map(({ value: v, label, desc }) => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => setYoutubeDialog(prev => ({ ...prev, size: v }))}
+                      className={`flex flex-col items-center px-3 py-2 rounded text-xs font-medium transition-colors ${
+                        youtubeDialog.size === v
+                          ? 'bg-[var(--kuromi-purple)] text-white'
+                          : 'bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
+                      }`}
+                    >
+                      <span>{label}</span>
+                      <span className={`text-[10px] ${youtubeDialog.size === v ? 'text-white/70' : 'text-[var(--text-muted)]'}`}>
+                        {desc}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Preview */}
+              {youtubeDialog.url && extractYouTubeId(youtubeDialog.url) && (
+                <div>
+                  <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">미리보기</label>
+                  <div className="bg-[var(--kuromi-cream)] rounded p-2 overflow-hidden">
+                    <div className={youtubeDialog.size === 'full' ? 'relative pb-[56.25%] h-0' : 'flex justify-center'}>
+                      <iframe
+                        src={`https://www.youtube.com/embed/${extractYouTubeId(youtubeDialog.url)}`}
+                        width={youtubeDialog.size === 'full' ? '100%' : YOUTUBE_SIZES[youtubeDialog.size].width}
+                        height={youtubeDialog.size === 'full' ? '100%' : YOUTUBE_SIZES[youtubeDialog.size].height}
+                        className={youtubeDialog.size === 'full' ? 'absolute top-0 left-0 w-full h-full' : 'max-w-full'}
+                        style={youtubeDialog.size !== 'full' ? { maxHeight: '200px', width: 'auto', aspectRatio: '16/9' } : undefined}
+                        title="YouTube 미리보기"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Dialog footer */}
+            <div className="flex justify-end gap-2 p-4 border-t border-[var(--kuromi-lavender)]">
+              <button
+                type="button"
+                onClick={handleYoutubeDialogClose}
+                className="px-4 py-2 rounded text-sm font-medium bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)] transition-colors"
+              >
+                취소
+              </button>
+              <button
+                type="button"
+                onClick={handleYoutubeInsert}
+                className="px-4 py-2 rounded text-sm font-medium bg-red-500 text-white hover:bg-red-600 transition-colors"
+              >
+                삽입
+              </button>
+            </div>
           </div>
         </div>
       )}

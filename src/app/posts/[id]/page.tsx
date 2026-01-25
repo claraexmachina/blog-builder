@@ -1,10 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
-import rehypeSanitize from 'rehype-sanitize';
-import { sanitizeSchema } from '@/lib/markdown-sanitize';
+import MarkdownRenderer from '@/components/MarkdownRenderer';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { getPostById, getAllCategories } from '@/lib/db';
@@ -81,12 +77,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
             {/* Content */}
             <div className="markdown-content">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
-              >
-                {post.content}
-              </ReactMarkdown>
+              <MarkdownRenderer content={post.content} />
             </div>
 
             {/* Actions */}
