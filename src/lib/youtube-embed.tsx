@@ -97,9 +97,9 @@ function YouTubeEmbed({ videoId, size, startTime }: YouTubeEmbedProps) {
   const embedUrl = buildYouTubeEmbedUrl(videoId, startTime);
 
   const isFull = size === 'full';
-  const containerStyle = isFull
-    ? { position: 'relative' as const, paddingBottom: '56.25%', height: 0, overflow: 'hidden' as const }
-    : undefined;
+  const containerStyle: React.CSSProperties = isFull
+    ? { position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }
+    : { display: 'inline-block' }; // inline-block으로 text-align 상속 가능
   const iframeStyle = isFull
     ? { position: 'absolute' as const, top: 0, left: 0, width: '100%', height: '100%' }
     : undefined;
