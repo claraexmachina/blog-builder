@@ -12,9 +12,12 @@ export type YouTubeSize = keyof typeof YOUTUBE_SIZES;
 
 // YouTube URL/ID에서 비디오 ID 추출
 export function extractYouTubeId(input: string): string | null {
+  // 쿼리 파라미터 제거 (VIDEO_ID?start=123 형식 처리)
+  const withoutQuery = input.split('?')[0];
+
   // 이미 VIDEO_ID인 경우 (11자리 알파벳/숫자/하이픈/언더스코어)
-  if (/^[\w-]{11}$/.test(input)) {
-    return input;
+  if (/^[\w-]{11}$/.test(withoutQuery)) {
+    return withoutQuery;
   }
 
   // URL 패턴들
