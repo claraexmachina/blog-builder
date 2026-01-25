@@ -38,6 +38,7 @@ import {
   generateYouTubeMarkdown,
   extractYouTubeId,
   type YouTubeSize,
+  type YouTubeAlign,
   YOUTUBE_SIZES,
 } from '@/lib/youtube-embed';
 
@@ -83,6 +84,7 @@ interface YouTubeDialogState {
   show: boolean;
   url: string;
   size: YouTubeSize;
+  align: YouTubeAlign;
   error: string;
 }
 
@@ -141,6 +143,7 @@ export default function MarkdownEditor({
     show: false,
     url: '',
     size: 'medium',
+    align: 'center',
     error: '',
   });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -451,15 +454,15 @@ export default function MarkdownEditor({
 
   // YouTube 다이얼로그 핸들러
   const handleYoutubeClick = useCallback(() => {
-    setYoutubeDialog({ show: true, url: '', size: 'medium', error: '' });
+    setYoutubeDialog({ show: true, url: '', size: 'medium', align: 'center', error: '' });
   }, []);
 
   const handleYoutubeDialogClose = useCallback(() => {
-    setYoutubeDialog({ show: false, url: '', size: 'medium', error: '' });
+    setYoutubeDialog({ show: false, url: '', size: 'medium', align: 'center', error: '' });
   }, []);
 
   const handleYoutubeInsert = useCallback(() => {
-    const { url, size } = youtubeDialog;
+    const { url, size, align } = youtubeDialog;
 
     if (!url.trim()) {
       setYoutubeDialog(prev => ({ ...prev, error: 'URL을 입력해주세요.' }));
@@ -472,7 +475,7 @@ export default function MarkdownEditor({
       return;
     }
 
-    const markdown = generateYouTubeMarkdown(url.trim(), size);
+    const markdown = generateYouTubeMarkdown(url.trim(), size, align);
     if (markdown) {
       insertText(`\n${markdown}\n`, '', '');
       handleYoutubeDialogClose();
@@ -1165,12 +1168,42 @@ export default function MarkdownEditor({
                 </div>
               </div>
 
+              {/* Alignment selector */}
+              <div>
+                <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">정렬</label>
+                <div className="flex gap-2">
+                  {([
+                    { value: 'left' as YouTubeAlign, icon: AlignLeft, label: '왼쪽' },
+                    { value: 'center' as YouTubeAlign, icon: AlignCenter, label: '가운데' },
+                    { value: 'right' as YouTubeAlign, icon: AlignRight, label: '오른쪽' },
+                  ]).map(({ value: v, icon: Icon, label }) => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => setYoutubeDialog(prev => ({ ...prev, align: v }))}
+                      className={`flex items-center gap-1 px-3 py-1 rounded text-xs font-medium transition-colors ${
+                        youtubeDialog.align === v
+                          ? 'bg-[var(--kuromi-purple)] text-white'
+                          : 'bg-[var(--kuromi-cream)] text-[var(--kuromi-dark-purple)] hover:bg-[var(--kuromi-light-lavender)]'
+                      }`}
+                      aria-label={label}
+                    >
+                      <Icon size={14} />
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Preview */}
               {youtubeDialog.url && extractYouTubeId(youtubeDialog.url) && (
                 <div>
                   <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">미리보기</label>
                   <div className="bg-[var(--kuromi-cream)] rounded p-2 overflow-hidden">
-                    <div className={youtubeDialog.size === 'full' ? 'relative pb-[56.25%] h-0' : 'flex justify-center'}>
+                    <div className={youtubeDialog.size === 'full' ? 'relative pb-[56.25%] h-0' : `flex ${
+                      youtubeDialog.align === 'left' ? 'justify-start' :
+                      youtubeDialog.align === 'right' ? 'justify-end' : 'justify-center'
+                    }`}>
                       <iframe
                         src={`https://www.youtube.com/embed/${extractYouTubeId(youtubeDialog.url)}`}
                         width={youtubeDialog.size === 'full' ? '100%' : YOUTUBE_SIZES[youtubeDialog.size].width}

@@ -143,10 +143,13 @@ export function createMarkdownComponents(baseComponents?: Components): Component
   };
 }
 
+export type YouTubeAlign = 'left' | 'center' | 'right';
+
 // YouTube 마크다운 문법 생성 헬퍼
 export function generateYouTubeMarkdown(
   videoIdOrUrl: string,
-  size: YouTubeSize = 'medium'
+  size: YouTubeSize = 'medium',
+  align: YouTubeAlign = 'center'
 ): string | null {
   const videoId = extractYouTubeId(videoIdOrUrl);
   if (!videoId) return null;
@@ -154,8 +157,15 @@ export function generateYouTubeMarkdown(
   const startTime = extractStartTime(videoIdOrUrl);
   const src = startTime ? `${videoId}?start=${startTime}` : videoId;
   const sizeStr = size === 'medium' ? '' : `:${size}`;
+  const markdown = `![youtube${sizeStr}](${src})`;
 
-  return `![youtube${sizeStr}](${src})`;
+  // 정렬이 center가 아닌 경우 div로 감싸기
+  if (align !== 'center') {
+    return `<div style="text-align: ${align};">\n\n${markdown}\n\n</div>`;
+  }
+
+  // center인 경우도 div로 감싸서 명시적으로 가운데 정렬
+  return `<div style="text-align: center;">\n\n${markdown}\n\n</div>`;
 }
 
 export { YOUTUBE_SIZES };
