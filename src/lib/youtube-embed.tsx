@@ -179,7 +179,7 @@ export function generateYouTubeHtml(
 </div>`;
   }
 
-  return `<div class="youtube-embed">
+  return `<div class="youtube-embed" style="text-align: center;">
 <iframe src="${embedUrl}" width="${dimensions.width}" height="${dimensions.height}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>`;
 }
