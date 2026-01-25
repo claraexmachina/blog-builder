@@ -12,11 +12,19 @@ import {
   Trash2,
 } from 'lucide-react';
 
-// 본문에서 첫 번째 이미지 URL 추출
+// 본문에서 첫 번째 이미지 URL 추출 (유튜브 임베드 제외)
 function extractFirstImage(content: string): string | null {
-  // Markdown 이미지: ![alt](url)
-  const mdMatch = content.match(/!\[.*?\]\((.*?)\)/);
-  if (mdMatch) return mdMatch[1];
+  // Markdown 이미지: ![alt](url) - 유튜브 임베드는 제외
+  const mdRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+  let match;
+  while ((match = mdRegex.exec(content)) !== null) {
+    const alt = match[1];
+    const url = match[2];
+    // 유튜브 임베드는 건너뛰기 (alt가 youtube로 시작하는 경우)
+    if (!alt.startsWith('youtube')) {
+      return url;
+    }
+  }
 
   // HTML img 태그: <img src="url">
   const htmlMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
@@ -25,7 +33,7 @@ function extractFirstImage(content: string): string | null {
   return null;
 }
 
-// 마크다운을 제거하고 순수 텍스트만 추출
+// 마크다운과 HTML을 제거하고 순수 텍스트만 추출
 function stripMarkdown(text: string): string {
   return text
     // Remove images ![alt](url)
@@ -44,6 +52,8 @@ function stripMarkdown(text: string): string {
     .replace(/^>\s+/gm, '')
     // Remove horizontal rules
     .replace(/^[-*_]{3,}\s*$/gm, '')
+    // Remove HTML tags
+    .replace(/<[^>]*>/g, '')
     // Remove extra whitespace
     .replace(/\n+/g, ' ')
     .replace(/\s+/g, ' ')

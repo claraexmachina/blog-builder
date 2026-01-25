@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Heart, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 
-// 마크다운 문법 제거
+// 마크다운과 HTML 문법 제거
 function stripMarkdown(text: string): string {
   return text
     .replace(/!\[.*?\]\(.*?\)/g, '')
@@ -17,6 +17,8 @@ function stripMarkdown(text: string): string {
     .replace(/`([^`]*)`/g, '$1')
     .replace(/^>\s+/gm, '')
     .replace(/^[-*_]{3,}\s*$/gm, '')
+    // Remove HTML tags
+    .replace(/<[^>]*>/g, '')
     .replace(/\n+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
