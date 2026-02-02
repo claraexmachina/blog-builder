@@ -12,6 +12,11 @@ import {
   Trash2,
 } from 'lucide-react';
 
+// URL이 유효한 이미지 URL인지 확인 (예시 텍스트 "url" 등 제외)
+function isValidImageUrl(url: string): boolean {
+  return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/');
+}
+
 // 본문에서 첫 번째 이미지 URL 추출 (유튜브 임베드 제외)
 function extractFirstImage(content: string): string | null {
   // Markdown 이미지: ![alt](url) - 유튜브 임베드는 제외
@@ -20,15 +25,15 @@ function extractFirstImage(content: string): string | null {
   while ((match = mdRegex.exec(content)) !== null) {
     const alt = match[1];
     const url = match[2];
-    // 유튜브 임베드는 건너뛰기 (alt가 youtube로 시작하는 경우)
-    if (!alt.startsWith('youtube')) {
+    // 유튜브 임베드는 건너뛰기, 유효한 URL인지도 확인
+    if (!alt.startsWith('youtube') && isValidImageUrl(url)) {
       return url;
     }
   }
 
   // HTML img 태그: <img src="url"> 또는 <img ... src="url">
   const htmlMatch = content.match(/<img\s[^>]*src=["']([^"']+)["']/i);
-  if (htmlMatch) return htmlMatch[1];
+  if (htmlMatch && isValidImageUrl(htmlMatch[1])) return htmlMatch[1];
 
   return null;
 }
