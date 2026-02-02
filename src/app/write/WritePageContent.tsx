@@ -26,8 +26,8 @@ function extractFirstImage(content: string): string | null {
     }
   }
 
-  // HTML img 태그: <img src="url">
-  const htmlMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
+  // HTML img 태그: <img src="url"> 또는 <img ... src="url">
+  const htmlMatch = content.match(/<img\s[^>]*src=["']([^"']+)["']/i);
   if (htmlMatch) return htmlMatch[1];
 
   return null;
