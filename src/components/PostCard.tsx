@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { Heart, Clock } from 'lucide-react';
 import { format } from 'date-fns';
+import Thumbnail from '@/components/Thumbnail';
 
 // 마크다운과 HTML 문법 제거
 function stripMarkdown(text: string): string {
@@ -52,19 +52,12 @@ export default function PostCard({
       <article className="pixel-card p-4">
         <div className="flex gap-4">
           {/* Thumbnail */}
-          <div className="w-16 h-16 flex-shrink-0 bg-[var(--color-surface-alt)] rounded-lg border border-[var(--border-light)] flex items-center justify-center overflow-hidden">
-            {thumbnail ? (
-              <Image
-                src={thumbnail}
-                alt={title}
-                width={64}
-                height={64}
-                className="object-cover w-full h-full rounded-lg"
-              />
-            ) : (
-              <span className="text-[var(--border-medium)] text-lg">◇</span>
-            )}
-          </div>
+          <Thumbnail
+            src={thumbnail}
+            alt={title}
+            size={64}
+            className="flex-shrink-0"
+          />
 
           {/* Content */}
           <div className="flex-1 min-w-0">

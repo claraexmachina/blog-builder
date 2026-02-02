@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { getAllPosts, getAllCategories } from '@/lib/db';
 import { Heart, Clock, Twitter, Github } from 'lucide-react';
 import { format } from 'date-fns';
@@ -10,6 +9,7 @@ import ProfileName from '@/components/ProfileName';
 import ProfileBio from '@/components/ProfileBio';
 import PixelRoom from '@/components/PixelRoom';
 import NowPlaying from '@/components/NowPlaying';
+import Thumbnail from '@/components/Thumbnail';
 
 export const dynamic = 'force-dynamic';
 
@@ -130,19 +130,12 @@ export default async function HomePage() {
                         >
                           <div className="flex gap-4">
                             {/* Thumbnail */}
-                            <div className="w-16 h-16 flex-shrink-0 bg-[var(--color-surface-alt)] rounded-lg border border-[var(--border-light)] flex items-center justify-center overflow-hidden">
-                              {post.thumbnail ? (
-                                <Image
-                                  src={post.thumbnail}
-                                  alt={post.title}
-                                  width={64}
-                                  height={64}
-                                  className="object-cover w-full h-full rounded-lg"
-                                />
-                              ) : (
-                                <span className="text-[var(--border-medium)] text-lg">◇</span>
-                              )}
-                            </div>
+                            <Thumbnail
+                              src={post.thumbnail}
+                              alt={post.title}
+                              size={64}
+                              className="flex-shrink-0"
+                            />
 
                             {/* Content */}
                             <div className="flex-1 min-w-0">
