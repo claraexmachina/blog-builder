@@ -22,9 +22,10 @@ function getKSTDate() {
 }
 
 export default async function HomePage() {
-  const posts = (await getAllPosts(true)).slice(0, 5);
+  const allPosts = await getAllPosts(true);
+  const posts = allPosts.slice(0, 5);
   const categories = await getAllCategories();
-  const totalLikes = posts.reduce((acc, post) => acc + post.likes, 0);
+  const totalLikes = allPosts.reduce((acc, post) => acc + post.likes, 0);
   const today = getKSTDate();
 
   return (
@@ -60,7 +61,7 @@ export default async function HomePage() {
                 <div className="h-px bg-[var(--border-light)] my-4"></div>
                 <div className="flex justify-center gap-6 text-xs">
                   <div className="text-center">
-                    <div className="text-[var(--accent-warm)] font-semibold text-sm">{posts.length}</div>
+                    <div className="text-[var(--accent-warm)] font-semibold text-sm">{allPosts.length}</div>
                     <div className="text-[var(--text-muted)]">{siteConfig.profile.statsLabels.posts}</div>
                   </div>
                   <div className="text-center">
